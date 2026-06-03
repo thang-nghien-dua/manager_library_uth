@@ -1,35 +1,40 @@
 package com.hacker.boooks.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.sql.Date;
+import java.util.List;
 
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 @Entity
 @Table(name = "book")
 public class BookEntity {
     @Id
-    @Column(name = "book_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "book_id")
     private Integer bookId;
+
     @Column(nullable = false)
     private String title;
-    @Column(nullable = false)
-    private String author;
-    @Column(nullable = false)
-    private String genre;
-    @Column(nullable = false)
+
     private Date publication;
-    @Column(name = "is_available", nullable = false)
-    private Boolean isAvailable;
-    private Integer holder;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "book_author",
+        joinColumns = @JoinColumn(name = "book_id"),
+        inverseJoinColumns = @JoinColumn(name = "author_id")
+    )
+    private List<AuthorEntity> authors;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "book_category",
+        joinColumns = @JoinColumn(name = "book_id"),
+        inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private List<CategoryEntity> categories;
 }

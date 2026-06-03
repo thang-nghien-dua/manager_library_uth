@@ -1,49 +1,34 @@
 package com.hacker.boooks.service.impl;
 
 import com.hacker.boooks.bean.*;
-import com.hacker.boooks.entity.BookEntity;
-import com.hacker.boooks.entity.LogEntity;
-import com.hacker.boooks.entity.MemberEntity;
-import com.hacker.boooks.repository.BookRepository;
-import com.hacker.boooks.repository.LogRepository;
-import com.hacker.boooks.repository.MemberRepository;
+import com.hacker.boooks.entity.*;
+import com.hacker.boooks.repository.*;
 import com.hacker.boooks.service.BookService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * Book management service implementation.
- */
 @Service
 @RequiredArgsConstructor
 @Slf4j
-@SuppressWarnings("unused")
 public class BookServiceImpl implements BookService {
-
-    private static final String BOOK_NOT_FOUND = "Book with ID {} not found";
 
     private final BookRepository bookRepository;
     private final MemberRepository memberRepository;
     private final LogRepository logRepository;
+    private final AuthorRepository authorRepository;
+    private final CategoryRepository categoryRepository;
+    private final BookCopyRepository bookCopyRepository;
 
-    /**
-     * Retrieves a list of books.
-     *
-     * @return ResponseEntity containing the list of books
-     */
     @Override
     public ResponseEntity<List<Book>> getBooks() {
-
         try {
             List<Book> books = new ArrayList<>();
             List<BookEntity> bookEntities = bookRepository.findAll();
@@ -52,34 +37,36 @@ public class BookServiceImpl implements BookService {
                 Book book = new Book();
                 book.setBookId(bookEntity.getBookId());
                 book.setTitle(bookEntity.getTitle());
-                book.setAuthor(bookEntity.getAuthor());
-                book.setGenre(bookEntity.getGenre());
-                book.setPublication(bookEntity.getPublication().toLocalDate());
-                book.setAvailable(bookEntity.getIsAvailable());
+                
+                String authors = bookEntity.getAuthors().stream().map(AuthorEntity::getName).collect(Collectors.joining(", "));
+                book.setAuthor(authors.isEmpty() ? "Unknown" : authors);
+                
+                String genres = bookEntity.getCategories().stream().map(CategoryEntity::getName).collect(Collectors.joining(", "));
+                book.setGenre(genres.isEmpty() ? "Unknown" : genres);
+                
+                if (bookEntity.getPublication() != null) {
+                    book.setPublication(bookEntity.getPublication().toLocalDate());
+                }
+                
+                // Get copies status
+                List<BookCopyEntity> copies = bookCopyRepository.findByBookId(bookEntity.getBookId());
+                boolean hasAvailable = copies.stream().anyMatch(c -> c.getStatus() == BookCopyEntity.Status.AVAILABLE);
+                book.setAvailable(hasAvailable);
+                
                 books.add(book);
             }
-
-            log.debug("Retrieved {} books successfully", books.size());
             return ResponseEntity.ok(books);
         } catch (Exception e) {
-            log.error("Failed to retrieve books: {}", e.getMessage());
+            log.error("Failed to retrieve books", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    /**
-     * Retrieves a book by ID.
-     *
-     * @param bookId the ID of the book to retrieve
-     * @return ResponseEntity containing the book if found, or not found response if not found
-     */
     @Override
     public ResponseEntity<Book> getBook(int bookId) {
-
         try {
             Optional<BookEntity> optionalBookEntity = bookRepository.findById(bookId);
             if (optionalBookEntity.isEmpty()) {
-                log.debug(BOOK_NOT_FOUND, bookId);
                 return ResponseEntity.notFound().build();
             }
 
@@ -87,259 +74,209 @@ public class BookServiceImpl implements BookService {
             Book book = new Book();
             book.setBookId(bookEntity.getBookId());
             book.setTitle(bookEntity.getTitle());
-            book.setAuthor(bookEntity.getAuthor());
-            book.setPublication(bookEntity.getPublication().toLocalDate());
-            book.setAvailable(bookEntity.getIsAvailable());
-            book.setHolder(bookEntity.getHolder());
+            String authors = bookEntity.getAuthors().stream().map(AuthorEntity::getName).collect(Collectors.joining(", "));
+            book.setAuthor(authors);
+            String genres = bookEntity.getCategories().stream().map(CategoryEntity::getName).collect(Collectors.joining(", "));
+            book.setGenre(genres);
+            if (bookEntity.getPublication() != null) {
+                book.setPublication(bookEntity.getPublication().toLocalDate());
+            }
 
-            log.debug("Retrieved book with ID {}: {}", bookId, book);
+            List<BookCopyEntity> copies = bookCopyRepository.findByBookId(bookEntity.getBookId());
+            boolean hasAvailable = copies.stream().anyMatch(c -> c.getStatus() == BookCopyEntity.Status.AVAILABLE);
+            book.setAvailable(hasAvailable);
+
             return ResponseEntity.ok(book);
         } catch (Exception e) {
-            log.error("Failed to retrieve book with ID {}: {}", bookId, e.getMessage());
+            log.error("Failed to retrieve book", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    /**
-     * Retrieves the profile of a book.
-     *
-     * @param bookId the ID of the book to retrieve the profile for
-     * @return ResponseEntity containing the book profile if found, or not found response if not found
-     */
     @Override
     public ResponseEntity<BookProfile> getBookProfile(int bookId) {
-
         try {
             Optional<BookEntity> optionalBookEntity = bookRepository.findById(bookId);
             if (optionalBookEntity.isEmpty()) {
-                log.debug(BOOK_NOT_FOUND, bookId);
                 return ResponseEntity.notFound().build();
             }
 
             BookEntity bookEntity = optionalBookEntity.get();
-
             BookProfile bookProfile = new BookProfile();
             bookProfile.setTitle(bookEntity.getTitle());
-            bookProfile.setAuthor(bookEntity.getAuthor());
-            bookProfile.setGenre(bookEntity.getGenre());
-            bookProfile.setAvailable(bookEntity.getIsAvailable());
+            String authors = bookEntity.getAuthors().stream().map(AuthorEntity::getName).collect(Collectors.joining(", "));
+            bookProfile.setAuthor(authors);
+            String genres = bookEntity.getCategories().stream().map(CategoryEntity::getName).collect(Collectors.joining(", "));
+            bookProfile.setGenre(genres);
 
-            if (Boolean.FALSE.equals(bookEntity.getIsAvailable())) {
-                Optional<MemberEntity> optionalMemberEntity = memberRepository.findById(bookEntity.getHolder());
-                if (optionalMemberEntity.isPresent()) {
-                    MemberEntity memberEntity = optionalMemberEntity.get();
-                    Member member = new Member(memberEntity.getMemberId(), memberEntity.getName(), memberEntity.getEmail(), memberEntity.getPhoneNumber());
-                    bookProfile.setHolder(member);
-                }
-            }
+            List<BookCopyEntity> copies = bookCopyRepository.findByBookId(bookEntity.getBookId());
+            boolean hasAvailable = copies.stream().anyMatch(c -> c.getStatus() == BookCopyEntity.Status.AVAILABLE);
+            bookProfile.setAvailable(hasAvailable);
 
-            log.debug("Retrieved book profile with ID {}: {}", bookId, bookProfile);
             return ResponseEntity.ok(bookProfile);
         } catch (Exception e) {
-            log.error("Failed to retrieve book profile with ID {}: {}", bookId, e.getMessage());
+            log.error("Failed to retrieve book profile", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    /**
-     * Adds a new book to the library.
-     *
-     * @param bookBO the book business object containing the details of the book to be added
-     * @return ResponseEntity indicating the success or failure of the book addition
-     */
     @Override
+    @Transactional
     public ResponseEntity<String> addBook(BookBO bookBO) {
-
         try {
             BookEntity bookEntity = new BookEntity();
             bookEntity.setTitle(bookBO.getTitle());
-            bookEntity.setAuthor(bookBO.getAuthor());
-            bookEntity.setGenre(bookBO.getGenre());
-            bookEntity.setPublication(Date.valueOf(bookBO.getPublicationDate()));
+            if (bookBO.getPublicationDate() != null) {
+                bookEntity.setPublication(Date.valueOf(bookBO.getPublicationDate()));
+            }
 
-            bookRepository.save(bookEntity);
+            // Handle author mapping (find-or-create)
+            List<AuthorEntity> authorList = new ArrayList<>();
+            if (bookBO.getAuthor() != null) {
+                String[] names = bookBO.getAuthor().split(",");
+                for (String name : names) {
+                    final String trimmedName = name.trim();
+                    if (!trimmedName.isEmpty()) {
+                        AuthorEntity author = authorRepository.findByNameIgnoreCase(trimmedName)
+                                .orElseGet(() -> authorRepository.save(new AuthorEntity(null, trimmedName, "")));
+                        authorList.add(author);
+                    }
+                }
+            }
+            bookEntity.setAuthors(authorList);
 
-            log.debug("Added a new book: {}", bookEntity);
+            // Handle category mapping (find-or-create)
+            List<CategoryEntity> categoryList = new ArrayList<>();
+            if (bookBO.getGenre() != null) {
+                String[] names = bookBO.getGenre().split(",");
+                for (String name : names) {
+                    final String trimmedName = name.trim();
+                    if (!trimmedName.isEmpty()) {
+                        CategoryEntity cat = categoryRepository.findByNameIgnoreCase(trimmedName)
+                                .orElseGet(() -> categoryRepository.save(new CategoryEntity(null, trimmedName)));
+                        categoryList.add(cat);
+                    }
+                }
+            }
+            bookEntity.setCategories(categoryList);
+
+            BookEntity savedBook = bookRepository.save(bookEntity);
+
+            // Add at least 1 book copy physical automatically
+            BookCopyEntity copy = new BookCopyEntity(null, savedBook.getBookId(), BookCopyEntity.Status.AVAILABLE);
+            bookCopyRepository.save(copy);
+
             return ResponseEntity.ok("Book added successfully");
         } catch (Exception e) {
-            log.error("Failed to add book: {}", e.getMessage());
+            log.error("Failed to add book", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    /**
-     * Updates a book in the library.
-     *
-     * @param bookId the ID of the book to be updated
-     * @param bookBO the book business object containing the updated details
-     * @return ResponseEntity indicating the success or failure of the book update
-     */
     @Override
+    @Transactional
     public ResponseEntity<String> updateBook(int bookId, BookBO bookBO) {
-
         try {
             Optional<BookEntity> optionalBookEntity = bookRepository.findById(bookId);
             if (optionalBookEntity.isEmpty()) {
-                log.debug(BOOK_NOT_FOUND, bookId);
                 return ResponseEntity.notFound().build();
             }
 
             BookEntity bookEntity = optionalBookEntity.get();
             bookEntity.setTitle(bookBO.getTitle());
-            bookEntity.setAuthor(bookBO.getAuthor());
-            bookEntity.setGenre(bookBO.getGenre());
-            bookEntity.setPublication(Date.valueOf(bookBO.getPublicationDate()));
+            if (bookBO.getPublicationDate() != null) {
+                bookEntity.setPublication(Date.valueOf(bookBO.getPublicationDate()));
+            }
+
+            // Update authors
+            List<AuthorEntity> authorList = new ArrayList<>();
+            if (bookBO.getAuthor() != null) {
+                String[] names = bookBO.getAuthor().split(",");
+                for (String name : names) {
+                    final String trimmedName = name.trim();
+                    if (!trimmedName.isEmpty()) {
+                        AuthorEntity author = authorRepository.findByNameIgnoreCase(trimmedName)
+                                .orElseGet(() -> authorRepository.save(new AuthorEntity(null, trimmedName, "")));
+                        authorList.add(author);
+                    }
+                }
+            }
+            bookEntity.setAuthors(authorList);
+
+            // Update categories
+            List<CategoryEntity> categoryList = new ArrayList<>();
+            if (bookBO.getGenre() != null) {
+                String[] names = bookBO.getGenre().split(",");
+                for (String name : names) {
+                    final String trimmedName = name.trim();
+                    if (!trimmedName.isEmpty()) {
+                        CategoryEntity cat = categoryRepository.findByNameIgnoreCase(trimmedName)
+                                .orElseGet(() -> categoryRepository.save(new CategoryEntity(null, trimmedName)));
+                        categoryList.add(cat);
+                    }
+                }
+            }
+            bookEntity.setCategories(categoryList);
 
             bookRepository.save(bookEntity);
-
-            log.debug("Updated book with ID {}: {}", bookId, bookEntity);
             return ResponseEntity.ok("Book updated successfully");
         } catch (Exception e) {
-            log.error("Failed to update book with ID {}: {}", bookId, e.getMessage());
+            log.error("Failed to update book", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    /**
-     * Deletes a book from the library.
-     *
-     * @param bookId the ID of the book to be deleted
-     * @return ResponseEntity indicating the success or failure of the book deletion
-     */
     @Override
     public ResponseEntity<String> deleteBook(int bookId) {
-
         try {
             Optional<BookEntity> optionalBookEntity = bookRepository.findById(bookId);
             if (optionalBookEntity.isEmpty()) {
-                log.debug(BOOK_NOT_FOUND, bookId);
                 return ResponseEntity.notFound().build();
             }
-
-            BookEntity bookEntity = optionalBookEntity.get();
-            bookRepository.delete(bookEntity);
-
-            log.debug("Deleted book with ID {}", bookId);
-            return ResponseEntity.ok("Deleted book " + bookId);
+            bookRepository.delete(optionalBookEntity.get());
+            return ResponseEntity.ok("Book deleted successfully");
         } catch (Exception e) {
-            log.error("Failed to delete book with ID {}: {}", bookId, e.getMessage());
+            log.error("Failed to delete book", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    /**
-     * Get the list of authors.
-     *
-     * @return The list of authors.
-     */
     @Override
     public ResponseEntity<List<String>> getAuthors() {
         try {
-            List<BookEntity> bookEntities = bookRepository.findAll();
-            if (bookEntities.isEmpty()) {
-                log.debug("No authors found");
-                return ResponseEntity.notFound().build();
-            }
-
-            List<String> authors = bookEntities.stream()
-                    .map(BookEntity::getAuthor)
-                    .distinct()
-                    .toList();
-
-            log.debug("Authors fetched successfully");
+            List<String> authors = authorRepository.findAll().stream().map(AuthorEntity::getName).collect(Collectors.toList());
             return ResponseEntity.ok(authors);
         } catch (Exception e) {
-            log.error("Error occurred while fetching authors: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    /**
-     * Get the profile of an author based on their name.
-     * This API provides information such as the author's name, the number of books written by the author,
-     * the most written genre by the author, a list of books written by the author, and the most read book
-     * by the author's audience.
-     *
-     * @param name The name of the author.
-     * @return The author's profile.
-     */
     @Override
     public ResponseEntity<AuthorProfile> getAuthorProfile(String name) {
-
         try {
-            AuthorProfile authorProfile = new AuthorProfile();
-            List<Book> books = new ArrayList<>();
-
-            List<BookEntity> booksByAuthor = bookRepository.findByAuthor(name);
-            if (booksByAuthor.isEmpty()) {
-                log.debug("No books found for author: {}", name);
+            Optional<AuthorEntity> optionalAuthor = authorRepository.findByNameIgnoreCase(name);
+            if (optionalAuthor.isEmpty()) {
                 return ResponseEntity.notFound().build();
             }
+            AuthorEntity authorEntity = optionalAuthor.get();
+            List<BookEntity> booksByAuthor = bookRepository.findByAuthor(name);
 
-            authorProfile.setName(name);
+            AuthorProfile authorProfile = new AuthorProfile();
+            authorProfile.setName(authorEntity.getName());
             authorProfile.setNoOfBooksWritten(booksByAuthor.size());
 
-            for (BookEntity bookEntity : booksByAuthor) {
-                Book book = new Book();
-                book.setBookId(bookEntity.getBookId());
-                book.setTitle(bookEntity.getTitle());
-                book.setAuthor(bookEntity.getAuthor());
-                book.setGenre(bookEntity.getGenre());
-                book.setPublication(bookEntity.getPublication().toLocalDate());
-                book.setAvailable(bookEntity.getIsAvailable());
-                books.add(book);
-            }
-
+            List<Book> books = booksByAuthor.stream().map(be -> {
+                Book b = new Book();
+                b.setBookId(be.getBookId());
+                b.setTitle(be.getTitle());
+                b.setAuthor(authorEntity.getName());
+                return b;
+            }).collect(Collectors.toList());
             authorProfile.setBooksWritten(books);
 
-            // Count the occurrences of each genre
-            Map<String, Long> genreCounts = booksByAuthor.stream()
-                    .collect(Collectors.groupingBy(BookEntity::getGenre, Collectors.counting()));
-
-            // Find the genre with the highest count
-            String mostOccurringGenre = genreCounts.entrySet().stream()
-                    .max(Map.Entry.comparingByValue())
-                    .map(Map.Entry::getKey)
-                    .orElse(null);
-
-            authorProfile.setMostWrittenGenre(mostOccurringGenre);
-
-            List<LogEntity> logsByAuthorBooks = logRepository.findByBookIdIn(
-                    booksByAuthor.stream()
-                            .map(BookEntity::getBookId)
-                            .toList()
-            );
-
-            Map<Integer, Long> bookCounts = logsByAuthorBooks.stream()
-                    .collect(Collectors.groupingBy(LogEntity::getBookId, Collectors.counting()));
-
-            Integer mostOccurringBookId = bookCounts.entrySet().stream()
-                    .max(Map.Entry.comparingByValue())
-                    .map(Map.Entry::getKey)
-                    .orElse(null);
-
-            if (mostOccurringBookId != null) {
-                Optional<BookEntity> optionalBookEntity = bookRepository.findById(mostOccurringBookId);
-
-                if (optionalBookEntity.isPresent()) {
-                    BookEntity bookEntity = optionalBookEntity.get();
-                    Book book = new Book();
-                    book.setBookId(bookEntity.getBookId());
-                    book.setTitle(bookEntity.getTitle());
-                    book.setAuthor(bookEntity.getAuthor());
-                    book.setGenre(bookEntity.getGenre());
-                    book.setPublication(bookEntity.getPublication().toLocalDate());
-                    book.setAvailable(bookEntity.getIsAvailable());
-                    authorProfile.setMostReadBook(book);
-                }
-            }
-
-            log.debug("Author profile retrieved for author: {}", name);
             return ResponseEntity.ok(authorProfile);
         } catch (Exception e) {
-            log.error("Error occurred while fetching author profile: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
 }

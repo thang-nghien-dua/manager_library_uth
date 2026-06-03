@@ -7,19 +7,15 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "member")
-public class MemberEntity {
+@Table(name = "author")
+public class AuthorEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_id")
-    private Integer memberId;
+    @Column(name = "author_id")
+    private Integer authorId;
 
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false, unique = true)
-    private String email;
-
-    @Column(name = "phone_number")
-    private String phoneNumber;
+    private String bio;
 }

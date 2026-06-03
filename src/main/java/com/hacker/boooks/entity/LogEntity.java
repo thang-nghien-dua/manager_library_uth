@@ -1,33 +1,32 @@
 package com.hacker.boooks.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.sql.Date;
 
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 @Entity
 @Table(name = "log")
 public class LogEntity {
     @Id
-    @Column(name = "log_id", nullable = false)
-    private int logId;
-    @Column(name = "book_id", nullable = false)
-    private int bookId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "log_id")
+    private Integer logId;
+
+    @Column(name = "copy_id", nullable = false)
+    private Integer copyId;
+
     @Column(name = "member_id", nullable = false)
-    private int memberId;
+    private Integer memberId;
+
     @Column(name = "issue_date", nullable = false)
     private Date issueDate;
+
     @Column(name = "return_date")
     private Date returnDate;
+
     private Float fine;
 }

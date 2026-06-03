@@ -7,19 +7,13 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "member")
-public class MemberEntity {
+@Table(name = "category")
+public class CategoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_id")
-    private Integer memberId;
+    @Column(name = "category_id")
+    private Integer categoryId;
 
     @Column(nullable = false)
     private String name;
-
-    @Column(nullable = false, unique = true)
-    private String email;
-
-    @Column(name = "phone_number")
-    private String phoneNumber;
 }

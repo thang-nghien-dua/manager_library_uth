@@ -3,9 +3,12 @@ package com.hacker.boooks.service.impl;
 import com.hacker.boooks.bean.Log;
 import com.hacker.boooks.entity.LogEntity;
 import com.hacker.boooks.repository.LogRepository;
+import com.hacker.boooks.repository.BookCopyRepository;
+import com.hacker.boooks.entity.BookCopyEntity;
 import com.hacker.boooks.service.LogService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,7 @@ import java.util.List;
 public class LogServiceImpl implements LogService {
 
     private final LogRepository logRepository;
+    private final BookCopyRepository bookCopyRepository;
 
     /**
      * Retrieves a list of all book logs.
@@ -44,7 +48,13 @@ public class LogServiceImpl implements LogService {
             for (LogEntity logEntity : logEntities) {
                 Log bookLog = new Log();
                 bookLog.setLogId(logEntity.getLogId());
-                bookLog.setBookId(logEntity.getBookId());
+                Optional<BookCopyEntity> copyOpt = bookCopyRepository.findById(logEntity.getCopyId());
+                if (copyOpt.isPresent()) {
+                    bookLog.setBookId(copyOpt.get().getBookId());
+                } else {
+                    bookLog.setBookId(logEntity.getCopyId());
+                }
+                
                 bookLog.setMemberId(logEntity.getMemberId());
                 bookLog.setIssueDate(logEntity.getIssueDate().toLocalDate());
                 bookLog.setReturnDate(logEntity.getReturnDate() != null ? logEntity.getReturnDate().toLocalDate() : null);

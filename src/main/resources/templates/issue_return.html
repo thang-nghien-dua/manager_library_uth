@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Boooks - Giao dịch Sách</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Outfit:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-background": "#111c2d",
+                    "surface-container": "#e7eeff",
+                    "surface-container-highest": "#d8e3fb",
+                    "on-tertiary-fixed": "#2a1700",
+                    "on-surface-variant": "#464555",
+                    "on-tertiary-container": "#ffd4a4",
+                    "surface-bright": "#f9f9ff",
+                    "outline": "#777587",
+                    "on-error-container": "#93000a",
+                    "primary-container": "#4f46e5",
+                    "surface-tint": "#4d44e3",
+                    "background": "#f9f9ff",
+                    "on-tertiary": "#ffffff",
+                    "primary": "#3525cd",
+                    "primary-fixed-dim": "#c3c0ff",
+                    "surface-container-low": "#f0f3ff",
+                    "tertiary": "#684000",
+                    "on-secondary-fixed-variant": "#005049",
+                    "on-secondary": "#ffffff",
+                    "on-primary-container": "#dad7ff",
+                    "on-primary-fixed-variant": "#3323cc",
+                    "surface-container-high": "#dee8ff",
+                    "tertiary-fixed-dim": "#ffb95f",
+                    "tertiary-fixed": "#ffddb8",
+                    "secondary-fixed-dim": "#6bd8cb",
+                    "surface": "#f9f9ff",
+                    "error-container": "#ffdad6",
+                    "on-surface": "#111c2d",
+                    "on-error": "#ffffff",
+                    "on-secondary-container": "#006f66",
+                    "inverse-primary": "#c3c0ff",
+                    "on-primary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "tertiary-container": "#885500",
+                    "on-primary-fixed": "#0f0069",
+                    "secondary-fixed": "#89f5e7",
+                    "inverse-on-surface": "#ecf1ff",
+                    "primary-fixed": "#e2dfff",
+                    "secondary": "#006a61",
+                    "inverse-surface": "#263143",
+                    "error": "#ba1a1a",
+                    "surface-variant": "#d8e3fb",
+                    "secondary-container": "#86f2e4",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-dim": "#cfdaf2",
+                    "on-secondary-fixed": "#00201d",
+                    "outline-variant": "#c7c4d8"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-desktop": "48px",
+                    "xl": "40px",
+                    "md": "16px",
+                    "margin-mobile": "16px",
+                    "gutter": "24px",
+                    "lg": "24px",
+                    "sm": "8px",
+                    "xs": "4px",
+                    "unit": "4px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Outfit"],
+                    "headline-lg-mobile": ["Outfit"],
+                    "label-sm": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-md": ["Outfit"],
+                    "body-sm": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-lg": ["Outfit"],
+                    "headline-sm": ["Outfit"]
+            },
+            "fontSize": {
+                    "display-lg": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                    "label-md": ["14px", {"lineHeight": "1", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      .glass-card {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+      .glass-input {
+        background: rgba(255, 255, 255, 0.6);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .glass-input:focus {
+        background: rgba(255, 255, 255, 0.9);
+        border-color: #4F46E5;
+        box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        outline: none;
+      }
+      .mesh-bg {
+        background-color: #f9f9ff;
+        background-image: 
+          radial-gradient(at 0% 0%, hsla(243, 75%, 59%, 0.1) 0px, transparent 50%),
+          radial-gradient(at 100% 0%, hsla(172, 100%, 42%, 0.1) 0px, transparent 50%);
+      }
+    </style>
+</head>
+<body class="mesh-bg min-h-screen font-body-md text-on-background overflow-x-hidden">
+<!-- Side Navigation Bar -->
+<nav class="fixed left-0 top-0 h-screen w-[280px] bg-on-background dark:bg-on-background border-r border-white/10 shadow-xl flex flex-col py-lg px-md z-50">
+<div class="mb-xl px-sm">
+<h1 class="font-display-lg text-display-lg font-bold text-white">Boooks</h1>
+<p class="text-white/60 font-label-sm">Digital Sanctuary</p>
+</div>
+<div class="space-y-sm flex-grow">
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:text-white hover:bg-white/10 transition-all duration-300 rounded-lg group" href="/dashboard">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">dashboard</span>
+<span class="font-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:text-white hover:bg-white/10 transition-all duration-300 rounded-lg group" href="/books-ui">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">book</span>
+<span class="font-body-md">Books</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:text-white hover:bg-white/10 transition-all duration-300 rounded-lg group" href="/members-ui">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">group</span>
+<span class="font-body-md">Members</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm border-l-4 border-primary bg-primary/10 text-white font-bold rounded-r-lg group" href="/issue-return">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+<span class="font-body-md">Transactions</span>
+</a>
+</div>
+<div class="mt-auto p-md bg-white/5 rounded-xl flex items-center gap-md border border-white/10">
+<img alt="Administrator profile" class="w-10 h-10 rounded-full border border-primary" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5WqWUNbJ_EqieuhFtEqfts7grUn1Ge5KYrR-3amRMYpm9Z5DioYM_i_8YatSgt77CTi2ULtEQaK0iOOAbDLp3W-tEu0CITqUNsqXWzK6US8zi9E8f-6YtC789DoM6g2Lx22vV_2ukqe8CmYyAbmUNtchf0-0QKsGOBWTnVu8y0u-RdoP1WA1SW9sHExshatno8_dQtTcxmxESLciWNGtiqTR8p7YwDA8Qw8iLUVnW45AxLU0ESrzm4mYdVN4lgtFV002zNstMN-cp"/>
+<div>
+<p class="text-white font-label-md">Admin Account</p>
+<p class="text-white/50 text-xs uppercase tracking-widest">Master Librarian</p>
+</div>
+</div>
+</nav>
+<!-- Top App Bar -->
+<header class="fixed top-0 right-0 w-[calc(100%-280px)] h-20 bg-white/70 backdrop-blur-md border-b border-white/20 flex items-center justify-between px-margin-desktop z-40">
+<div class="flex items-center gap-md">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input id="search-input" oninput="filterLogs(this.value)" class="glass-input pl-10 pr-4 py-2 rounded-full w-64 text-sm" placeholder="Tìm kiếm mã sách, thẻ thành viên..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-lg">
+<button class="text-on-surface-variant hover:text-primary transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full ring-2 ring-white"></span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-[280px] pt-24 px-margin-desktop pb-xl min-h-screen">
+<header class="mb-lg flex justify-between items-end">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-background">Giao dịch Sách</h2>
+<p class="text-on-surface-variant">Quản lý mượn và trả sách theo thời gian thực</p>
+</div>
+<div class="flex items-center gap-sm bg-white/50 p-sm rounded-lg border border-black/5">
+<span class="material-symbols-outlined text-primary">schedule</span>
+<span class="font-label-md" id="current-time">10:45 AM</span>
+</div>
+</header>
+<!-- Split Layout Grid -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Left: Issue Section -->
+<section class="col-span-12 lg:col-span-4 flex flex-col gap-gutter">
+<div class="glass-card rounded-xl p-lg shadow-sm">
+<div class="flex items-center gap-sm mb-lg">
+<div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">logout</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm">Mượn sách mới</h3>
+</div>
+<form class="space-y-lg" id="issue-form">
+<div class="space-y-xs">
+<label class="font-label-md text-on-surface-variant pl-1">Mã thành viên (ID)</label>
+<input id="member-id" class="glass-input w-full p-md rounded-lg" placeholder="VD: 1" required="" type="number"/>
+</div>
+<div class="space-y-xs">
+<label class="font-label-md text-on-surface-variant pl-1">Mã sách (ID)</label>
+<div class="relative">
+<input id="book-id" class="glass-input w-full p-md rounded-lg" placeholder="VD: 1" required="" type="number"/>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+</div>
+</div>
+
+<button class="w-full bg-primary py-lg rounded-xl text-white font-headline-sm shadow-lg hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-md" id="issue-button" type="submit">
+<span>Xác nhận mượn</span>
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</form>
+</div>
+<div class="glass-card rounded-xl p-lg border-l-4 border-secondary shadow-sm">
+<h4 class="font-label-md uppercase tracking-wider text-on-surface-variant mb-md">Quy định mượn</h4>
+<ul class="space-y-sm text-sm text-on-surface-variant">
+<li class="flex items-center gap-sm"><span class="material-symbols-outlined text-[16px] text-secondary">check_circle</span> Tối đa 5 cuốn/lần</li>
+<li class="flex items-center gap-sm"><span class="material-symbols-outlined text-[16px] text-secondary">check_circle</span> Thời hạn: 14 ngày</li>
+<li class="flex items-center gap-sm"><span class="material-symbols-outlined text-[16px] text-secondary">check_circle</span> Phí quá hạn: 5,000đ/ngày</li>
+</ul>
+</div>
+</section>
+<!-- Right: Return Section -->
+<section class="col-span-12 lg:col-span-8">
+<div class="glass-card rounded-xl p-lg shadow-sm h-full flex flex-col">
+<div class="flex items-center justify-between mb-lg">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-lg bg-secondary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary">login</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm">Các sách đang được mượn</h3>
+</div>
+<div class="flex gap-sm">
+<span class="bg-surface-container text-primary px-3 py-1 rounded-full text-xs font-bold flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">history</span>
+                                Lịch sử
+                            </span>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="border-b border-surface-container-highest">
+<th class="py-md font-label-md text-on-surface-variant">Sách / Thành viên</th>
+<th class="py-md font-label-md text-on-surface-variant">Ngày mượn</th>
+<th class="py-md font-label-md text-on-surface-variant">Hạn trả</th>
+<th class="py-md font-label-md text-on-surface-variant">Tình trạng</th>
+<th class="py-md font-label-md text-on-surface-variant text-right">Thao tác</th>
+</tr>
+</thead>
+<tbody id="active-logs" class="divide-y divide-surface-container-low">
+    <!-- Dynamic logs will be inserted here -->
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Success Toast Notification -->
+<div class="fixed bottom-margin-mobile right-margin-mobile flex items-center gap-md bg-on-background text-white p-lg rounded-xl shadow-2xl border border-white/10 translate-y-20 opacity-0 transition-all duration-500 z-[100]" id="success-toast">
+<div class="w-10 h-10 bg-secondary rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-white">check</span>
+</div>
+<div>
+<p class="font-bold">Giao dịch thành công!</p>
+<p class="text-sm text-white/70">Mượn sách: The Art of Innovation cho MB-2024-001</p>
+</div>
+<button class="ml-lg text-white/50 hover:text-white transition-colors" onclick="hideToast()">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<script>
+        // Real-time Clock
+        function updateClock() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+            document.getElementById('current-time').textContent = timeStr;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Handle Issue Form submission
+        const issueForm = document.getElementById('issue-form');
+        const issueBtn = document.getElementById('issue-button');
+        const toast = document.getElementById('success-toast');
+
+        issueForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const bookId = document.getElementById('book-id').value;
+            const memberId = document.getElementById('member-id').value;
+            const token = localStorage.getItem('accessToken');
+            const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+            
+            const originalContent = issueBtn.innerHTML;
+            issueBtn.innerHTML = `<span class="material-symbols-outlined animate-spin">progress_activity</span> <span>Đang xử lý...</span>`;
+            issueBtn.disabled = true;
+
+            try {
+                const res = await fetch(`/books/issue?bookId=${bookId}&memberId=${memberId}`, {
+                    method: 'POST',
+                    headers: headers
+                });
+
+                if (res.ok) {
+                    showToast();
+                    issueForm.reset();
+                    loadLogs(); // Refresh logs
+                } else {
+                    alert('Lỗi: Sách không có sẵn hoặc ID không hợp lệ.');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Lỗi mạng');
+            } finally {
+                issueBtn.innerHTML = originalContent;
+                issueBtn.disabled = false;
+            }
+        });
+
+        let allLogsData = [];
+
+        async function loadLogs() {
+            const token = localStorage.getItem('accessToken');
+            const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+            try {
+                const res = await fetch('/logs', { headers });
+                if (res.ok) {
+                    const logs = await res.json();
+                    allLogsData = logs.filter(log => log.returnDate === null);
+                    renderLogs(allLogsData);
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function filterLogs(query) {
+            const q = query.toLowerCase();
+            const filtered = allLogsData.filter(log => 
+                String(log.bookId).includes(q) || 
+                String(log.memberId).includes(q)
+            );
+            renderLogs(filtered);
+        }
+
+        function renderLogs(logs) {
+            const tbody = document.getElementById('active-logs');
+            tbody.innerHTML = '';
+            
+            logs.forEach(log => {
+                const issueDate = log.issueDate || 'N/A';
+                
+                tbody.innerHTML += `
+                <tr class="group hover:bg-white/40 transition-colors">
+                    <td class="py-lg">
+                        <div class="flex items-center gap-md">
+                            <div class="w-12 h-16 bg-surface-variant rounded shadow-sm overflow-hidden flex-shrink-0 flex items-center justify-center font-bold text-primary">
+                                ID:${log.bookId}
+                            </div>
+                            <div>
+                                <p class="font-body-md font-bold">Book ID: ${log.bookId}</p>
+                                <p class="text-xs text-on-surface-variant">Member ID: ${log.memberId}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="py-lg text-sm">${issueDate}</td>
+                    <td class="py-lg text-sm text-on-surface-variant">N/A</td>
+                    <td class="py-lg">
+                        <span class="bg-secondary/10 text-secondary px-2 py-1 rounded text-[10px] font-bold w-fit uppercase">Đang mượn</span>
+                    </td>
+                    <td class="py-lg text-right">
+                        <button onclick="returnBook(${log.bookId}, ${log.memberId})" class="bg-white border border-outline-variant hover:border-primary hover:text-primary px-lg py-sm rounded-lg text-sm font-bold transition-all transform active:scale-95">
+                            Trả sách
+                        </button>
+                    </td>
+                </tr>
+                `;
+            });
+        }
+
+        async function returnBook(bookId, memberId) {
+            if(!confirm('Xác nhận trả sách này?')) return;
+            const token = localStorage.getItem('accessToken');
+            const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+            try {
+                const res = await fetch(`/books/return?bookId=${bookId}&memberId=${memberId}`, {
+                    method: 'POST',
+                    headers: headers
+                });
+                if(res.ok) {
+                    alert('Trả sách thành công!');
+                    loadLogs();
+                } else {
+                    alert('Lỗi trả sách');
+                }
+            } catch(e) {
+                console.error(e);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadLogs);
+
+        function showToast() {
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            setTimeout(hideToast, 5000);
+        }
+
+        function hideToast() {
+            toast.classList.add('translate-y-20', 'opacity-0');
+            toast.classList.remove('translate-y-0', 'opacity-100');
+        }
+    </script>
+</body></html>

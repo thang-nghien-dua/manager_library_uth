@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Boooks Dashboard | Digital Sanctuary</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .glass-surface {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .glass-surface-elevated {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 25px -5px rgba(79, 70, 229, 0.1);
+        }
+        .mesh-gradient {
+            background-color: #f9f9ff;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(0, 106, 97, 0.05) 0px, transparent 50%);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-background": "#111c2d",
+                      "surface-container": "#e7eeff",
+                      "surface-container-highest": "#d8e3fb",
+                      "on-tertiary-fixed": "#2a1700",
+                      "on-surface-variant": "#464555",
+                      "on-tertiary-container": "#ffd4a4",
+                      "surface-bright": "#f9f9ff",
+                      "outline": "#777587",
+                      "on-error-container": "#93000a",
+                      "primary-container": "#4f46e5",
+                      "surface-tint": "#4d44e3",
+                      "background": "#f9f9ff",
+                      "on-tertiary": "#ffffff",
+                      "primary": "#3525cd",
+                      "primary-fixed-dim": "#c3c0ff",
+                      "surface-container-low": "#f0f3ff",
+                      "tertiary": "#684000",
+                      "on-secondary-fixed-variant": "#005049",
+                      "on-secondary": "#ffffff",
+                      "on-primary-container": "#dad7ff",
+                      "on-primary-fixed-variant": "#3323cc",
+                      "surface-container-high": "#dee8ff",
+                      "tertiary-fixed-dim": "#ffb95f",
+                      "tertiary-fixed": "#ffddb8",
+                      "secondary-fixed-dim": "#6bd8cb",
+                      "surface": "#f9f9ff",
+                      "error-container": "#ffdad6",
+                      "on-surface": "#111c2d",
+                      "on-error": "#ffffff",
+                      "on-secondary-container": "#006f66",
+                      "inverse-primary": "#c3c0ff",
+                      "on-primary": "#ffffff",
+                      "on-tertiary-fixed-variant": "#653e00",
+                      "tertiary-container": "#885500",
+                      "on-primary-fixed": "#0f0069",
+                      "secondary-fixed": "#89f5e7",
+                      "inverse-on-surface": "#ecf1ff",
+                      "primary-fixed": "#e2dfff",
+                      "secondary": "#006a61",
+                      "inverse-surface": "#263143",
+                      "error": "#ba1a1a",
+                      "surface-variant": "#d8e3fb",
+                      "secondary-container": "#86f2e4",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-dim": "#cfdaf2",
+                      "on-secondary-fixed": "#00201d",
+                      "outline-variant": "#c7c4d8"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "2xl": "1rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-desktop": "48px",
+                      "xl": "40px",
+                      "md": "16px",
+                      "margin-mobile": "16px",
+                      "gutter": "24px",
+                      "lg": "24px",
+                      "sm": "8px",
+                      "xs": "4px",
+                      "unit": "4px"
+              },
+              "fontFamily": {
+                      "display-lg": ["Outfit"],
+                      "headline-lg-mobile": ["Outfit"],
+                      "label-sm": ["Inter"],
+                      "label-md": ["Inter"],
+                      "headline-md": ["Outfit"],
+                      "body-sm": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "body-md": ["Inter"],
+                      "headline-lg": ["Outfit"],
+                      "headline-sm": ["Outfit"]
+              },
+              "fontSize": {
+                      "display-lg": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                      "label-md": ["14px", {"lineHeight": "1", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                      "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                      "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                      "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+      </script>
+</head>
+<body class="mesh-gradient min-h-screen text-on-surface">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-screen w-[280px] bg-on-background dark:bg-on-background border-r border-white/10 shadow-xl flex flex-col h-full py-lg px-md z-50">
+<div class="mb-xl px-md">
+<h1 class="font-display-lg text-display-lg font-bold text-white tracking-tight">Boooks</h1>
+<p class="font-body-md text-primary-fixed-dim opacity-80">Digital Sanctuary</p>
+</div>
+<nav class="flex-1 space-y-sm">
+<a class="flex items-center gap-md p-md rounded-lg transition-all duration-300 border-l-4 border-primary bg-primary/10 text-white font-bold transition-transform duration-200 active:scale-95" href="/dashboard">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-md p-md rounded-lg text-on-surface-variant hover:text-white hover:bg-white/10 transition-all duration-300 transition-transform duration-200 active:scale-95" href="/books-ui">
+<span class="material-symbols-outlined">book</span>
+<span class="font-body-md text-body-md">Books</span>
+</a>
+<a class="flex items-center gap-md p-md rounded-lg text-on-surface-variant hover:text-white hover:bg-white/10 transition-all duration-300 transition-transform duration-200 active:scale-95" href="/members-ui">
+<span class="material-symbols-outlined">group</span>
+<span class="font-body-md text-body-md">Members</span>
+</a>
+<a class="flex items-center gap-md p-md rounded-lg text-on-surface-variant hover:text-white hover:bg-white/10 transition-all duration-300 transition-transform duration-200 active:scale-95" href="/issue-return">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-body-md text-body-md">Transactions</span>
+</a>
+</nav>
+<div class="mt-auto p-md glass-surface rounded-2xl bg-white/5 border-white/10 flex items-center gap-md">
+<img alt="User profile picture" class="w-10 h-10 rounded-full object-cover border border-primary" data-alt="A professional headshot of a library administrator in a clean, high-key office environment. The person has a friendly but authoritative expression. The lighting is soft and natural, emphasizing a professional and trustworthy persona. The background is slightly blurred to maintain focus on the individual, fitting a premium digital sanctuary aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAoUXvp2-I4D-ymu47lXr2iD-uJWVIR7Vf0JCbM5l0LCd_9A1vyVxQVYWjJqXzooh_rGonJax1MN4EOU63oz0_vnPmOuU5qZmC9UM64BmyMWIhZeMtBvKz0gUf00V7ydJi8cXK0SkyBINk6IFJFHIwSUFOoau2uKyTn5BHTyJhzbTDWpnLHiXCdj-2OZSihkU3tJUxAxYnwetSX6DvB6kBb_8ErMef6HoAS2Fiztife_fLjUSwnw19BXg0a-RawmDJnCcACnLKmPkK"/>
+<div class="overflow-hidden">
+<p class="font-label-md text-label-md text-white truncate">Admin Account</p>
+<p class="font-body-sm text-body-sm text-white/60 truncate">Chief Librarian</p>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-[280px] min-h-screen">
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 w-[calc(100%-280px)] h-20 bg-white/70 dark:bg-on-background/70 backdrop-blur-md border-b border-white/20 shadow-sm flex items-center justify-between px-margin-desktop w-full z-40">
+<div class="flex items-center flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full pl-xl pr-md py-sm bg-white/60 border border-outline-variant rounded-full focus:ring-2 focus:ring-primary focus:border-primary transition-all font-body-sm text-body-sm outline-none" placeholder="Search books, authors, or members..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-lg">
+<button class="relative p-sm text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-xs right-xs w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="p-sm text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="h-8 w-px bg-outline-variant mx-sm"></div>
+<div class="flex items-center gap-sm">
+<p class="font-label-md text-label-md text-on-surface hidden lg:block">System Status: Active</p>
+<span class="w-3 h-3 bg-secondary rounded-full animate-pulse"></span>
+</div>
+</div>
+</header>
+<!-- Canvas -->
+<div class="pt-32 pb-xl px-margin-desktop space-y-gutter">
+<!-- Welcome Header -->
+<div class="flex items-end justify-between">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-background">System Overview</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Welcome back, Admin. Here is what's happening at Boooks today.</p>
+</div>
+<div class="flex gap-md">
+<button class="px-lg py-sm rounded-xl border border-slate-200 glass-surface hover:bg-slate-100 transition-all font-label-md text-label-md text-primary">
+                        Export Reports
+                    </button>
+<button class="px-lg py-sm rounded-xl bg-primary text-white shadow-lg hover:-translate-y-[2px] transition-all font-label-md text-label-md">
+                        + Add New Book
+                    </button>
+</div>
+</div>
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- Total Books -->
+<div class="glass-surface-elevated p-lg rounded-2xl transition-transform duration-300 hover:scale-[1.02]">
+<div class="flex justify-between items-start mb-md">
+<div class="p-sm bg-primary/10 rounded-xl text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+</div>
+<span class="text-secondary font-label-md text-label-md">+2.4%</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Total Books</p>
+<h3 id="total-books" class="font-headline-lg text-headline-lg text-on-background">...</h3>
+</div>
+<!-- Borrowed -->
+<div class="glass-surface-elevated p-lg rounded-2xl transition-transform duration-300 hover:scale-[1.02]">
+<div class="flex justify-between items-start mb-md">
+<div class="p-sm bg-secondary-container/20 rounded-xl text-secondary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">bookmark</span>
+</div>
+<span class="text-secondary font-label-md text-label-md">+12%</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Borrowed</p>
+<h3 id="total-borrowed" class="font-headline-lg text-headline-lg text-on-background">...</h3>
+</div>
+<!-- Members -->
+<div class="glass-surface-elevated p-lg rounded-2xl transition-transform duration-300 hover:scale-[1.02]">
+<div class="flex justify-between items-start mb-md">
+<div class="p-sm bg-tertiary-container/10 rounded-xl text-tertiary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person</span>
+</div>
+<span class="text-secondary font-label-md text-label-md">+5.1%</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Active Members</p>
+<h3 id="total-members" class="font-headline-lg text-headline-lg text-on-background">...</h3>
+</div>
+<!-- Total Fines -->
+<div class="glass-surface-elevated p-lg rounded-2xl transition-transform duration-300 hover:scale-[1.02]">
+<div class="flex justify-between items-start mb-md">
+<div class="p-sm bg-error-container/30 rounded-xl text-error">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">payments</span>
+</div>
+<span class="text-error font-label-md text-label-md">-0.8%</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Tổng tiền phạt (VND)</p>
+<h3 id="total-fines" class="font-headline-lg text-headline-lg text-on-background">0 đ</h3>
+</div>
+</div>
+<!-- Detailed Analysis Section -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Top 5 Books -->
+<div class="lg:col-span-5 glass-surface-elevated p-lg rounded-2xl">
+        <div class="flex items-center justify-between mb-lg">
+            <h4 class="font-headline-sm text-headline-sm text-on-background">Top 5 sách mượn nhiều nhất</h4>
+            <span class="material-symbols-outlined text-outline">more_vert</span>
+        </div>
+        <div id="top-books-container" class="space-y-md">
+            <!-- Dynamic Books will be inserted here -->
+        </div>
+        <button class="w-full mt-lg py-sm text-primary font-label-md text-label-md border-t border-outline-variant/30 hover:bg-primary/5 transition-colors rounded-b-xl">
+            Xem tất cả sách
+        </button>
+    </div>
+    
+    <!-- Top 5 Readers -->
+    <div class="lg:col-span-7 glass-surface-elevated p-lg rounded-2xl flex flex-col">
+        <div class="flex items-center justify-between mb-lg">
+            <h4 class="font-headline-sm text-headline-sm text-on-background">Top 5 độc giả năng nổ</h4>
+            <div class="flex gap-sm">
+                <span class="px-sm py-xs bg-surface-container rounded text-body-sm text-on-surface-variant">All Time</span>
+                <span class="material-symbols-outlined text-outline">calendar_today</span>
+            </div>
+        </div>
+        <div class="flex-1 overflow-x-auto">
+            <table class="w-full text-left">
+                <thead>
+                    <tr class="border-b border-outline-variant/30">
+                        <th class="pb-md font-label-md text-label-md text-on-surface-variant">Thành viên</th>
+                        <th class="pb-md font-label-md text-label-md text-on-surface-variant">Tổng số lần mượn</th>
+                        <th class="pb-md font-label-md text-label-md text-on-surface-variant">Trạng thái</th>
+                    </tr>
+                </thead>
+                <tbody id="top-readers-container" class="divide-y divide-outline-variant/20">
+                    <!-- Dynamic Readers will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+        <button class="w-full mt-auto pt-lg text-primary font-label-md text-label-md border-t border-outline-variant/30 hover:bg-primary/5 transition-colors">
+            Xem tất cả độc giả
+        </button>
+    </div>
+</div>
+</div>
+</main>
+<script>
+        // Micro-interaction for cards
+        document.querySelectorAll('.glass-surface-elevated').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-4px)';
+                card.style.transition = 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Search bar focus effect
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.style.transform = 'scale(1.02)';
+            searchInput.parentElement.style.transition = 'transform 0.3s ease';
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.style.transform = 'scale(1)';
+        });
+
+        // Dashboard Data Fetching
+        document.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('accessToken');
+            const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+
+            try {
+                let booksMap = {};
+                let membersMap = {};
+
+                // Fetch Books
+                const booksRes = await fetch('/books', { headers });
+                if (booksRes.ok) {
+                    const books = await booksRes.json();
+                    document.getElementById('total-books').textContent = books.length;
+                    
+                    const borrowedCount = books.filter(b => !b.available).length;
+                    document.getElementById('total-borrowed').textContent = borrowedCount;
+                    
+                    books.forEach(b => { booksMap[b.bookId] = b; });
+                }
+
+                // Fetch Members
+                const membersRes = await fetch('/members', { headers });
+                if (membersRes.ok) {
+                    const members = await membersRes.json();
+                    document.getElementById('total-members').textContent = members.length;
+                    
+                    members.forEach(m => { membersMap[m.memberId] = m; });
+                }
+
+                // Fetch Logs for Fines and Top 5 calculation
+                const logsRes = await fetch('/logs', { headers });
+                if (logsRes.ok) {
+                    const logs = await logsRes.json();
+                    
+                    // 1. Calculate Total Fines
+                    let totalFines = 0;
+                    let bookBorrows = {};
+                    let memberBorrows = {};
+
+                    logs.forEach(log => {
+                        totalFines += (log.fine || 0);
+                        
+                        // Count borrows per book
+                        if (!bookBorrows[log.bookId]) bookBorrows[log.bookId] = 0;
+                        bookBorrows[log.bookId]++;
+                        
+                        // Count borrows per member
+                        if (!memberBorrows[log.memberId]) memberBorrows[log.memberId] = 0;
+                        memberBorrows[log.memberId]++;
+                    });
+
+                    // Format VND
+                    const formatter = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' });
+                    document.getElementById('total-fines').textContent = formatter.format(totalFines);
+
+                    // 2. Calculate Top 5 Books
+                    const topBooks = Object.keys(bookBorrows)
+                        .map(id => ({ id: id, count: bookBorrows[id] }))
+                        .sort((a, b) => b.count - a.count)
+                        .slice(0, 5);
+
+                    const topBooksContainer = document.getElementById('top-books-container');
+                    topBooksContainer.innerHTML = '';
+                    topBooks.forEach(tb => {
+                        const bInfo = booksMap[tb.id];
+                        if (!bInfo) return;
+                        
+                        topBooksContainer.innerHTML += `
+                            <div class="flex items-center gap-md group cursor-pointer p-sm rounded-xl hover:bg-primary/5 transition-colors">
+                                <div class="w-12 h-16 rounded-md overflow-hidden shadow-md bg-surface-container-highest flex items-center justify-center font-bold text-primary">
+                                    ID:${tb.id}
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="font-label-md text-label-md text-on-background truncate">${bInfo.title || 'N/A'}</p>
+                                    <p class="font-body-sm text-body-sm text-on-surface-variant truncate">${bInfo.author || 'N/A'}</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="font-label-md text-label-md text-primary">${tb.count}</p>
+                                    <p class="font-body-sm text-body-sm text-on-surface-variant">Lần mượn</p>
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    // 3. Calculate Top 5 Readers
+                    const topReaders = Object.keys(memberBorrows)
+                        .map(id => ({ id: id, count: memberBorrows[id] }))
+                        .sort((a, b) => b.count - a.count)
+                        .slice(0, 5);
+
+                    const topReadersContainer = document.getElementById('top-readers-container');
+                    topReadersContainer.innerHTML = '';
+                    
+                    const colors = ['bg-primary/20 text-primary', 'bg-secondary/20 text-secondary', 'bg-tertiary/20 text-tertiary', 'bg-error/20 text-error', 'bg-on-background/10 text-on-background'];
+                    
+                    topReaders.forEach((tr, index) => {
+                        const mInfo = membersMap[tr.id];
+                        if (!mInfo) return;
+                        
+                        const init = (mInfo.name || '').substring(0, 2).toUpperCase();
+                        const colorClass = colors[index % colors.length];
+
+                        topReadersContainer.innerHTML += `
+                            <tr class="hover:bg-primary/5 transition-colors">
+                                <td class="py-md">
+                                    <div class="flex items-center gap-sm">
+                                        <div class="w-8 h-8 rounded-full ${colorClass} flex items-center justify-center font-bold text-xs">${init}</div>
+                                        <span class="font-body-md text-body-md text-on-background">${mInfo.name || 'N/A'}</span>
+                                    </div>
+                                </td>
+                                <td class="py-md font-body-md text-body-md text-center">${tr.count}</td>
+                                <td class="py-md text-right">
+                                    <span class="px-sm py-xs bg-surface-container-highest text-on-surface-variant text-xs font-bold rounded-full">Active</span>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                }
+            } catch (err) {
+                console.error("Failed to fetch dashboard data:", err);
+            }
+        });
+    </script>
+</body></html>
