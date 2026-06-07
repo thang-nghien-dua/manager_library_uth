@@ -12,6 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 public class MemberProfile {
+    private int memberId;
     private String name;
     private String email;
     private String phoneNumber;

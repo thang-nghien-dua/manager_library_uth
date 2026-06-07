@@ -5,4 +5,7 @@ import java.util.List;
 
 public interface MemberRepository extends JpaRepository<MemberEntity, Integer> {
     List<MemberEntity> findByNameContainingIgnoreCaseOrEmailContainingIgnoreCaseOrPhoneNumberContainingIgnoreCase(String nameKeyword, String emailKeyword, String phoneNumberKeyword);
+
+    java.util.Optional<MemberEntity> findByUsername(String username);
+    java.util.Optional<MemberEntity> findByEmail(String email);
 }

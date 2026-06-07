@@ -221,6 +221,10 @@
 <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline">search</span>
 </div>
 </div>
+<div class="space-y-xs">
+<label class="font-label-md text-on-surface-variant pl-1">Ngày phải trả</label>
+<input id="due-date" class="glass-input w-full p-md rounded-lg" required="" type="date"/>
+</div>
 
 <button class="w-full bg-primary py-lg rounded-xl text-white font-headline-sm shadow-lg hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-md" id="issue-button" type="submit">
 <span>Xác nhận mượn</span>
@@ -262,6 +266,7 @@
 <th class="py-md font-label-md text-on-surface-variant">Ngày mượn</th>
 <th class="py-md font-label-md text-on-surface-variant">Hạn trả</th>
 <th class="py-md font-label-md text-on-surface-variant">Tình trạng</th>
+<th class="py-md font-label-md text-on-surface-variant text-right">Tiền phạt</th>
 <th class="py-md font-label-md text-on-surface-variant text-right">Thao tác</th>
 </tr>
 </thead>
@@ -307,6 +312,7 @@
             
             const bookId = document.getElementById('book-id').value;
             const memberId = document.getElementById('member-id').value;
+            const dueDate = document.getElementById('due-date').value;
             const token = localStorage.getItem('accessToken');
             const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
             
@@ -315,7 +321,7 @@
             issueBtn.disabled = true;
 
             try {
-                const res = await fetch(`/books/issue?bookId=${bookId}&memberId=${memberId}`, {
+                const res = await fetch(`/books/issue?bookId=${bookId}&memberId=${memberId}&dueDate=${dueDate}`, {
                     method: 'POST',
                     headers: headers
                 });
@@ -368,6 +374,22 @@
             
             logs.forEach(log => {
                 const issueDate = log.issueDate || 'N/A';
+                const dueDate = log.dueDate || 'N/A';
+                
+                let currentFine = 0;
+                let isOverdue = false;
+                if (log.dueDate) {
+                    const due = new Date(log.dueDate);
+                    due.setHours(23, 59, 59, 999);
+                    const now = new Date();
+                    if (now > due) {
+                        isOverdue = true;
+                        const diffTime = Math.abs(now - due);
+                        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                        currentFine = diffDays * 1000;
+                    }
+                }
+                const fineHtml = currentFine > 0 ? `<span class="text-error font-bold">${currentFine} ₫</span>` : `<span class="text-on-surface-variant">-</span>`;
                 
                 tbody.innerHTML += `
                 <tr class="group hover:bg-white/40 transition-colors">
@@ -383,9 +405,12 @@
                         </div>
                     </td>
                     <td class="py-lg text-sm">${issueDate}</td>
-                    <td class="py-lg text-sm text-on-surface-variant">N/A</td>
+                    <td class="py-lg text-sm text-on-surface-variant ${isOverdue ? 'text-error font-bold' : ''}">${dueDate}</td>
                     <td class="py-lg">
-                        <span class="bg-secondary/10 text-secondary px-2 py-1 rounded text-[10px] font-bold w-fit uppercase">Đang mượn</span>
+                        <span class="${isOverdue ? 'bg-error/10 text-error' : 'bg-secondary/10 text-secondary'} px-2 py-1 rounded text-[10px] font-bold w-fit uppercase">${isOverdue ? 'Trễ hạn' : 'Đang mượn'}</span>
+                    </td>
+                    <td class="py-lg text-right">
+                        ${fineHtml}
                     </td>
                     <td class="py-lg text-right">
                         <button onclick="returnBook(${log.bookId}, ${log.memberId})" class="bg-white border border-outline-variant hover:border-primary hover:text-primary px-lg py-sm rounded-lg text-sm font-bold transition-all transform active:scale-95">

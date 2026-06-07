@@ -31,6 +31,21 @@ public class AuthenticationController {
         return authenticationService.register(username, password);
     }
 
+    @Operation(summary = "Register New User", description = "Register a normal user account")
+    @PostMapping("/register-user")
+    public ResponseEntity<?> registerUser(
+            @RequestHeader("username") String username,
+            @RequestHeader("password") String password,
+            @RequestHeader("name") String name,
+            @RequestHeader("email") String email,
+            @RequestHeader(value = "phone", required = false) String phone) {
+        try {
+            return authenticationService.registerUser(username, password, name, email, phone);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @Operation(summary = "Login", description = "This API allows a librarian to log in to the library system. The request should include the username and password. Upon successful login, an authentication token will be generated and returned in the response. This token should be included in subsequent requests to authenticate the librarian.")
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> login(

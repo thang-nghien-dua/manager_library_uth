@@ -48,10 +48,18 @@ public class BookServiceImpl implements BookService {
                     book.setPublication(bookEntity.getPublication().toLocalDate());
                 }
                 
+                book.setPageCount(bookEntity.getPageCount());
+                book.setDescription(bookEntity.getDescription());
+                book.setCoverImage(bookEntity.getCoverImage());
+                
                 // Get copies status
                 List<BookCopyEntity> copies = bookCopyRepository.findByBookId(bookEntity.getBookId());
-                boolean hasAvailable = copies.stream().anyMatch(c -> c.getStatus() == BookCopyEntity.Status.AVAILABLE);
-                book.setAvailable(hasAvailable);
+                long availableCount = copies.stream().filter(c -> c.getStatus() == BookCopyEntity.Status.AVAILABLE).count();
+                long rentedCount = copies.stream().filter(c -> c.getStatus() == BookCopyEntity.Status.BORROWED).count();
+                
+                book.setQuantityAvailable((int) availableCount);
+                book.setQuantityRented((int) rentedCount);
+                book.setAvailable(availableCount > 0);
                 
                 books.add(book);
             }
@@ -82,9 +90,17 @@ public class BookServiceImpl implements BookService {
                 book.setPublication(bookEntity.getPublication().toLocalDate());
             }
 
+            book.setPageCount(bookEntity.getPageCount());
+            book.setDescription(bookEntity.getDescription());
+            book.setCoverImage(bookEntity.getCoverImage());
+
             List<BookCopyEntity> copies = bookCopyRepository.findByBookId(bookEntity.getBookId());
-            boolean hasAvailable = copies.stream().anyMatch(c -> c.getStatus() == BookCopyEntity.Status.AVAILABLE);
-            book.setAvailable(hasAvailable);
+            long availableCount = copies.stream().filter(c -> c.getStatus() == BookCopyEntity.Status.AVAILABLE).count();
+            long rentedCount = copies.stream().filter(c -> c.getStatus() == BookCopyEntity.Status.BORROWED).count();
+            
+            book.setQuantityAvailable((int) availableCount);
+            book.setQuantityRented((int) rentedCount);
+            book.setAvailable(availableCount > 0);
 
             return ResponseEntity.ok(book);
         } catch (Exception e) {
@@ -109,9 +125,17 @@ public class BookServiceImpl implements BookService {
             String genres = bookEntity.getCategories().stream().map(CategoryEntity::getName).collect(Collectors.joining(", "));
             bookProfile.setGenre(genres);
 
+            bookProfile.setPageCount(bookEntity.getPageCount());
+            bookProfile.setDescription(bookEntity.getDescription());
+            bookProfile.setCoverImage(bookEntity.getCoverImage());
+
             List<BookCopyEntity> copies = bookCopyRepository.findByBookId(bookEntity.getBookId());
-            boolean hasAvailable = copies.stream().anyMatch(c -> c.getStatus() == BookCopyEntity.Status.AVAILABLE);
-            bookProfile.setAvailable(hasAvailable);
+            long availableCount = copies.stream().filter(c -> c.getStatus() == BookCopyEntity.Status.AVAILABLE).count();
+            long rentedCount = copies.stream().filter(c -> c.getStatus() == BookCopyEntity.Status.BORROWED).count();
+            
+            bookProfile.setQuantityAvailable((int) availableCount);
+            bookProfile.setQuantityRented((int) rentedCount);
+            bookProfile.setAvailable(availableCount > 0);
 
             return ResponseEntity.ok(bookProfile);
         } catch (Exception e) {
@@ -124,11 +148,23 @@ public class BookServiceImpl implements BookService {
     @Transactional
     public ResponseEntity<String> addBook(BookBO bookBO) {
         try {
+            // Validate unique book (title + author)
+            List<BookEntity> existingBooks = bookRepository.findByTitleIgnoreCase(bookBO.getTitle());
+            for (BookEntity existing : existingBooks) {
+                String existingAuthors = existing.getAuthors().stream().map(AuthorEntity::getName).collect(Collectors.joining(","));
+                if (bookBO.getAuthor() != null && existingAuthors.equalsIgnoreCase(bookBO.getAuthor().trim())) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Sách đã tồn tại (trùng tiêu đề và tác giả)");
+                }
+            }
+
             BookEntity bookEntity = new BookEntity();
             bookEntity.setTitle(bookBO.getTitle());
             if (bookBO.getPublicationDate() != null) {
                 bookEntity.setPublication(Date.valueOf(bookBO.getPublicationDate()));
             }
+            bookEntity.setPageCount(bookBO.getPageCount());
+            bookEntity.setDescription(bookBO.getDescription());
+            bookEntity.setCoverImage(bookBO.getCoverImage());
 
             // Handle author mapping (find-or-create)
             List<AuthorEntity> authorList = new ArrayList<>();
@@ -162,9 +198,12 @@ public class BookServiceImpl implements BookService {
 
             BookEntity savedBook = bookRepository.save(bookEntity);
 
-            // Add at least 1 book copy physical automatically
-            BookCopyEntity copy = new BookCopyEntity(null, savedBook.getBookId(), BookCopyEntity.Status.AVAILABLE);
-            bookCopyRepository.save(copy);
+            // Add requested quantity of copies
+            int quantity = bookBO.getQuantity() > 0 ? bookBO.getQuantity() : 1;
+            for (int i = 0; i < quantity; i++) {
+                BookCopyEntity copy = new BookCopyEntity(null, savedBook.getBookId(), BookCopyEntity.Status.AVAILABLE);
+                bookCopyRepository.save(copy);
+            }
 
             return ResponseEntity.ok("Book added successfully");
         } catch (Exception e) {
@@ -186,6 +225,11 @@ public class BookServiceImpl implements BookService {
             bookEntity.setTitle(bookBO.getTitle());
             if (bookBO.getPublicationDate() != null) {
                 bookEntity.setPublication(Date.valueOf(bookBO.getPublicationDate()));
+            }
+            bookEntity.setPageCount(bookBO.getPageCount());
+            bookEntity.setDescription(bookBO.getDescription());
+            if (bookBO.getCoverImage() != null) {
+                bookEntity.setCoverImage(bookBO.getCoverImage());
             }
 
             // Update authors
@@ -219,6 +263,34 @@ public class BookServiceImpl implements BookService {
             bookEntity.setCategories(categoryList);
 
             bookRepository.save(bookEntity);
+
+            // Handle updating book quantity (copies)
+            List<BookCopyEntity> currentCopies = bookCopyRepository.findByBookId(bookEntity.getBookId());
+            long rentedCount = currentCopies.stream().filter(c -> c.getStatus() == BookCopyEntity.Status.BORROWED).count();
+            int requestedQuantity = bookBO.getQuantity() > 0 ? bookBO.getQuantity() : 1;
+            
+            if (requestedQuantity < rentedCount) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Không thể giảm số lượng xuống " + requestedQuantity + " vì đang có " + rentedCount + " cuốn đang được mượn.");
+            }
+            
+            if (requestedQuantity > currentCopies.size()) {
+                // Add more copies
+                int toAdd = requestedQuantity - currentCopies.size();
+                for (int i = 0; i < toAdd; i++) {
+                    bookCopyRepository.save(new BookCopyEntity(null, bookEntity.getBookId(), BookCopyEntity.Status.AVAILABLE));
+                }
+            } else if (requestedQuantity < currentCopies.size()) {
+                // Remove available copies
+                int toRemove = currentCopies.size() - requestedQuantity;
+                int removed = 0;
+                for (BookCopyEntity copy : currentCopies) {
+                    if (copy.getStatus() == BookCopyEntity.Status.AVAILABLE && removed < toRemove) {
+                        bookCopyRepository.delete(copy);
+                        removed++;
+                    }
+                }
+            }
+
             return ResponseEntity.ok("Book updated successfully");
         } catch (Exception e) {
             log.error("Failed to update book", e);

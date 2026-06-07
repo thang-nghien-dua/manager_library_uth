@@ -45,18 +45,77 @@ public class BookController {
     }
 
     @Operation(summary = "Add a new book", description = "Use this API to add a new book to the library database. You need to provide the necessary details of the book, including the title, author, genre, publication date, and any other relevant information. After successful execution, the book will be added to the library collection.")
-    @PostMapping("")
-    public ResponseEntity<String> addBook(@RequestParam String title, @RequestParam String author, @RequestParam String genre, @Parameter(example = "2023-05-30") @RequestParam String publishedOn) {
-        LocalDate publishedDate = LocalDate.parse(publishedOn, DateTimeFormatter.ISO_DATE);
-        BookBO bookBO = new BookBO(title, author, genre, publishedDate);
+    @PostMapping(value = "", consumes = {"multipart/form-data"})
+    public ResponseEntity<String> addBook(@RequestParam String title, 
+                                          @RequestParam String author, 
+                                          @RequestParam String genre, 
+                                          @RequestParam(required = false) String publishedOn,
+                                          @RequestParam(required = false) Integer pageCount,
+                                          @RequestParam(required = false) String description,
+                                          @RequestParam(defaultValue = "1") int quantity,
+                                          @RequestParam(value = "coverImage", required = false) org.springframework.web.multipart.MultipartFile coverImage) {
+        LocalDate publishedDate = null;
+        if (publishedOn != null && !publishedOn.isEmpty()) {
+            publishedDate = LocalDate.parse(publishedOn, DateTimeFormatter.ISO_DATE);
+        }
+        BookBO bookBO = new BookBO();
+        bookBO.setTitle(title);
+        bookBO.setAuthor(author);
+        bookBO.setGenre(genre);
+        bookBO.setPublicationDate(publishedDate);
+        bookBO.setPageCount(pageCount);
+        bookBO.setDescription(description);
+        bookBO.setQuantity(quantity);
+        
+        if (coverImage != null && !coverImage.isEmpty()) {
+            String fileName = System.currentTimeMillis() + "_" + coverImage.getOriginalFilename();
+            try {
+                java.nio.file.Path path = java.nio.file.Paths.get("src/main/resources/static/uploads/" + fileName);
+                java.nio.file.Files.createDirectories(path.getParent());
+                java.nio.file.Files.copy(coverImage.getInputStream(), path);
+                bookBO.setCoverImage("/uploads/" + fileName);
+            } catch (java.io.IOException e) {
+                return ResponseEntity.status(org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload image");
+            }
+        }
         return bookService.addBook(bookBO);
     }
 
     @Operation(summary = "Update book details", description = "This API allows you to update the details of a specific book. You need to provide the book's ID along with the updated information, such as the title, author, genre, publication date, or any other relevant fields. After executing the request, the book's details will be updated in the library system.")
-    @PutMapping("/{bookId}")
-    public ResponseEntity<String> updateBook(@PathVariable int bookId, @RequestParam String title, @RequestParam String author, @RequestParam String genre, @RequestParam String publishedOn) {
-        LocalDate publishedDate = LocalDate.parse(publishedOn, DateTimeFormatter.ISO_DATE);
-        BookBO bookBO = new BookBO(title, author, genre, publishedDate);
+    @PutMapping(value = "/{bookId}", consumes = {"multipart/form-data"})
+    public ResponseEntity<String> updateBook(@PathVariable int bookId, 
+                                             @RequestParam String title, 
+                                             @RequestParam String author, 
+                                             @RequestParam String genre, 
+                                             @RequestParam(required = false) String publishedOn,
+                                             @RequestParam(required = false) Integer pageCount,
+                                             @RequestParam(required = false) String description,
+                                             @RequestParam(defaultValue = "1") int quantity,
+                                             @RequestParam(value = "coverImage", required = false) org.springframework.web.multipart.MultipartFile coverImage) {
+        LocalDate publishedDate = null;
+        if (publishedOn != null && !publishedOn.isEmpty()) {
+            publishedDate = LocalDate.parse(publishedOn, DateTimeFormatter.ISO_DATE);
+        }
+        BookBO bookBO = new BookBO();
+        bookBO.setTitle(title);
+        bookBO.setAuthor(author);
+        bookBO.setGenre(genre);
+        bookBO.setPublicationDate(publishedDate);
+        bookBO.setPageCount(pageCount);
+        bookBO.setDescription(description);
+        bookBO.setQuantity(quantity);
+        
+        if (coverImage != null && !coverImage.isEmpty()) {
+            String fileName = System.currentTimeMillis() + "_" + coverImage.getOriginalFilename();
+            try {
+                java.nio.file.Path path = java.nio.file.Paths.get("src/main/resources/static/uploads/" + fileName);
+                java.nio.file.Files.createDirectories(path.getParent());
+                java.nio.file.Files.copy(coverImage.getInputStream(), path);
+                bookBO.setCoverImage("/uploads/" + fileName);
+            } catch (java.io.IOException e) {
+                return ResponseEntity.status(org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload image");
+            }
+        }
         return bookService.updateBook(bookId, bookBO);
     }
 

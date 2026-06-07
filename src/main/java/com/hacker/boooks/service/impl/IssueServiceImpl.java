@@ -31,7 +31,7 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     @Transactional
-    public ResponseEntity<IssueResponse> issueBook(int bookId, int memberId) {
+    public ResponseEntity<IssueResponse> issueBook(int bookId, int memberId, String dueDateStr) {
         try {
             Optional<BookEntity> bookOpt = bookRepository.findById(bookId);
             Optional<MemberEntity> memberOpt = memberRepository.findById(memberId);
@@ -53,12 +53,10 @@ public class IssueServiceImpl implements IssueService {
             logEntity.setCopyId(copy.getCopyId());
             logEntity.setMemberId(memberId);
             logEntity.setIssueDate(Date.valueOf(LocalDate.now()));
+            
+            LocalDate expectedReturnDate = LocalDate.parse(dueDateStr);
+            logEntity.setDueDate(Date.valueOf(expectedReturnDate));
             logRepository.save(logEntity);
-
-            Optional<FineEntity> fineOpt = fineRepository.findById(1);
-            LocalDate expectedReturnDate = fineOpt
-                    .map(fine -> LocalDate.now().plusDays(fine.getDaysOverdue()))
-                    .orElseGet(() -> LocalDate.now().plusDays(14));
 
             return ResponseEntity.ok(new IssueResponse(expectedReturnDate));
         } catch (Exception e) {
@@ -94,19 +92,10 @@ public class IssueServiceImpl implements IssueService {
             bookCopyRepository.save(copy);
 
             LocalDate currentDate = LocalDate.now();
-            Optional<FineEntity> fineOpt = fineRepository.findById(1);
-
-            LocalDate expectedReturnDate;
-            float finePerDay;
+            
+            LocalDate expectedReturnDate = logEntity.getDueDate() != null ? logEntity.getDueDate().toLocalDate() : logEntity.getIssueDate().toLocalDate().plusDays(14);
+            float finePerDay = 1000.0f; // As requested: quá 1 ngày là 1k
             float totalFine = 0.0f;
-
-            if (fineOpt.isPresent()) {
-                expectedReturnDate = logEntity.getIssueDate().toLocalDate().plusDays(fineOpt.get().getDaysOverdue());
-                finePerDay = fineOpt.get().getFineAmount();
-            } else {
-                expectedReturnDate = currentDate.plusDays(14);
-                finePerDay = 0.0f;
-            }
 
             if (currentDate.isAfter(expectedReturnDate)) {
                 long daysDifference = ChronoUnit.DAYS.between(expectedReturnDate, currentDate);

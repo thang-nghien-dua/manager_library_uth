@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="vi" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi Tiết Sách | Boooks</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-background": "#111c2d",
+                        "surface-container": "#e7eeff",
+                        "surface-container-highest": "#d8e3fb",
+                        "on-surface-variant": "#464555",
+                        "primary": "#3525cd",
+                        "surface": "#f9f9ff",
+                        "on-surface": "#111c2d",
+                        "on-primary": "#ffffff",
+                        "secondary": "#006a61",
+                        "error": "#ba1a1a",
+                        "outline": "#777587",
+                        "tertiary": "#684000",
+                    },
+                    fontFamily: {
+                        "display-lg": ["Outfit"],
+                        "body-md": ["Inter"],
+                        "headline-md": ["Outfit"]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background: radial-gradient(circle at top left, #f0f3ff, #f9f9ff 50%, #e2dfff 100%);
+            min-height: 100vh;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-surface">
+
+    <!-- Top Navigation -->
+    <header class="fixed top-0 left-0 w-full h-20 bg-white/70 backdrop-blur-md border-b border-white/20 shadow-sm flex items-center justify-between px-8 z-40">
+        <div class="flex items-center gap-4">
+            <h1 class="font-display-lg text-3xl font-bold text-primary tracking-tight cursor-pointer" onclick="window.location.href='/user/home'">Boooks</h1>
+            <nav class="hidden md:flex ml-8 gap-6">
+                <a href="/user/home" class="text-on-surface-variant hover:text-primary py-1 transition-colors">Khám phá</a>
+                <a href="/user/history" class="text-on-surface-variant hover:text-primary py-1 transition-colors">Lịch sử mượn</a>
+            </nav>
+        </div>
+        
+        <div class="flex items-center gap-6">
+            <div class="relative group cursor-pointer">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
+                        <span id="user-initial">U</span>
+                    </div>
+                    <span id="user-name-display" class="font-semibold text-on-surface hidden sm:block">User</span>
+                </div>
+                <!-- Dropdown -->
+                <div class="absolute right-0 mt-2 w-48 glass-card rounded-xl shadow-lg border border-white/30 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                    <a href="#" onclick="logout()" class="block px-4 py-3 text-sm text-error hover:bg-error/10 rounded-b-xl"><span class="material-symbols-outlined mr-2 text-sm">logout</span> Đăng xuất</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pt-28 pb-12 px-8 max-w-5xl mx-auto">
+        <div class="mb-6">
+            <button onclick="window.history.back()" class="flex items-center text-primary hover:underline font-medium">
+                <span class="material-symbols-outlined mr-1 text-sm">arrow_back</span> Quay lại
+            </button>
+        </div>
+
+        <div class="glass-card rounded-3xl p-8 shadow-lg flex flex-col md:flex-row gap-8 mb-8" id="book-info-container">
+            <!-- Rendered by JS -->
+            <div class="w-full flex justify-center items-center py-20">
+                <span class="material-symbols-outlined animate-spin text-4xl text-primary">progress_activity</span>
+            </div>
+        </div>
+
+        <!-- Reviews Section -->
+        <section class="glass-card rounded-3xl p-8 shadow-lg">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="font-headline-md text-2xl font-bold text-on-background">Đánh giá & Bình luận</h3>
+                <button onclick="openReviewModal()" class="bg-surface-container-highest text-primary px-4 py-2 rounded-lg font-semibold hover:bg-primary/20 transition-colors flex items-center gap-2">
+                    <span class="material-symbols-outlined text-sm">edit_square</span> Viết đánh giá
+                </button>
+            </div>
+            
+            <div id="reviews-list" class="space-y-6">
+                <!-- Rendered by JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Review Modal -->
+    <div id="review-modal" class="fixed inset-0 bg-on-background/50 backdrop-blur-sm z-[100] hidden items-center justify-center p-4">
+        <div class="bg-surface rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
+            <div class="px-6 py-4 border-b border-outline/20 flex justify-between items-center bg-surface-container-low">
+                <h3 class="font-headline-sm text-xl font-bold text-on-surface">Viết Đánh Giá</h3>
+                <button type="button" onclick="closeReviewModal()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-outline/10 text-outline transition-colors">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <form id="review-form" class="p-6 space-y-4">
+                <div>
+                    <label class="block font-medium text-on-surface-variant mb-2">Đánh giá của bạn</label>
+                    <div class="flex gap-2 text-2xl cursor-pointer" id="star-rating">
+                        <span class="material-symbols-outlined text-outline hover:text-tertiary transition-colors" data-val="1">star</span>
+                        <span class="material-symbols-outlined text-outline hover:text-tertiary transition-colors" data-val="2">star</span>
+                        <span class="material-symbols-outlined text-outline hover:text-tertiary transition-colors" data-val="3">star</span>
+                        <span class="material-symbols-outlined text-outline hover:text-tertiary transition-colors" data-val="4">star</span>
+                        <span class="material-symbols-outlined text-outline hover:text-tertiary transition-colors" data-val="5">star</span>
+                    </div>
+                    <input type="hidden" id="r-rating" value="0">
+                </div>
+                <div>
+                    <label class="block font-medium text-on-surface-variant mb-2">Bình luận</label>
+                    <textarea id="r-comment" rows="4" required class="w-full px-4 py-2 rounded-xl border border-outline/20 bg-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-body-md" placeholder="Chia sẻ cảm nghĩ của bạn về cuốn sách..."></textarea>
+                </div>
+                <div class="pt-4 flex gap-3 justify-end border-t border-outline/20">
+                    <button type="button" onclick="closeReviewModal()" class="px-5 py-2 rounded-xl font-medium text-on-surface-variant hover:bg-surface-container transition-colors">Hủy</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl font-medium bg-primary text-white shadow-md hover:-translate-y-px transition-all">Gửi đánh giá</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const bookId = urlParams.get('id');
+        let currentMemberId = null;
+        let bookData = null;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!bookId) {
+                alert("Không tìm thấy sách!");
+                window.location.href = "/user/home";
+                return;
+            }
+
+            const username = localStorage.getItem('username');
+            if(username) {
+                document.getElementById('user-name-display').textContent = username;
+                document.getElementById('user-initial').textContent = username.charAt(0).toUpperCase();
+                await fetchMemberId(username);
+            } else {
+                window.location.href = "/";
+            }
+
+            fetchBookDetails();
+            fetchReviews();
+            setupStars();
+        });
+
+        async function fetchMemberId(username) {
+            const token = localStorage.getItem('accessToken');
+            try {
+                const response = await fetch(`/members/by-username?username=${username}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    currentMemberId = data.memberId;
+                }
+            } catch (e) {
+                console.error("Failed to fetch member info", e);
+            }
+        }
+
+        async function fetchBookDetails() {
+            const token = localStorage.getItem('accessToken');
+            try {
+                const response = await fetch(`/books/${bookId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (response.ok) {
+                    bookData = await response.json();
+                    renderBookDetails(bookData);
+                } else {
+                    document.getElementById('book-info-container').innerHTML = `<p class="text-error">Không thể tải thông tin sách.</p>`;
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function renderBookDetails(book) {
+            const coverImg = book.coverImage || 'https://via.placeholder.com/300x450?text=No+Cover';
+            const available = book.quantityAvailable > 0;
+            
+            let dateStr = '';
+            if (book.publication) {
+                if (Array.isArray(book.publication)) {
+                    dateStr = `${book.publication[0]}-${String(book.publication[1]).padStart(2, '0')}-${String(book.publication[2]).padStart(2, '0')}`;
+                } else {
+                    const d = new Date(book.publication);
+                    dateStr = d.toISOString().split('T')[0];
+                }
+            }
+
+            let borrowBtn = '';
+            if (available) {
+                borrowBtn = `<button onclick="borrowBook()" class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-3 rounded-xl shadow-lg transition-transform hover:-translate-y-1">Mượn Sách Này</button>`;
+            } else {
+                borrowBtn = `<button disabled class="w-full bg-outline-variant text-white font-bold py-3 rounded-xl cursor-not-allowed">Đã Hết Sách</button>`;
+            }
+
+            const html = `
+                <div class="w-full md:w-1/3 flex flex-col gap-4">
+                    <div class="w-full aspect-[2/3] rounded-2xl overflow-hidden shadow-md">
+                        <img src="${coverImg}" alt="${book.title}" class="w-full h-full object-cover">
+                    </div>
+                    ${borrowBtn}
+                </div>
+                <div class="w-full md:w-2/3 flex flex-col">
+                    <div class="flex items-start justify-between mb-2">
+                        <div>
+                            <h2 class="text-4xl font-bold text-on-background mb-1">${book.title}</h2>
+                            <p class="text-xl text-on-surface-variant font-medium">${book.author || 'Tác giả chưa cập nhật'}</p>
+                        </div>
+                        <span class="bg-surface-container-highest text-primary px-4 py-1.5 rounded-full font-semibold whitespace-nowrap">${book.genre || 'Khác'}</span>
+                    </div>
+                    
+                    <div class="flex items-center gap-6 my-6 pb-6 border-b border-outline/10">
+                        <div class="text-center">
+                            <p class="text-xs text-on-surface-variant uppercase tracking-wider mb-1">Số trang</p>
+                            <p class="font-bold text-lg">${book.pageCount || '-'}</p>
+                        </div>
+                        <div class="text-center border-l border-outline/20 pl-6">
+                            <p class="text-xs text-on-surface-variant uppercase tracking-wider mb-1">Xuất bản</p>
+                            <p class="font-bold text-lg">${dateStr || '-'}</p>
+                        </div>
+                        <div class="text-center border-l border-outline/20 pl-6">
+                            <p class="text-xs text-on-surface-variant uppercase tracking-wider mb-1">Trạng thái</p>
+                            <p class="font-bold text-lg ${available ? 'text-secondary' : 'text-error'}">${available ? book.quantityAvailable + ' bản' : 'Hết bản'}</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-4 flex-1">
+                        <h3 class="font-bold text-lg mb-2 text-on-background">Tóm tắt nội dung</h3>
+                        <p class="text-on-surface-variant leading-relaxed whitespace-pre-line">${book.description || 'Chưa có thông tin mô tả cho cuốn sách này.'}</p>
+                    </div>
+                </div>
+            `;
+            document.getElementById('book-info-container').innerHTML = html;
+        }
+
+        async function borrowBook() {
+            if (!currentMemberId) {
+                alert("Không thể mượn sách. Vui lòng đăng nhập lại.");
+                return;
+            }
+            if (!confirm(`Xác nhận mượn sách: ${bookData.title}?`)) return;
+
+            const token = localStorage.getItem('accessToken');
+            try {
+                const response = await fetch(`/books/issue?bookId=${bookId}&memberId=${currentMemberId}`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (response.ok) {
+                    alert("Mượn sách thành công!");
+                    fetchBookDetails(); // refresh quantity
+                } else {
+                    const text = await response.text();
+                    alert("Mượn sách thất bại: " + text);
+                }
+            } catch (e) {
+                console.error(e);
+                alert("Lỗi hệ thống khi mượn sách.");
+            }
+        }
+
+        async function fetchReviews() {
+            const token = localStorage.getItem('accessToken');
+            try {
+                const response = await fetch(`/reviews/book/${bookId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (response.ok) {
+                    const reviews = await response.json();
+                    renderReviews(reviews);
+                }
+            } catch(e) {
+                console.error(e);
+            }
+        }
+
+        function renderReviews(reviews) {
+            const container = document.getElementById('reviews-list');
+            if (reviews.length === 0) {
+                container.innerHTML = `<p class="text-on-surface-variant italic text-center py-4">Chưa có đánh giá nào cho cuốn sách này.</p>`;
+                return;
+            }
+
+            container.innerHTML = '';
+            reviews.forEach(rv => {
+                let stars = '';
+                for(let i=1; i<=5; i++) {
+                    if(i <= rv.rating) {
+                        stars += `<span class="material-symbols-outlined text-tertiary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>`;
+                    } else {
+                        stars += `<span class="material-symbols-outlined text-outline/30 text-sm">star</span>`;
+                    }
+                }
+                
+                const date = new Date(rv.createdAt).toLocaleDateString('vi-VN');
+
+                container.innerHTML += `
+                    <div class="border-b border-outline/10 pb-6 last:border-0 last:pb-0">
+                        <div class="flex justify-between items-start mb-2">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">
+                                    ${rv.username.charAt(0).toUpperCase()}
+                                </div>
+                                <div>
+                                    <p class="font-bold text-on-background text-sm">${rv.username}</p>
+                                    <p class="text-xs text-on-surface-variant">${date}</p>
+                                </div>
+                            </div>
+                            <div class="flex">${stars}</div>
+                        </div>
+                        <p class="text-on-surface-variant text-sm mt-3 ml-11">${rv.comment}</p>
+                    </div>
+                `;
+            });
+        }
+
+        // Modal Review Logic
+        function setupStars() {
+            const stars = document.querySelectorAll('#star-rating span');
+            const ratingInput = document.getElementById('r-rating');
+            
+            stars.forEach(star => {
+                star.addEventListener('click', () => {
+                    const val = parseInt(star.getAttribute('data-val'));
+                    ratingInput.value = val;
+                    stars.forEach(s => {
+                        if (parseInt(s.getAttribute('data-val')) <= val) {
+                            s.style.fontVariationSettings = "'FILL' 1";
+                            s.classList.replace('text-outline', 'text-tertiary');
+                        } else {
+                            s.style.fontVariationSettings = "'FILL' 0";
+                            s.classList.replace('text-tertiary', 'text-outline');
+                        }
+                    });
+                });
+            });
+        }
+
+        function openReviewModal() {
+            document.getElementById('review-form').reset();
+            document.getElementById('r-rating').value = "0";
+            document.querySelectorAll('#star-rating span').forEach(s => {
+                s.style.fontVariationSettings = "'FILL' 0";
+                s.classList.replace('text-tertiary', 'text-outline');
+            });
+            const modal = document.getElementById('review-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeReviewModal() {
+            const modal = document.getElementById('review-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        document.getElementById('review-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const rating = document.getElementById('r-rating').value;
+            const comment = document.getElementById('r-comment').value;
+            const username = localStorage.getItem('username');
+            const token = localStorage.getItem('accessToken');
+
+            if (rating === "0") {
+                alert("Vui lòng chọn số sao đánh giá!");
+                return;
+            }
+
+            try {
+                const response = await fetch(`/reviews?bookId=${bookId}&rating=${rating}&comment=${encodeURIComponent(comment)}`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'username': username
+                    }
+                });
+                
+                if (response.ok) {
+                    closeReviewModal();
+                    fetchReviews();
+                    alert("Cảm ơn bạn đã đánh giá!");
+                } else {
+                    const text = await response.text();
+                    alert("Lỗi đánh giá: " + text);
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Lỗi hệ thống.");
+            }
+        });
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = '/';
+        }
+    </script>
+</body>
+</html>

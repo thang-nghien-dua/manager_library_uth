@@ -21,8 +21,8 @@ public class IssueController {
 
     @Operation(summary = "Issue Book", description = "This API allows you to issue a book to a member in the library system. It takes the book ID and member ID as input parameters and returns the response containing the details of the issued book.")
     @PostMapping("/issue")
-    public ResponseEntity<IssueResponse> issueBook(@RequestParam int bookId, @RequestParam int memberId) {
-        return issueService.issueBook(bookId, memberId);
+    public ResponseEntity<IssueResponse> issueBook(@RequestParam int bookId, @RequestParam int memberId, @RequestParam String dueDate) {
+        return issueService.issueBook(bookId, memberId, dueDate);
     }
 
     @Operation(summary = "Return Book", description = "This API allows you to return a book that was previously issued by a member. It takes the book ID and member ID as input parameters and returns the response containing the details of the returned book.")

@@ -11,4 +11,6 @@ public interface BookRepository extends JpaRepository<BookEntity, Integer> {
 
     @Query("SELECT DISTINCT b FROM BookEntity b LEFT JOIN b.authors a WHERE LOWER(b.title) LIKE LOWER(CONCAT('%', :titleKeyword, '%')) OR LOWER(a.name) LIKE LOWER(CONCAT('%', :authorKeyword, '%'))")
     List<BookEntity> findByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(@Param("titleKeyword") String titleKeyword, @Param("authorKeyword") String authorKeyword);
+
+    List<BookEntity> findByTitleIgnoreCase(String title);
 }

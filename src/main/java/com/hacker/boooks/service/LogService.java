@@ -17,4 +17,12 @@ public interface LogService {
      */
     ResponseEntity<List<Log>> getLogs();
 
+    /**
+     * Retrieves a list of logs for a specific member.
+     *
+     * @param memberId the ID of the member
+     * @return ResponseEntity with a list of book logs
+     */
+    ResponseEntity<List<Log>> getLogsByMemberId(int memberId);
+
 }

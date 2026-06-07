@@ -25,6 +25,9 @@ public class LogEntity {
     @Column(name = "issue_date", nullable = false)
     private Date issueDate;
 
+    @Column(name = "due_date")
+    private Date dueDate;
+
     @Column(name = "return_date")
     private Date returnDate;
 

@@ -19,4 +19,13 @@ public class WebController {
 
     @GetMapping("/issue-return")
     public String issueReturn() { return "issue_return"; }
+
+    @GetMapping("/user/home")
+    public String userHome() { return "user_home"; }
+
+    @GetMapping("/user/book-details")
+    public String userBookDetails() { return "book_details"; }
+
+    @GetMapping("/user/history")
+    public String userHistory() { return "my_history"; }
 }

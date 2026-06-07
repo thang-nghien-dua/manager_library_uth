@@ -23,6 +23,11 @@ public interface AuthenticationService {
     ResponseEntity<AuthenticationResponse> register(String username, String password);
 
     /**
+     * Registers a new regular user.
+     */
+    ResponseEntity<AuthenticationResponse> registerUser(String username, String password, String name, String email, String phone);
+
+    /**
      * Authenticates a user and generates access and refresh tokens.
      *
      * @param username the username of the user

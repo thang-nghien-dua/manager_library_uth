@@ -16,4 +16,8 @@ public class BookBO {
     private String author;
     private String genre;
     private LocalDate publicationDate;
+    private Integer pageCount;
+    private String description;
+    private int quantity;
+    private String coverImage;
 }

@@ -43,6 +43,12 @@ public class MemberController {
         return memberService.getMemberProfile(memberId);
     }
 
+    @Operation(summary = "Get member by username", description = "Retrieve member profile based on their username.")
+    @GetMapping("/by-username")
+    public ResponseEntity<MemberProfile> getMemberByUsername(@RequestParam String username) {
+        return memberService.getMemberByUsername(username);
+    }
+
     @Operation(summary = "Add a member", description = "Add a new member to the library database.")
     @PostMapping
     public ResponseEntity<String> addMember(@RequestParam String name, @RequestParam String email, @RequestParam String phoneNumber) {

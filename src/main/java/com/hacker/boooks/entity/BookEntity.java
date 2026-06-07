@@ -22,6 +22,15 @@ public class BookEntity {
 
     private Date publication;
 
+    @Column(name = "page_count")
+    private Integer pageCount;
+
+    @Column(length = 2000)
+    private String description;
+
+    @Column(name = "cover_image")
+    private String coverImage;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "book_author",

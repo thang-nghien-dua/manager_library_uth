@@ -169,25 +169,27 @@
                     Digital Sanctuary
                 </p>
 </div>
+<!-- Tabs for Login / Register -->
+<div class="flex w-full mb-lg border-b border-outline-variant/30">
+    <button type="button" id="tab-login" class="flex-1 py-sm font-label-md text-label-md text-primary border-b-2 border-primary transition-colors">Đăng nhập</button>
+    <button type="button" id="tab-register" class="flex-1 py-sm font-label-md text-label-md text-on-surface-variant border-b-2 border-transparent hover:text-primary transition-colors">Đăng ký</button>
+</div>
+
 <!-- Login Form -->
 <form class="w-full space-y-lg" id="loginForm">
 <div class="space-y-sm">
-<label class="font-label-md text-label-md text-on-surface-variant block ml-1" for="username">Username</label>
+<label class="font-label-md text-label-md text-on-surface-variant block ml-1" for="username">Tên đăng nhập</label>
 <div class="relative group">
-<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors">
-                            person
-                        </span>
-<input class="w-full bg-white/60 border border-outline-variant rounded-lg py-md pl-[48px] pr-md font-body-md text-body-md text-on-background focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-outline/50" id="username" name="username" placeholder="Enter your username" required="" type="text"/>
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors">person</span>
+<input class="w-full bg-white/60 border border-outline-variant rounded-lg py-md pl-[48px] pr-md font-body-md text-body-md text-on-background focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-outline/50" id="username" name="username" placeholder="Nhập tên đăng nhập" required="" type="text"/>
 </div>
 </div>
 <div class="space-y-sm">
-<label class="font-label-md text-label-md text-on-surface-variant block ml-1" for="password">Password</label>
+<label class="font-label-md text-label-md text-on-surface-variant block ml-1" for="password">Mật khẩu</label>
 <div class="relative group">
-<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors">
-                            lock
-                        </span>
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors">lock</span>
 <input class="w-full bg-white/60 border border-outline-variant rounded-lg py-md pl-[48px] pr-md font-body-md text-body-md text-on-background focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-outline/50" id="password" name="password" placeholder="••••••••" required="" type="password"/>
-<button class="absolute right-md top-1/2 -translate-y-1/2 text-outline hover:text-on-background transition-colors" type="button">
+<button class="absolute right-md top-1/2 -translate-y-1/2 text-outline hover:text-on-background transition-colors toggle-pass" type="button">
 <span class="material-symbols-outlined text-[20px]">visibility</span>
 </button>
 </div>
@@ -195,15 +197,64 @@
 <div class="flex items-center justify-between">
 <label class="flex items-center cursor-pointer group">
 <input class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary/20 bg-white/60 transition-all" type="checkbox"/>
-<span class="ml-sm font-label-sm text-label-sm text-on-surface-variant group-hover:text-on-background transition-colors">Remember me</span>
+<span class="ml-sm font-label-sm text-label-sm text-on-surface-variant group-hover:text-on-background transition-colors">Ghi nhớ đăng nhập</span>
 </label>
-<a class="font-label-sm text-label-sm text-primary hover:underline transition-all" href="#">Forgot password?</a>
+<a class="font-label-sm text-label-sm text-primary hover:underline transition-all" href="#">Quên mật khẩu?</a>
 </div>
 <button class="w-full bg-primary text-on-primary font-label-md text-label-md py-md rounded-lg shadow-lg shadow-primary/20 hover:translate-y-[-2px] hover:shadow-xl hover:shadow-primary/30 active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-sm" type="submit">
                     Đăng nhập
                     <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
 </button>
 </form>
+
+<!-- Register Form (Hidden by default) -->
+<form class="w-full space-y-md hidden" id="registerForm">
+<div class="space-y-sm">
+<label class="font-label-md text-label-md text-on-surface-variant block ml-1" for="reg-username">Tên đăng nhập</label>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors">person</span>
+<input class="w-full bg-white/60 border border-outline-variant rounded-lg py-md pl-[48px] pr-md font-body-md text-body-md text-on-background focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-outline/50" id="reg-username" name="username" placeholder="Tạo tên đăng nhập" required="" type="text"/>
+</div>
+</div>
+<div class="space-y-sm">
+<label class="font-label-md text-label-md text-on-surface-variant block ml-1" for="reg-password">Mật khẩu</label>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors">lock</span>
+<input class="w-full bg-white/60 border border-outline-variant rounded-lg py-md pl-[48px] pr-md font-body-md text-body-md text-on-background focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-outline/50" id="reg-password" name="password" placeholder="••••••••" required="" type="password"/>
+<button class="absolute right-md top-1/2 -translate-y-1/2 text-outline hover:text-on-background transition-colors toggle-pass" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+</div>
+<div class="space-y-sm">
+<label class="font-label-md text-label-md text-on-surface-variant block ml-1" for="reg-name">Họ và tên</label>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors">badge</span>
+<input class="w-full bg-white/60 border border-outline-variant rounded-lg py-md pl-[48px] pr-md font-body-md text-body-md text-on-background focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-outline/50" id="reg-name" name="name" placeholder="Nhập họ và tên của bạn" required="" type="text"/>
+</div>
+</div>
+<div class="space-y-sm">
+<label class="font-label-md text-label-md text-on-surface-variant block ml-1" for="reg-email">Email</label>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors">mail</span>
+<input class="w-full bg-white/60 border border-outline-variant rounded-lg py-md pl-[48px] pr-md font-body-md text-body-md text-on-background focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-outline/50" id="reg-email" name="email" placeholder="example@email.com" required="" type="email"/>
+</div>
+</div>
+<div class="space-y-sm">
+<label class="font-label-md text-label-md text-on-surface-variant block ml-1" for="reg-phone">Số điện thoại</label>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors">call</span>
+<input class="w-full bg-white/60 border border-outline-variant rounded-lg py-md pl-[48px] pr-md font-body-md text-body-md text-on-background focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-outline/50" id="reg-phone" name="phone" placeholder="Nhập số điện thoại" type="text"/>
+</div>
+</div>
+
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md py-md rounded-lg shadow-lg shadow-primary/20 hover:translate-y-[-2px] hover:shadow-xl hover:shadow-primary/30 active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-sm mt-md" type="submit">
+                    Đăng ký tài khoản
+                    <span class="material-symbols-outlined text-[18px]">person_add</span>
+</button>
+<p id="reg-error" class="text-error font-body-sm text-center hidden"></p>
+</form>
+
 <!-- Footer Action -->
 <div class="mt-xl text-center">
 <p class="font-body-sm text-body-sm text-on-surface-variant">
@@ -225,8 +276,30 @@
 <script>
         // Micro-interactions and effects
         document.addEventListener('DOMContentLoaded', () => {
-            const form = document.getElementById('loginForm');
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            const tabLogin = document.getElementById('tab-login');
+            const tabRegister = document.getElementById('tab-register');
             const glassCard = document.querySelector('.glass-card');
+
+            // Tab switching logic
+            tabLogin.addEventListener('click', () => {
+                loginForm.classList.remove('hidden');
+                registerForm.classList.add('hidden');
+                tabLogin.classList.add('text-primary', 'border-primary');
+                tabLogin.classList.remove('text-on-surface-variant', 'border-transparent');
+                tabRegister.classList.remove('text-primary', 'border-primary');
+                tabRegister.classList.add('text-on-surface-variant', 'border-transparent');
+            });
+
+            tabRegister.addEventListener('click', () => {
+                registerForm.classList.remove('hidden');
+                loginForm.classList.add('hidden');
+                tabRegister.classList.add('text-primary', 'border-primary');
+                tabRegister.classList.remove('text-on-surface-variant', 'border-transparent');
+                tabLogin.classList.remove('text-primary', 'border-primary');
+                tabLogin.classList.add('text-on-surface-variant', 'border-transparent');
+            });
 
             // Subtle parallax effect on mouse move
             window.addEventListener('mousemove', (e) => {
@@ -246,13 +319,13 @@
             }, 100);
 
             // Button loading state and actual backend login
-            form.addEventListener('submit', async (e) => {
+            loginForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                const btn = form.querySelector('button[type="submit"]');
+                const btn = loginForm.querySelector('button[type="submit"]');
                 const originalContent = btn.innerHTML;
                 
-                const username = form.username.value;
-                const password = form.password.value;
+                const username = loginForm.username.value;
+                const password = loginForm.password.value;
                 
                 btn.disabled = true;
                 btn.innerHTML = `<span class="material-symbols-outlined animate-spin">progress_activity</span> Processing...`;
@@ -270,6 +343,9 @@
                     if (response.ok) {
                         const data = await response.json();
                         localStorage.setItem('accessToken', data.accessToken);
+                        localStorage.setItem('userRole', data.role);
+                        localStorage.setItem('username', username);
+                        
                         if (data.refreshToken) {
                             localStorage.setItem('refreshToken', data.refreshToken);
                         }
@@ -279,25 +355,89 @@
                         glassCard.style.transform = 'scale(1.02)';
                         
                         setTimeout(() => {
-                            window.location.href = '/dashboard';
+                            if (data.role === 'ROLE_USER') {
+                                window.location.href = '/user/home';
+                            } else {
+                                window.location.href = '/dashboard';
+                            }
                         }, 1000);
                     } else {
-                        throw new Error('Invalid username or password');
+                        throw new Error('Sai tên đăng nhập hoặc mật khẩu');
                     }
                 } catch (error) {
                     btn.disabled = false;
                     btn.innerHTML = originalContent;
-                    alert('Login Failed: ' + error.message);
+                    alert('Đăng nhập thất bại: ' + error.message);
+                }
+            });
+
+            // Registration handling
+            registerForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = registerForm.querySelector('button[type="submit"]');
+                const errorText = document.getElementById('reg-error');
+                const originalContent = btn.innerHTML;
+                errorText.classList.add('hidden');
+                
+                const username = registerForm.username.value;
+                const password = registerForm.password.value;
+                const name = registerForm.name.value;
+                const email = registerForm.email.value;
+                const phone = registerForm.phone.value;
+                
+                btn.disabled = true;
+                btn.innerHTML = `<span class="material-symbols-outlined animate-spin">progress_activity</span> Processing...`;
+                
+                try {
+                    const response = await fetch('/register-user', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'username': username,
+                            'password': password,
+                            'name': name,
+                            'email': email,
+                            'phone': phone
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        localStorage.setItem('accessToken', data.accessToken);
+                        localStorage.setItem('userRole', data.role);
+                        localStorage.setItem('username', username);
+                        
+                        if (data.refreshToken) {
+                            localStorage.setItem('refreshToken', data.refreshToken);
+                        }
+                        
+                        btn.innerHTML = `<span class="material-symbols-outlined">check_circle</span> Đăng ký thành công!`;
+                        btn.classList.replace('bg-primary', 'bg-secondary');
+                        
+                        setTimeout(() => {
+                            window.location.href = '/user/home';
+                        }, 1000);
+                    } else {
+                        const errorMsg = await response.text();
+                        throw new Error(errorMsg || 'Lỗi đăng ký');
+                    }
+                } catch (error) {
+                    btn.disabled = false;
+                    btn.innerHTML = originalContent;
+                    errorText.textContent = error.message;
+                    errorText.classList.remove('hidden');
                 }
             });
 
             // Password visibility toggle
-            const togglePass = document.querySelector('button[type="button"]');
-            const passInput = document.getElementById('password');
-            togglePass.addEventListener('click', () => {
-                const type = passInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                passInput.setAttribute('type', type);
-                togglePass.querySelector('span').textContent = type === 'password' ? 'visibility' : 'visibility_off';
+            const togglePassBtns = document.querySelectorAll('.toggle-pass');
+            togglePassBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const passInput = btn.previousElementSibling;
+                    const type = passInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passInput.setAttribute('type', type);
+                    btn.querySelector('span').textContent = type === 'password' ? 'visibility' : 'visibility_off';
+                });
             });
         });
     </script>

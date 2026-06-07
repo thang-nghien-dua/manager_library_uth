@@ -19,4 +19,9 @@ public class Book {
     private LocalDate publication;
     private boolean isAvailable;
     private Integer holder;
+    private Integer pageCount;
+    private String description;
+    private String coverImage;
+    private int quantityAvailable;
+    private int quantityRented;
 }

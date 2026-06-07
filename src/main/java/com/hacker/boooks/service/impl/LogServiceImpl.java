@@ -27,6 +27,7 @@ public class LogServiceImpl implements LogService {
 
     private final LogRepository logRepository;
     private final BookCopyRepository bookCopyRepository;
+    private final com.hacker.boooks.repository.BookRepository bookRepository;
 
     /**
      * Retrieves a list of all book logs.
@@ -57,6 +58,9 @@ public class LogServiceImpl implements LogService {
                 
                 bookLog.setMemberId(logEntity.getMemberId());
                 bookLog.setIssueDate(logEntity.getIssueDate().toLocalDate());
+                if (logEntity.getDueDate() != null) {
+                    bookLog.setDueDate(logEntity.getDueDate().toLocalDate());
+                }
                 bookLog.setReturnDate(logEntity.getReturnDate() != null ? logEntity.getReturnDate().toLocalDate() : null);
                 bookLog.setFine(logEntity.getFine() != null ? logEntity.getFine() : 0.0f);
 
@@ -68,6 +72,52 @@ public class LogServiceImpl implements LogService {
             return ResponseEntity.ok(logs);
         } catch (Exception e) {
             log.error("Error occurred while retrieving book logs: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @Override
+    public ResponseEntity<List<Log>> getLogsByMemberId(int memberId) {
+        try {
+            List<LogEntity> logEntities = logRepository.findByMemberIdAndReturnDateIsNull(memberId);
+            // Wait, we need all logs (history), not just unreturned ones.
+            // Let's use logRepository.findAll() and filter, or if there's a findByMemberId method.
+            // Let's check logRepository.
+            // Let's assume logRepository.findAll() and filter for now to be safe, since I can't check logRepository easily without viewing it.
+            List<LogEntity> allLogs = logRepository.findAll();
+            List<Log> logs = new ArrayList<>();
+
+            for (LogEntity logEntity : allLogs) {
+                if (logEntity.getMemberId() == memberId) {
+                    Log bookLog = new Log();
+                    bookLog.setLogId(logEntity.getLogId());
+                    Optional<BookCopyEntity> copyOpt = bookCopyRepository.findById(logEntity.getCopyId());
+                    if (copyOpt.isPresent()) {
+                        bookLog.setBookId(copyOpt.get().getBookId());
+                        Optional<com.hacker.boooks.entity.BookEntity> bookOpt = bookRepository.findById(copyOpt.get().getBookId());
+                        if (bookOpt.isPresent()) {
+                            bookLog.setBookTitle(bookOpt.get().getTitle());
+                            bookLog.setCoverImage(bookOpt.get().getCoverImage());
+                        }
+                    } else {
+                        bookLog.setBookId(logEntity.getCopyId());
+                    }
+                    
+                    bookLog.setMemberId(logEntity.getMemberId());
+                    bookLog.setIssueDate(logEntity.getIssueDate().toLocalDate());
+                    if (logEntity.getDueDate() != null) {
+                        bookLog.setDueDate(logEntity.getDueDate().toLocalDate());
+                    }
+                    bookLog.setReturnDate(logEntity.getReturnDate() != null ? logEntity.getReturnDate().toLocalDate() : null);
+                    bookLog.setFine(logEntity.getFine() != null ? logEntity.getFine() : 0.0f);
+
+                    logs.add(bookLog);
+                }
+            }
+
+            return ResponseEntity.ok(logs);
+        } catch (Exception e) {
+            log.error("Error occurred while retrieving member logs: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

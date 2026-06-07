@@ -16,7 +16,7 @@ public interface IssueService {
      * @param memberId The ID of the member to whom the book is issued.
      * @return ResponseEntity containing the issue response with the expected return date.
      */
-    ResponseEntity<IssueResponse> issueBook(int bookId, int memberId);
+    ResponseEntity<IssueResponse> issueBook(int bookId, int memberId, String dueDate);
 
     /**
      * Returns a book and calculates the fine (if any) for the given book and member.

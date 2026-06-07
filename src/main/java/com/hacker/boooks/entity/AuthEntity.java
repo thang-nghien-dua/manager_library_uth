@@ -27,10 +27,13 @@ public class AuthEntity implements UserDetails {
     private String resetToken;
     @Column(name = "is_activated")
     private Boolean isActivated;
+    
+    @Column(length = 20)
+    private String role; // e.g. "ROLE_ADMIN", "ROLE_USER"
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ADMIN"));
+        return List.of(new SimpleGrantedAuthority(role != null ? role : "ROLE_ADMIN"));
     }
     @Override
     public boolean isAccountNonExpired() { return true; }

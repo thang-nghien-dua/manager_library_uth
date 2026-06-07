@@ -16,6 +16,9 @@ public class Log {
     private int bookId;
     private int memberId;
     private LocalDate issueDate;
+    private LocalDate dueDate;
     private LocalDate returnDate;
     private float fine;
+    private String bookTitle;
+    private String coverImage;
 }

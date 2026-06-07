@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -29,6 +30,12 @@ public class LogController {
     @GetMapping("")
     public ResponseEntity<List<Log>> getBooks() {
         return logService.getLogs();
+    }
+
+    @Operation(summary = "Get member's book logs", description = "Get logs for a specific member.")
+    @GetMapping("/member/{memberId}")
+    public ResponseEntity<List<Log>> getLogsByMemberId(@PathVariable int memberId) {
+        return logService.getLogsByMemberId(memberId);
     }
 
 }

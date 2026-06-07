@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="vi" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lịch Sử Mượn Trả | Boooks</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-background": "#111c2d",
+                        "surface-container": "#e7eeff",
+                        "surface-container-highest": "#d8e3fb",
+                        "on-surface-variant": "#464555",
+                        "primary": "#3525cd",
+                        "surface": "#f9f9ff",
+                        "on-surface": "#111c2d",
+                        "on-primary": "#ffffff",
+                        "secondary": "#006a61",
+                        "tertiary": "#684000",
+                        "error": "#ba1a1a",
+                        "outline": "#777587"
+                    },
+                    fontFamily: {
+                        "display-lg": ["Outfit"],
+                        "body-md": ["Inter"],
+                        "headline-md": ["Outfit"]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background: radial-gradient(circle at top left, #f0f3ff, #f9f9ff 50%, #e2dfff 100%);
+            min-height: 100vh;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-surface">
+
+    <!-- Top Navigation -->
+    <header class="fixed top-0 left-0 w-full h-20 bg-white/70 backdrop-blur-md border-b border-white/20 shadow-sm flex items-center justify-between px-8 z-40">
+        <div class="flex items-center gap-4">
+            <h1 class="font-display-lg text-3xl font-bold text-primary tracking-tight cursor-pointer" onclick="window.location.href='/user/home'">Boooks</h1>
+            <nav class="hidden md:flex ml-8 gap-6">
+                <a href="/user/home" class="text-on-surface-variant hover:text-primary py-1 transition-colors">Khám phá</a>
+                <a href="/user/history" class="text-primary font-semibold border-b-2 border-primary py-1">Lịch sử mượn</a>
+            </nav>
+        </div>
+        
+        <div class="flex items-center gap-6">
+            <div class="relative group cursor-pointer">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
+                        <span id="user-initial">U</span>
+                    </div>
+                    <span id="user-name-display" class="font-semibold text-on-surface hidden sm:block">User</span>
+                </div>
+                <!-- Dropdown -->
+                <div class="absolute right-0 mt-2 w-48 glass-card rounded-xl shadow-lg border border-white/30 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                    <a href="#" onclick="logout()" class="block px-4 py-3 text-sm text-error hover:bg-error/10 rounded-b-xl"><span class="material-symbols-outlined mr-2 text-sm">logout</span> Đăng xuất</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pt-28 pb-12 px-8 max-w-6xl mx-auto">
+        <section class="mb-10 text-center md:text-left">
+            <h2 class="font-headline-md text-4xl font-bold text-on-background mb-2">Lịch sử mượn sách</h2>
+            <p class="text-on-surface-variant text-lg">Theo dõi các tài liệu bạn đã mượn và trạng thái trả</p>
+        </section>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <div class="glass-card rounded-2xl p-6 shadow-sm border-l-4 border-primary">
+                <div class="flex justify-between items-start mb-2">
+                    <p class="text-on-surface-variant font-medium">Tổng sách đã mượn</p>
+                    <span class="material-symbols-outlined text-primary bg-primary/10 p-2 rounded-lg">library_books</span>
+                </div>
+                <p class="text-4xl font-bold text-on-background" id="stat-total">0</p>
+            </div>
+            <div class="glass-card rounded-2xl p-6 shadow-sm border-l-4 border-tertiary">
+                <div class="flex justify-between items-start mb-2">
+                    <p class="text-on-surface-variant font-medium">Sách đang mượn</p>
+                    <span class="material-symbols-outlined text-tertiary bg-tertiary/10 p-2 rounded-lg">import_contacts</span>
+                </div>
+                <p class="text-4xl font-bold text-on-background" id="stat-active">0</p>
+            </div>
+            <div class="glass-card rounded-2xl p-6 shadow-sm border-l-4 border-error">
+                <div class="flex justify-between items-start mb-2">
+                    <p class="text-on-surface-variant font-medium">Phạt trễ hạn</p>
+                    <span class="material-symbols-outlined text-error bg-error/10 p-2 rounded-lg">payments</span>
+                </div>
+                <p class="text-4xl font-bold text-on-background" id="stat-fine">0 ₫</p>
+            </div>
+        </div>
+
+        <!-- History Table -->
+        <div class="glass-card rounded-2xl shadow-lg overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-surface-container-low/50">
+                            <th class="px-6 py-4 font-label-md text-on-surface-variant uppercase tracking-wider text-xs">Sách</th>
+                            <th class="px-6 py-4 font-label-md text-on-surface-variant uppercase tracking-wider text-xs">Ngày mượn</th>
+                            <th class="px-6 py-4 font-label-md text-on-surface-variant uppercase tracking-wider text-xs">Ngày trả (Dự kiến / Thực tế)</th>
+                            <th class="px-6 py-4 font-label-md text-on-surface-variant uppercase tracking-wider text-xs text-center">Trạng thái</th>
+                            <th class="px-6 py-4 font-label-md text-on-surface-variant uppercase tracking-wider text-xs text-right">Phạt</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-list" class="divide-y divide-white/20">
+                        <!-- Rendered by JS -->
+                        <tr><td colspan="5" class="text-center py-10"><span class="material-symbols-outlined animate-spin text-3xl text-primary">progress_activity</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let currentMemberId = null;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const username = localStorage.getItem('username');
+            if(username) {
+                document.getElementById('user-name-display').textContent = username;
+                document.getElementById('user-initial').textContent = username.charAt(0).toUpperCase();
+                await fetchMemberId(username);
+            } else {
+                window.location.href = "/";
+            }
+        });
+
+        async function fetchMemberId(username) {
+            const token = localStorage.getItem('accessToken');
+            try {
+                const response = await fetch(`/members/by-username?username=${username}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    currentMemberId = data.memberId;
+                    fetchHistory();
+                } else {
+                    window.location.href = "/";
+                }
+            } catch (e) {
+                console.error("Failed to fetch member info", e);
+            }
+        }
+
+        async function fetchHistory() {
+            const token = localStorage.getItem('accessToken');
+            try {
+                const response = await fetch(`/logs/member/${currentMemberId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (response.ok) {
+                    const logs = await response.json();
+                    renderHistory(logs);
+                } else {
+                    document.getElementById('history-list').innerHTML = `<tr><td colspan="5" class="text-center py-10 text-error">Lỗi khi tải lịch sử.</td></tr>`;
+                }
+            } catch(e) {
+                console.error(e);
+            }
+        }
+
+        function renderHistory(logs) {
+            const list = document.getElementById('history-list');
+            
+            if (logs.length === 0) {
+                list.innerHTML = `<tr><td colspan="5" class="text-center py-10 text-on-surface-variant">Bạn chưa mượn cuốn sách nào.</td></tr>`;
+                return;
+            }
+
+            list.innerHTML = '';
+            
+            let totalFine = 0;
+            let activeBorrows = 0;
+
+            // Sort logs by issueDate descending
+            logs.sort((a, b) => new Date(b.issueDate) - new Date(a.issueDate));
+
+            logs.forEach(log => {
+                const issueD = new Date(log.issueDate);
+                const expectedD = log.dueDate ? new Date(log.dueDate) : new Date(issueD.getTime() + 14 * 24 * 60 * 60 * 1000);
+                expectedD.setHours(23, 59, 59, 999);
+
+                let isReturned = log.returnDate != null;
+                let isOverdue = !isReturned && new Date() > expectedD;
+                
+                let displayFine = log.fine || 0;
+                if (!isReturned && isOverdue) {
+                    const diffTime = Math.abs(new Date() - expectedD);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    displayFine = diffDays * 1000;
+                }
+
+                if (!isReturned) activeBorrows++;
+                if (displayFine > 0) totalFine += displayFine;
+
+                const statusHtml = isReturned 
+                    ? `<span class="inline-flex items-center gap-1 bg-secondary/10 text-secondary px-3 py-1 rounded-full text-xs font-semibold"><span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>Đã trả</span>`
+                    : (isOverdue 
+                        ? `<span class="inline-flex items-center gap-1 bg-error/10 text-error px-3 py-1 rounded-full text-xs font-semibold"><span class="w-1.5 h-1.5 rounded-full bg-error"></span>Trễ hạn</span>`
+                        : `<span class="inline-flex items-center gap-1 bg-tertiary/10 text-tertiary px-3 py-1 rounded-full text-xs font-semibold"><span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>Đang mượn</span>`
+                    );
+
+                const coverImg = log.coverImage || 'https://via.placeholder.com/40x60?text=Book';
+
+                list.innerHTML += `
+                    <tr class="hover:bg-white/40 transition-colors group cursor-pointer" onclick="window.location.href='/user/book-details?id=${log.bookId}'">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-4">
+                                <img src="${coverImg}" class="w-10 h-14 object-cover rounded shadow-sm">
+                                <div>
+                                    <p class="font-bold text-on-surface">${log.bookTitle || ('Sách ID: ' + log.bookId)}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-on-surface-variant">${issueD.toLocaleDateString('vi-VN')}</td>
+                        <td class="px-6 py-4 text-on-surface-variant">
+                            <div class="flex flex-col">
+                                <span class="text-xs text-outline mb-1">Dự kiến: ${expectedD.toLocaleDateString('vi-VN')}</span>
+                                <span class="font-medium ${isReturned ? 'text-secondary' : ''}">${isReturned ? (new Date(log.returnDate)).toLocaleDateString('vi-VN') : 'Chưa trả'}</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-center">${statusHtml}</td>
+                        <td class="px-6 py-4 text-right font-semibold ${displayFine > 0 ? 'text-error' : 'text-on-surface-variant'}">${displayFine > 0 ? displayFine + ' ₫' : '-'}</td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById('stat-total').textContent = logs.length;
+            document.getElementById('stat-active').textContent = activeBorrows;
+            document.getElementById('stat-fine').textContent = totalFine + ' ₫';
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = '/';
+        }
+    </script>
+</body>
+</html>

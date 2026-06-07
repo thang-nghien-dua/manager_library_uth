@@ -37,6 +37,14 @@ public interface MemberService {
     ResponseEntity<MemberProfile> getMemberProfile(int memberId);
 
     /**
+     * Get a member by username.
+     *
+     * @param username the username of the member
+     * @return ResponseEntity containing the member profile if found
+     */
+    ResponseEntity<MemberProfile> getMemberByUsername(String username);
+
+    /**
      * Adds a new member to the library.
      *
      * @param memberBO The MemberBO object containing the member details to be added.

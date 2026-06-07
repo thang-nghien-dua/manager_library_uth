@@ -62,6 +62,7 @@ public class MemberServiceImpl implements MemberService {
             }
             MemberEntity m = optionalMemberEntity.get();
             MemberProfile memberProfile = new MemberProfile();
+            memberProfile.setMemberId(m.getMemberId());
             memberProfile.setName(m.getName());
             memberProfile.setEmail(m.getEmail());
             memberProfile.setPhoneNumber(m.getPhoneNumber());
@@ -91,9 +92,22 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public ResponseEntity<MemberProfile> getMemberByUsername(String username) {
+        try {
+            Optional<MemberEntity> optionalMemberEntity = memberRepository.findByUsername(username);
+            if (optionalMemberEntity.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+            return getMemberProfile(optionalMemberEntity.get().getMemberId());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @Override
     public ResponseEntity<String> addMember(MemberBO memberBO) {
         try {
-            MemberEntity m = new MemberEntity(null, memberBO.getName(), memberBO.getEmail(), memberBO.getPhoneNumber());
+            MemberEntity m = new MemberEntity(null, memberBO.getName(), memberBO.getEmail(), memberBO.getPhoneNumber(), null);
             memberRepository.save(m);
             return ResponseEntity.ok("Member added successfully");
         } catch (Exception e) {

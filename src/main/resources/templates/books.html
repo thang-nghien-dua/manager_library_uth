@@ -253,12 +253,15 @@
 <table class="w-full text-left border-collapse">
 <thead>
 <tr class="bg-surface-container-low/50">
+<th class="px-lg py-md font-label-md text-on-surface-variant uppercase tracking-wider text-xs w-16">Ảnh</th>
 <th class="px-lg py-md font-label-md text-on-surface-variant uppercase tracking-wider text-xs">Tựa sách</th>
 <th class="px-lg py-md font-label-md text-on-surface-variant uppercase tracking-wider text-xs">Tác giả</th>
 <th class="px-lg py-md font-label-md text-on-surface-variant uppercase tracking-wider text-xs">Thể loại</th>
-<th class="px-lg py-md font-label-md text-on-surface-variant uppercase tracking-wider text-xs text-center">Số bản</th>
-<th class="px-lg py-md font-label-md text-on-surface-variant uppercase tracking-wider text-xs">Trạng thái</th>
-<th class="px-lg py-md font-label-md text-on-surface-variant uppercase tracking-wider text-xs text-right">Thao tác</th>
+<th class="px-lg py-md font-label-md text-on-surface-variant uppercase tracking-wider text-xs">Ngày phát hành</th>
+<th class="px-lg py-md font-label-md text-on-surface-variant uppercase tracking-wider text-xs text-center">Số trang</th>
+<th class="px-lg py-md font-label-md text-on-surface-variant uppercase tracking-wider text-xs text-center">Đã cho thuê</th>
+<th class="px-lg py-md font-label-md text-on-surface-variant uppercase tracking-wider text-xs text-center">Số lượng còn</th>
+<th class="px-lg py-md font-label-md text-on-surface-variant uppercase tracking-wider text-xs text-right"></th>
 </tr>
 </thead>
 <tbody id="book-list" class="divide-y divide-white/20">
@@ -285,34 +288,52 @@
 </main>
 
 <!-- Book Modal -->
-<div id="book-modal" class="fixed inset-0 bg-on-background/50 backdrop-blur-sm z-[100] hidden items-center justify-center p-md">
-    <div class="bg-surface rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
+<div id="book-modal" class="fixed inset-0 bg-on-background/50 backdrop-blur-sm z-[100] hidden items-center justify-center p-md overflow-y-auto">
+    <div class="bg-surface rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden my-auto">
         <div class="px-lg py-md border-b border-outline/20 flex justify-between items-center bg-surface-container-low">
             <h3 id="modal-title" class="font-headline-sm text-headline-sm text-on-surface">Thêm Sách Mới</h3>
             <button type="button" onclick="closeBookModal()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-outline/10 text-outline transition-colors">
                 <span class="material-symbols-outlined">close</span>
             </button>
         </div>
-        <form id="book-form" class="p-lg space-y-md">
-            <div>
+        <form id="book-form" class="p-lg grid grid-cols-1 md:grid-cols-2 gap-md">
+            <div class="md:col-span-2">
                 <label class="block font-label-md text-label-md text-on-surface-variant mb-xs">Tựa sách *</label>
-                <input id="b-title" required type="text" class="w-full px-md py-sm rounded-xl border border-outline/20 bg-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-body-md" placeholder="VD: Nhà giả kim">
+                <input id="b-title" required type="text" class="form-input w-full px-md py-sm rounded-xl border border-outline/20 bg-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-body-md" placeholder="VD: Nhà giả kim">
             </div>
             <div>
                 <label class="block font-label-md text-label-md text-on-surface-variant mb-xs">Tác giả *</label>
-                <input id="b-author" required type="text" class="w-full px-md py-sm rounded-xl border border-outline/20 bg-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-body-md" placeholder="VD: Paulo Coelho">
+                <input id="b-author" required type="text" class="form-input w-full px-md py-sm rounded-xl border border-outline/20 bg-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-body-md" placeholder="VD: Paulo Coelho">
             </div>
             <div>
                 <label class="block font-label-md text-label-md text-on-surface-variant mb-xs">Thể loại *</label>
-                <input id="b-genre" required type="text" class="w-full px-md py-sm rounded-xl border border-outline/20 bg-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-body-md" placeholder="VD: Tiểu thuyết">
+                <input id="b-genre" required type="text" class="form-input w-full px-md py-sm rounded-xl border border-outline/20 bg-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-body-md" placeholder="VD: Tiểu thuyết">
             </div>
             <div>
-                <label class="block font-label-md text-label-md text-on-surface-variant mb-xs">Ngày xuất bản *</label>
-                <input id="b-published" required type="date" class="w-full px-md py-sm rounded-xl border border-outline/20 bg-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-body-md">
+                <label class="block font-label-md text-label-md text-on-surface-variant mb-xs">Ngày phát hành *</label>
+                <input id="b-published" required type="date" class="form-input w-full px-md py-sm rounded-xl border border-outline/20 bg-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-body-md">
             </div>
-            <div class="pt-md flex gap-sm justify-end">
+            <div>
+                <label class="block font-label-md text-label-md text-on-surface-variant mb-xs">Số trang</label>
+                <input id="b-page-count" type="number" class="form-input w-full px-md py-sm rounded-xl border border-outline/20 bg-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-body-md" placeholder="VD: 300">
+            </div>
+            <div>
+                <label class="block font-label-md text-label-md text-on-surface-variant mb-xs">Số lượng *</label>
+                <input id="b-quantity" required type="number" min="1" class="form-input w-full px-md py-sm rounded-xl border border-outline/20 bg-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-body-md" placeholder="VD: 5">
+            </div>
+            <div>
+                <label class="block font-label-md text-label-md text-on-surface-variant mb-xs">Ảnh bìa (chọn file từ máy tính)</label>
+                <input id="b-cover" type="file" accept="image/*" class="form-input w-full px-md py-sm rounded-xl border border-outline/20 bg-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-body-md">
+            </div>
+            <div class="md:col-span-2">
+                <label class="block font-label-md text-label-md text-on-surface-variant mb-xs">Mô tả</label>
+                <textarea id="b-desc" rows="3" class="form-input w-full px-md py-sm rounded-xl border border-outline/20 bg-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-body-md" placeholder="Tóm tắt nội dung..."></textarea>
+            </div>
+            
+            <div class="md:col-span-2 pt-md flex gap-sm justify-end border-t border-outline/20">
                 <button type="button" onclick="closeBookModal()" class="px-lg py-sm rounded-xl font-label-md text-label-md text-on-surface-variant hover:bg-surface-container transition-colors">Hủy</button>
-                <button type="submit" class="px-lg py-sm rounded-xl font-label-md text-label-md bg-primary text-white shadow-md hover:-translate-y-px hover:shadow-lg transition-all">Lưu</button>
+                <button type="button" id="btn-edit-mode" onclick="enableEditMode()" class="hidden px-lg py-sm rounded-xl font-label-md text-label-md bg-secondary text-white shadow-md hover:-translate-y-px transition-all">Edit</button>
+                <button type="submit" id="btn-save" class="px-lg py-sm rounded-xl font-label-md text-label-md bg-primary text-white shadow-md hover:-translate-y-px hover:shadow-lg transition-all">Lưu</button>
             </div>
         </form>
     </div>
@@ -320,36 +341,70 @@
 
 <script>
         let isEditing = false;
+        let isViewing = false;
         let currentBookId = null;
         let allBooksData = [];
 
-        function openBookModal(book = null) {
+        function setFormDisabled(disabled) {
+            const inputs = document.querySelectorAll('#book-form .form-input');
+            inputs.forEach(input => {
+                input.disabled = disabled;
+                if (disabled) {
+                    input.classList.add('opacity-70', 'bg-gray-100');
+                } else {
+                    input.classList.remove('opacity-70', 'bg-gray-100');
+                }
+            });
+            document.getElementById('btn-save').classList.toggle('hidden', disabled);
+            document.getElementById('btn-edit-mode').classList.toggle('hidden', !disabled);
+        }
+
+        function enableEditMode() {
+            setFormDisabled(false);
+            isEditing = true;
+            isViewing = false;
+            document.getElementById('modal-title').textContent = 'Chỉnh sửa Sách';
+            // Only allow changing total quantity if needed, or disable it
+        }
+
+        function openBookModal(book = null, viewMode = false) {
             const modal = document.getElementById('book-modal');
             const form = document.getElementById('book-form');
             const title = document.getElementById('modal-title');
             
             if (book) {
-                isEditing = true;
+                isEditing = !viewMode;
+                isViewing = viewMode;
                 currentBookId = book.bookId;
-                title.textContent = 'Cập nhật Sách';
+                title.textContent = viewMode ? 'Thông tin Sách' : 'Chỉnh sửa Sách';
+                
                 document.getElementById('b-title').value = book.title || '';
                 document.getElementById('b-author').value = book.author || '';
                 document.getElementById('b-genre').value = book.genre || '';
+                document.getElementById('b-page-count').value = book.pageCount || '';
+                document.getElementById('b-desc').value = book.description || '';
+                document.getElementById('b-cover').value = ''; // Clear file input when editing, only select if want to change
+                document.getElementById('b-quantity').value = (book.quantityAvailable || 0) + (book.quantityRented || 0);
+                
                 let dateStr = '';
-                if (book.publishedOn) {
-                    if (Array.isArray(book.publishedOn)) {
-                        dateStr = `${book.publishedOn[0]}-${String(book.publishedOn[1]).padStart(2, '0')}-${String(book.publishedOn[2]).padStart(2, '0')}`;
+                if (book.publication) {
+                    if (Array.isArray(book.publication)) {
+                        dateStr = `${book.publication[0]}-${String(book.publication[1]).padStart(2, '0')}-${String(book.publication[2]).padStart(2, '0')}`;
                     } else {
-                        const d = new Date(book.publishedOn);
+                        const d = new Date(book.publication);
                         dateStr = d.toISOString().split('T')[0];
                     }
                 }
                 document.getElementById('b-published').value = dateStr;
+                
+                setFormDisabled(viewMode);
             } else {
                 isEditing = false;
+                isViewing = false;
                 currentBookId = null;
                 title.textContent = 'Thêm Sách Mới';
                 form.reset();
+                setFormDisabled(false);
             }
             
             modal.classList.remove('hidden');
@@ -364,14 +419,24 @@
 
         async function saveBook(event) {
             event.preventDefault();
+            if (isViewing) return;
+            
             const token = localStorage.getItem('accessToken');
             const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
             
-            const params = new URLSearchParams();
-            params.append('title', document.getElementById('b-title').value);
-            params.append('author', document.getElementById('b-author').value);
-            params.append('genre', document.getElementById('b-genre').value);
-            params.append('publishedOn', document.getElementById('b-published').value);
+            const formData = new FormData();
+            formData.append('title', document.getElementById('b-title').value);
+            formData.append('author', document.getElementById('b-author').value);
+            formData.append('genre', document.getElementById('b-genre').value);
+            formData.append('publishedOn', document.getElementById('b-published').value);
+            formData.append('quantity', document.getElementById('b-quantity').value);
+            formData.append('pageCount', document.getElementById('b-page-count').value || '0');
+            formData.append('description', document.getElementById('b-desc').value);
+            
+            const fileInput = document.getElementById('b-cover');
+            if (fileInput.files.length > 0) {
+                formData.append('coverImage', fileInput.files[0]);
+            }
 
             const url = isEditing ? `/books/${currentBookId}` : `/books`;
             const method = isEditing ? 'PUT' : 'POST';
@@ -379,11 +444,8 @@
             try {
                 const response = await fetch(url, {
                     method: method,
-                    headers: {
-                        ...headers,
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: params
+                    headers: headers,
+                    body: formData
                 });
 
                 if (response.ok) {
@@ -455,34 +517,40 @@
             bookList.innerHTML = '';
 
             books.forEach(book => {
-                const statusHtml = book.available 
-                    ? `<span class="inline-flex items-center gap-1 bg-secondary/10 text-secondary px-3 py-1 rounded-full text-xs font-semibold"><span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>Sẵn sàng</span>`
-                    : `<span class="inline-flex items-center gap-1 bg-tertiary/10 text-tertiary px-3 py-1 rounded-full text-xs font-semibold"><span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>Đang mượn</span>`;
-
                 const bookJson = JSON.stringify(book).replace(/"/g, '&quot;');
+                let dateStr = '';
+                if (book.publication) {
+                    if (Array.isArray(book.publication)) {
+                        dateStr = `${book.publication[0]}-${String(book.publication[1]).padStart(2, '0')}-${String(book.publication[2]).padStart(2, '0')}`;
+                    } else {
+                        const d = new Date(book.publication);
+                        dateStr = d.toISOString().split('T')[0];
+                    }
+                }
+                const coverImg = book.coverImage || 'https://via.placeholder.com/60x80?text=No+Cover';
 
                 bookList.innerHTML += `
                     <tr class="hover:bg-white/40 transition-colors group">
                         <td class="px-lg py-md">
-                            <div class="flex items-center gap-md">
-                                <div class="w-10 h-10 rounded-md bg-surface-container-highest flex items-center justify-center font-bold text-primary">
-                                    ${book.bookId}
-                                </div>
-                                <span class="font-bold text-on-surface block">${book.title}</span>
-                            </div>
+                            <img src="${coverImg}" class="w-12 h-16 object-cover rounded shadow-sm border border-outline/10">
+                        </td>
+                        <td class="px-lg py-md">
+                            <span class="font-bold text-on-surface block">${book.title}</span>
                         </td>
                         <td class="px-lg py-md text-on-surface-variant">${book.author || 'N/A'}</td>
                         <td class="px-lg py-md">
                             <span class="bg-surface-container-highest text-on-surface px-sm py-1 rounded-full text-xs font-medium">${book.genre || 'N/A'}</span>
                         </td>
-                        <td class="px-lg py-md text-center font-medium">${book.pages || '-'}</td>
-                        <td class="px-lg py-md">${statusHtml}</td>
+                        <td class="px-lg py-md text-on-surface-variant">${dateStr}</td>
+                        <td class="px-lg py-md text-center font-medium">${book.pageCount || '-'}</td>
+                        <td class="px-lg py-md text-center font-bold text-tertiary">${book.quantityRented || 0}</td>
+                        <td class="px-lg py-md text-center font-bold text-secondary">${book.quantityAvailable || 0}</td>
                         <td class="px-lg py-md text-right">
                             <div class="flex justify-end gap-2">
-                                <button class="p-2 text-on-surface-variant hover:text-primary hover:bg-primary/10 rounded-lg transition-all" onclick="openBookModal(${bookJson})" title="Sửa">
-                                    <span class="material-symbols-outlined text-body-md">edit</span>
+                                <button class="p-2 text-on-surface-variant hover:text-primary hover:bg-primary/10 rounded-lg transition-all" onclick="openBookModal(${bookJson}, true)" title="View">
+                                    <span class="material-symbols-outlined text-body-md">visibility</span>
                                 </button>
-                                <button class="p-2 text-on-surface-variant hover:text-error hover:bg-error/10 rounded-lg transition-all" onclick="deleteBook(${book.bookId})" title="Xóa">
+                                <button class="p-2 text-on-surface-variant hover:text-error hover:bg-error/10 rounded-lg transition-all" onclick="deleteBook(${book.bookId})" title="Delete">
                                     <span class="material-symbols-outlined text-body-md">delete</span>
                                 </button>
                             </div>

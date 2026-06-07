@@ -41,6 +41,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final com.hacker.boooks.repository.MemberRepository memberRepository;
 
     /**
      * Registers a new user.
@@ -52,6 +53,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public ResponseEntity<AuthenticationResponse> register(String username, String password) {
         try {
+            if (authRepository.existsById(username)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); // Actually, we should return a message, but AuthenticationResponse doesn't have a message field.
+            }
+
             var user = User.builder()
                     .username(username)
                     .password(passwordEncoder.encode(password))
@@ -67,6 +72,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             authEntity.setLastLogin(new Timestamp(System.currentTimeMillis()));
             authEntity.setRefreshToken(refreshToken);
             authEntity.setIsActivated(false);
+            authEntity.setRole("ROLE_ADMIN");
 
             authRepository.save(authEntity);
 
@@ -75,10 +81,64 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             AuthenticationResponse authenticationResponse = new AuthenticationResponse();
             authenticationResponse.setAccessToken(accessToken);
             authenticationResponse.setRefreshToken(refreshToken);
+            authenticationResponse.setRole(authEntity.getRole() != null ? authEntity.getRole() : "ROLE_ADMIN");
 
             log.info("User registered successfully: {}", username);
 
             return ResponseEntity.ok(authenticationResponse);
+        } catch (Exception e) {
+            log.error("Error occurred during user registration: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @Override
+    public ResponseEntity<AuthenticationResponse> registerUser(String username, String password, String name, String email, String phone) {
+        try {
+            if (authRepository.existsById(username)) {
+                AuthenticationResponse errorResp = new AuthenticationResponse();
+                // To return a string error, it's better to throw an exception or return a different DTO.
+                // Let's rely on the controller to handle error strings, or use a custom RuntimeException.
+                throw new IllegalArgumentException("Tài khoản đã tồn tại");
+            }
+            if (memberRepository.findByEmail(email).isPresent()) {
+                throw new IllegalArgumentException("Email đã tồn tại");
+            }
+
+            String refreshToken = generateRefreshToken(username);
+
+            AuthEntity authEntity = new AuthEntity();
+            authEntity.setUsername(username);
+            authEntity.setPassword(passwordEncoder.encode(password));
+            authEntity.setCreationTime(new Timestamp(System.currentTimeMillis()));
+            authEntity.setLastLogin(new Timestamp(System.currentTimeMillis()));
+            authEntity.setRefreshToken(refreshToken);
+            authEntity.setIsActivated(true); // Users activate automatically
+            authEntity.setRole("ROLE_USER");
+
+            authRepository.save(authEntity);
+
+            com.hacker.boooks.entity.MemberEntity member = new com.hacker.boooks.entity.MemberEntity();
+            member.setUsername(username);
+            member.setName(name);
+            member.setEmail(email);
+            member.setPhoneNumber(phone);
+            memberRepository.save(member);
+
+            String accessToken = jwtService.generateToken(authEntity);
+
+            AuthenticationResponse authenticationResponse = new AuthenticationResponse();
+            authenticationResponse.setAccessToken(accessToken);
+            authenticationResponse.setRefreshToken(refreshToken);
+            authenticationResponse.setRole("ROLE_USER");
+
+            log.info("User registered successfully: {}", username);
+
+            return ResponseEntity.ok(authenticationResponse);
+        } catch (IllegalArgumentException e) {
+            log.error("Validation error: {}", e.getMessage());
+            // We need a way to return message. Controller can catch this.
+            throw e;
         } catch (Exception e) {
             log.error("Error occurred during user registration: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -116,6 +176,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             AuthenticationResponse authenticationResponse = new AuthenticationResponse();
             authenticationResponse.setAccessToken(accessToken);
             authenticationResponse.setRefreshToken(refreshToken);
+            authenticationResponse.setRole(authEntity.getRole() != null ? authEntity.getRole() : "ROLE_ADMIN");
 
             log.info("User logged in successfully: {}", username);
 
@@ -203,7 +264,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             AuthEntity authEntity = authRepository.findById(username)
                     .orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
 
-            if (authEntity.getPassword().equals(passwordEncoder.encode(oldPassword)) && newPassword.equals(retypePassword)) {
+            if (passwordEncoder.matches(oldPassword, authEntity.getPassword()) && newPassword.equals(retypePassword)) {
                 authEntity.setPassword(passwordEncoder.encode(newPassword));
                 authRepository.save(authEntity);
 
