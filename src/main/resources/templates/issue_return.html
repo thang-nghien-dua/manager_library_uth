@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html class="light" lang="vi"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Boooks - Giao dịch Sách</title>
+<title>Boooks - Giao dá»‹ch SĂ¡ch</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -159,21 +159,23 @@
 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
 <span class="font-body-md">Transactions</span>
 </a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:text-white hover:bg-white/10 transition-all duration-300 rounded-lg group" href="/reports">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">bar_chart</span>
+<span class="font-body-md">BĂ¡o cĂ¡o</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:text-white hover:bg-white/10 transition-all duration-300 rounded-lg group" href="/admin/staff">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">manage_accounts</span>
+<span class="font-body-md">NhĂ¢n viĂªn</span>
+</a>
 </div>
-<div class="mt-auto p-md bg-white/5 rounded-xl flex items-center gap-md border border-white/10">
-<img alt="Administrator profile" class="w-10 h-10 rounded-full border border-primary" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5WqWUNbJ_EqieuhFtEqfts7grUn1Ge5KYrR-3amRMYpm9Z5DioYM_i_8YatSgt77CTi2ULtEQaK0iOOAbDLp3W-tEu0CITqUNsqXWzK6US8zi9E8f-6YtC789DoM6g2Lx22vV_2ukqe8CmYyAbmUNtchf0-0QKsGOBWTnVu8y0u-RdoP1WA1SW9sHExshatno8_dQtTcxmxESLciWNGtiqTR8p7YwDA8Qw8iLUVnW45AxLU0ESrzm4mYdVN4lgtFV002zNstMN-cp"/>
-<div>
-<p class="text-white font-label-md">Admin Account</p>
-<p class="text-white/50 text-xs uppercase tracking-widest">Master Librarian</p>
-</div>
-</div>
+<div class="mt-auto p-md bg-white/5 rounded-xl flex items-center justify-center border border-white/10"><p class="text-white font-headline-sm font-bold tracking-widest uppercase">Admin</p></div>
 </nav>
 <!-- Top App Bar -->
 <header class="fixed top-0 right-0 w-[calc(100%-280px)] h-20 bg-white/70 backdrop-blur-md border-b border-white/20 flex items-center justify-between px-margin-desktop z-40">
 <div class="flex items-center gap-md">
 <div class="relative">
 <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
-<input id="search-input" oninput="filterLogs(this.value)" class="glass-input pl-10 pr-4 py-2 rounded-full w-64 text-sm" placeholder="Tìm kiếm mã sách, thẻ thành viên..." type="text"/>
+<input id="search-input" oninput="filterLogs(this.value)" class="glass-input pl-10 pr-4 py-2 rounded-full w-64 text-sm" placeholder="TĂ¬m tĂªn sĂ¡ch, Ä‘á»™c giáº£..." type="text"/>
 </div>
 </div>
 <div class="flex items-center gap-lg">
@@ -190,8 +192,8 @@
 <main class="ml-[280px] pt-24 px-margin-desktop pb-xl min-h-screen">
 <header class="mb-lg flex justify-between items-end">
 <div>
-<h2 class="font-headline-lg text-headline-lg text-on-background">Giao dịch Sách</h2>
-<p class="text-on-surface-variant">Quản lý mượn và trả sách theo thời gian thực</p>
+<h2 class="font-headline-lg text-headline-lg text-on-background">Giao dá»‹ch SĂ¡ch</h2>
+<p class="text-on-surface-variant">Quáº£n lĂ½ mÆ°á»£n vĂ  tráº£ sĂ¡ch theo thá»i gian thá»±c</p>
 </div>
 <div class="flex items-center gap-sm bg-white/50 p-sm rounded-lg border border-black/5">
 <span class="material-symbols-outlined text-primary">schedule</span>
@@ -207,37 +209,38 @@
 <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
 <span class="material-symbols-outlined text-primary">logout</span>
 </div>
-<h3 class="font-headline-sm text-headline-sm">Mượn sách mới</h3>
+<h3 class="font-headline-sm text-headline-sm">MÆ°á»£n sĂ¡ch má»›i</h3>
 </div>
 <form class="space-y-lg" id="issue-form">
-<div class="space-y-xs">
-<label class="font-label-md text-on-surface-variant pl-1">Mã thành viên (ID)</label>
-<input id="member-id" class="glass-input w-full p-md rounded-lg" placeholder="VD: 1" required="" type="number"/>
+<div class="space-y-xs relative">
+<label class="font-label-md text-on-surface-variant pl-1">TĂ¬m Äá»™c giáº£ (SÄT)</label>
+<input id="member-search" class="glass-input w-full p-md rounded-lg" placeholder="Nháº­p SÄT..." type="text" autocomplete="off"/>
+<input id="member-id" type="hidden" required/>
+<div id="member-dropdown" class="absolute z-50 w-full bg-white rounded-lg shadow-xl border border-outline/10 max-h-48 overflow-y-auto hidden" style="top: 100%;"></div>
+</div>
+<div class="space-y-xs relative">
+<label class="font-label-md text-on-surface-variant pl-1">TĂ¬m SĂ¡ch (TĂªn sĂ¡ch)</label>
+<input id="book-search" class="glass-input w-full p-md rounded-lg" placeholder="Nháº­p tĂªn sĂ¡ch..." type="text" autocomplete="off"/>
+<input id="book-id" type="hidden" required/>
+<div id="book-dropdown" class="absolute z-50 w-full bg-white rounded-lg shadow-xl border border-outline/10 max-h-64 overflow-y-auto hidden" style="top: 100%;"></div>
 </div>
 <div class="space-y-xs">
-<label class="font-label-md text-on-surface-variant pl-1">Mã sách (ID)</label>
-<div class="relative">
-<input id="book-id" class="glass-input w-full p-md rounded-lg" placeholder="VD: 1" required="" type="number"/>
-<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline">search</span>
-</div>
-</div>
-<div class="space-y-xs">
-<label class="font-label-md text-on-surface-variant pl-1">Ngày phải trả</label>
+<label class="font-label-md text-on-surface-variant pl-1">NgĂ y pháº£i tráº£</label>
 <input id="due-date" class="glass-input w-full p-md rounded-lg" required="" type="date"/>
 </div>
 
 <button class="w-full bg-primary py-lg rounded-xl text-white font-headline-sm shadow-lg hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-md" id="issue-button" type="submit">
-<span>Xác nhận mượn</span>
+<span>XĂ¡c nháº­n mÆ°á»£n</span>
 <span class="material-symbols-outlined">arrow_forward</span>
 </button>
 </form>
 </div>
 <div class="glass-card rounded-xl p-lg border-l-4 border-secondary shadow-sm">
-<h4 class="font-label-md uppercase tracking-wider text-on-surface-variant mb-md">Quy định mượn</h4>
+<h4 class="font-label-md uppercase tracking-wider text-on-surface-variant mb-md">Quy Ä‘á»‹nh mÆ°á»£n</h4>
 <ul class="space-y-sm text-sm text-on-surface-variant">
-<li class="flex items-center gap-sm"><span class="material-symbols-outlined text-[16px] text-secondary">check_circle</span> Tối đa 5 cuốn/lần</li>
-<li class="flex items-center gap-sm"><span class="material-symbols-outlined text-[16px] text-secondary">check_circle</span> Thời hạn: 14 ngày</li>
-<li class="flex items-center gap-sm"><span class="material-symbols-outlined text-[16px] text-secondary">check_circle</span> Phí quá hạn: 5,000đ/ngày</li>
+<li class="flex items-center gap-sm"><span class="material-symbols-outlined text-[16px] text-secondary">check_circle</span> Tá»‘i Ä‘a 5 cuá»‘n/láº§n</li>
+<li class="flex items-center gap-sm"><span class="material-symbols-outlined text-[16px] text-secondary">check_circle</span> Thá»i háº¡n: 14 ngĂ y</li>
+<li class="flex items-center gap-sm"><span class="material-symbols-outlined text-[16px] text-secondary">check_circle</span> PhĂ­ quĂ¡ háº¡n: 5,000Ä‘/ngĂ y</li>
 </ul>
 </div>
 </section>
@@ -249,12 +252,12 @@
 <div class="w-10 h-10 rounded-lg bg-secondary/10 flex items-center justify-center">
 <span class="material-symbols-outlined text-secondary">login</span>
 </div>
-<h3 class="font-headline-sm text-headline-sm">Các sách đang được mượn</h3>
+<h3 class="font-headline-sm text-headline-sm">CĂ¡c sĂ¡ch Ä‘ang Ä‘Æ°á»£c mÆ°á»£n</h3>
 </div>
 <div class="flex gap-sm">
 <span class="bg-surface-container text-primary px-3 py-1 rounded-full text-xs font-bold flex items-center gap-xs">
 <span class="material-symbols-outlined text-[14px]">history</span>
-                                Lịch sử
+                                Lá»‹ch sá»­
                             </span>
 </div>
 </div>
@@ -262,12 +265,12 @@
 <table class="w-full text-left">
 <thead>
 <tr class="border-b border-surface-container-highest">
-<th class="py-md font-label-md text-on-surface-variant">Sách / Thành viên</th>
-<th class="py-md font-label-md text-on-surface-variant">Ngày mượn</th>
-<th class="py-md font-label-md text-on-surface-variant">Hạn trả</th>
-<th class="py-md font-label-md text-on-surface-variant">Tình trạng</th>
-<th class="py-md font-label-md text-on-surface-variant text-right">Tiền phạt</th>
-<th class="py-md font-label-md text-on-surface-variant text-right">Thao tác</th>
+<th class="py-md font-label-md text-on-surface-variant">SĂ¡ch / ThĂ nh viĂªn</th>
+<th class="py-md font-label-md text-on-surface-variant">NgĂ y mÆ°á»£n</th>
+<th class="py-md font-label-md text-on-surface-variant">Háº¡n tráº£</th>
+<th class="py-md font-label-md text-on-surface-variant">TĂ¬nh tráº¡ng</th>
+<th class="py-md font-label-md text-on-surface-variant text-right">Tiá»n pháº¡t</th>
+<th class="py-md font-label-md text-on-surface-variant text-right">Thao tĂ¡c</th>
 </tr>
 </thead>
 <tbody id="active-logs" class="divide-y divide-surface-container-low">
@@ -285,8 +288,8 @@
 <span class="material-symbols-outlined text-white">check</span>
 </div>
 <div>
-<p class="font-bold">Giao dịch thành công!</p>
-<p class="text-sm text-white/70">Mượn sách: The Art of Innovation cho MB-2024-001</p>
+<p class="font-bold">Giao dá»‹ch thĂ nh cĂ´ng!</p>
+<p class="text-sm text-white/70">MÆ°á»£n sĂ¡ch: The Art of Innovation cho MB-2024-001</p>
 </div>
 <button class="ml-lg text-white/50 hover:text-white transition-colors" onclick="hideToast()">
 <span class="material-symbols-outlined">close</span>
@@ -301,6 +304,88 @@
         }
         setInterval(updateClock, 1000);
         updateClock();
+
+        let membersData = [];
+        let booksData = [];
+
+        async function fetchMembersAndBooks() {
+            const token = localStorage.getItem('accessToken');
+            const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+            try {
+                const memRes = await fetch('/members', { headers });
+                if (memRes.ok) membersData = await memRes.json();
+                
+                const bookRes = await fetch('/books', { headers });
+                if (bookRes.ok) booksData = await bookRes.json();
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // Member Autocomplete
+        const memSearch = document.getElementById('member-search');
+        const memDrop = document.getElementById('member-dropdown');
+        const memIdInput = document.getElementById('member-id');
+
+        memSearch.addEventListener('input', (e) => {
+            const q = e.target.value.trim();
+            if (!q) { memDrop.classList.add('hidden'); return; }
+            const filtered = membersData.filter(m => (m.phoneNumber || '').includes(q));
+            memDrop.innerHTML = '';
+            if (filtered.length === 0) {
+                memDrop.innerHTML = '<div class="p-3 text-sm text-outline">KhĂ´ng tĂ¬m tháº¥y SÄT</div>';
+            } else {
+                filtered.forEach(m => {
+                    const div = document.createElement('div');
+                    div.className = 'p-3 hover:bg-primary/10 cursor-pointer border-b border-outline/10 text-sm';
+                    div.innerHTML = `<span class="font-bold">${m.phoneNumber || 'N/A'}</span> - ${m.name}`;
+                    div.onclick = () => {
+                        memSearch.value = `${m.phoneNumber || 'N/A'} - ${m.name}`;
+                        memIdInput.value = m.memberId;
+                        memDrop.classList.add('hidden');
+                    };
+                    memDrop.appendChild(div);
+                });
+            }
+            memDrop.classList.remove('hidden');
+        });
+
+        // Book Autocomplete
+        const bookSearch = document.getElementById('book-search');
+        const bookDrop = document.getElementById('book-dropdown');
+        const bookIdInput = document.getElementById('book-id');
+
+        bookSearch.addEventListener('input', (e) => {
+            const q = e.target.value.trim().toLowerCase();
+            if (!q) { bookDrop.classList.add('hidden'); return; }
+            const filtered = booksData.filter(b => b.available && (b.title || '').toLowerCase().includes(q));
+            bookDrop.innerHTML = '';
+            if (filtered.length === 0) {
+                bookDrop.innerHTML = '<div class="p-3 text-sm text-outline">KhĂ´ng tĂ¬m tháº¥y sĂ¡ch phĂ¹ há»£p (hoáº·c Ä‘Ă£ háº¿t)</div>';
+            } else {
+                filtered.forEach(b => {
+                    const div = document.createElement('div');
+                    div.className = 'p-2 hover:bg-primary/10 cursor-pointer border-b border-outline/10 flex items-center gap-3';
+                    const cover = b.coverImage || 'https://via.placeholder.com/40x60?text=No+Cover';
+                    div.innerHTML = `<img src="${cover}" class="w-10 h-14 object-cover rounded shadow-sm">
+                                     <div><p class="font-bold text-sm leading-tight">${b.title}</p><p class="text-xs text-on-surface-variant">${b.author || 'N/A'} (ID: ${b.bookId})</p></div>`;
+                    div.onclick = () => {
+                        bookSearch.value = b.title;
+                        bookIdInput.value = b.bookId;
+                        bookDrop.classList.add('hidden');
+                    };
+                    bookDrop.appendChild(div);
+                });
+            }
+            bookDrop.classList.remove('hidden');
+        });
+        
+        // Hide dropdowns when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!memSearch.contains(e.target) && !memDrop.contains(e.target)) memDrop.classList.add('hidden');
+            if (!bookSearch.contains(e.target) && !bookDrop.contains(e.target)) bookDrop.classList.add('hidden');
+        });
+
 
         // Handle Issue Form submission
         const issueForm = document.getElementById('issue-form');
@@ -317,7 +402,7 @@
             const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
             
             const originalContent = issueBtn.innerHTML;
-            issueBtn.innerHTML = `<span class="material-symbols-outlined animate-spin">progress_activity</span> <span>Đang xử lý...</span>`;
+            issueBtn.innerHTML = `<span class="material-symbols-outlined animate-spin">progress_activity</span> <span>Äang xá»­ lĂ½...</span>`;
             issueBtn.disabled = true;
 
             try {
@@ -331,11 +416,11 @@
                     issueForm.reset();
                     loadLogs(); // Refresh logs
                 } else {
-                    alert('Lỗi: Sách không có sẵn hoặc ID không hợp lệ.');
+                    alert('Lá»—i: SĂ¡ch khĂ´ng cĂ³ sáºµn hoáº·c ID khĂ´ng há»£p lá»‡.');
                 }
             } catch (err) {
                 console.error(err);
-                alert('Lỗi mạng');
+                alert('Lá»—i máº¡ng');
             } finally {
                 issueBtn.innerHTML = originalContent;
                 issueBtn.disabled = false;
@@ -361,10 +446,14 @@
 
         function filterLogs(query) {
             const q = query.toLowerCase();
-            const filtered = allLogsData.filter(log => 
-                String(log.bookId).includes(q) || 
-                String(log.memberId).includes(q)
-            );
+            const filtered = allLogsData.filter(log => {
+                const book = booksData.find(b => b.bookId === log.bookId);
+                const member = membersData.find(m => m.memberId === log.memberId);
+                const bTitle = book ? book.title.toLowerCase() : '';
+                const mName = member ? member.name.toLowerCase() : '';
+                const mPhone = member ? (member.phoneNumber || '').toLowerCase() : '';
+                return bTitle.includes(q) || mName.includes(q) || mPhone.includes(q);
+            });
             renderLogs(filtered);
         }
 
@@ -376,6 +465,14 @@
                 const issueDate = log.issueDate || 'N/A';
                 const dueDate = log.dueDate || 'N/A';
                 
+                const book = booksData.find(b => b.bookId === log.bookId);
+                const member = membersData.find(m => m.memberId === log.memberId);
+                const bookTitle = book ? book.title : `SĂ¡ch ID: ${log.bookId}`;
+                const memberName = member ? member.name : `Äá»™c giáº£ ID: ${log.memberId}`;
+                const coverHtml = (book && book.coverImage) 
+                    ? `<img src="${book.coverImage}" class="w-full h-full object-cover">` 
+                    : `ID:${log.bookId}`;
+
                 let currentFine = 0;
                 let isOverdue = false;
                 if (log.dueDate) {
@@ -386,35 +483,38 @@
                         isOverdue = true;
                         const diffTime = Math.abs(now - due);
                         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                        currentFine = diffDays * 1000;
+                        currentFine = diffDays * 5000;
                     }
                 }
-                const fineHtml = currentFine > 0 ? `<span class="text-error font-bold">${currentFine} ₫</span>` : `<span class="text-on-surface-variant">-</span>`;
+                const formattedFine = currentFine > 0 ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(currentFine) : '-';
+                const fineHtml = currentFine > 0 ? `<span class="text-error font-bold">${formattedFine}</span>` : `<span class="text-on-surface-variant">-</span>`;
                 
                 tbody.innerHTML += `
                 <tr class="group hover:bg-white/40 transition-colors">
                     <td class="py-lg">
                         <div class="flex items-center gap-md">
-                            <div class="w-12 h-16 bg-surface-variant rounded shadow-sm overflow-hidden flex-shrink-0 flex items-center justify-center font-bold text-primary">
-                                ID:${log.bookId}
+                            <div class="w-12 h-16 bg-surface-variant rounded shadow-sm overflow-hidden flex-shrink-0 flex items-center justify-center font-bold text-primary text-xs text-center">
+                                ${coverHtml}
                             </div>
                             <div>
-                                <p class="font-body-md font-bold">Book ID: ${log.bookId}</p>
-                                <p class="text-xs text-on-surface-variant">Member ID: ${log.memberId}</p>
+                                <p class="font-body-md font-bold text-on-surface line-clamp-1" title="${bookTitle}">${bookTitle}</p>
+                                <p class="text-xs text-on-surface-variant flex items-center gap-1 mt-1">
+                                    <span class="material-symbols-outlined text-[14px]">person</span> ${memberName}
+                                </p>
                             </div>
                         </div>
                     </td>
                     <td class="py-lg text-sm">${issueDate}</td>
                     <td class="py-lg text-sm text-on-surface-variant ${isOverdue ? 'text-error font-bold' : ''}">${dueDate}</td>
                     <td class="py-lg">
-                        <span class="${isOverdue ? 'bg-error/10 text-error' : 'bg-secondary/10 text-secondary'} px-2 py-1 rounded text-[10px] font-bold w-fit uppercase">${isOverdue ? 'Trễ hạn' : 'Đang mượn'}</span>
+                        <span class="${isOverdue ? 'bg-error/10 text-error' : 'bg-secondary/10 text-secondary'} px-2 py-1 rounded text-[10px] font-bold w-fit uppercase">${isOverdue ? 'Trá»… háº¡n' : 'Äang mÆ°á»£n'}</span>
                     </td>
                     <td class="py-lg text-right">
                         ${fineHtml}
                     </td>
                     <td class="py-lg text-right">
                         <button onclick="returnBook(${log.bookId}, ${log.memberId})" class="bg-white border border-outline-variant hover:border-primary hover:text-primary px-lg py-sm rounded-lg text-sm font-bold transition-all transform active:scale-95">
-                            Trả sách
+                            Tráº£ sĂ¡ch
                         </button>
                     </td>
                 </tr>
@@ -423,7 +523,7 @@
         }
 
         async function returnBook(bookId, memberId) {
-            if(!confirm('Xác nhận trả sách này?')) return;
+            if(!confirm('XĂ¡c nháº­n tráº£ sĂ¡ch nĂ y?')) return;
             const token = localStorage.getItem('accessToken');
             const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
             try {
@@ -432,17 +532,20 @@
                     headers: headers
                 });
                 if(res.ok) {
-                    alert('Trả sách thành công!');
+                    alert('Tráº£ sĂ¡ch thĂ nh cĂ´ng!');
                     loadLogs();
                 } else {
-                    alert('Lỗi trả sách');
+                    alert('Lá»—i tráº£ sĂ¡ch');
                 }
             } catch(e) {
                 console.error(e);
             }
         }
 
-        document.addEventListener('DOMContentLoaded', loadLogs);
+        document.addEventListener('DOMContentLoaded', async () => {
+            await fetchMembersAndBooks();
+            loadLogs();
+        });
 
         function showToast() {
             toast.classList.remove('translate-y-20', 'opacity-0');

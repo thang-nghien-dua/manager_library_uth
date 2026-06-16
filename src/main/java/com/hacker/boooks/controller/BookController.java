@@ -70,7 +70,7 @@ public class BookController {
         if (coverImage != null && !coverImage.isEmpty()) {
             String fileName = System.currentTimeMillis() + "_" + coverImage.getOriginalFilename();
             try {
-                java.nio.file.Path path = java.nio.file.Paths.get("src/main/resources/static/uploads/" + fileName);
+                java.nio.file.Path path = java.nio.file.Paths.get("uploads/" + fileName);
                 java.nio.file.Files.createDirectories(path.getParent());
                 java.nio.file.Files.copy(coverImage.getInputStream(), path);
                 bookBO.setCoverImage("/uploads/" + fileName);
@@ -108,7 +108,7 @@ public class BookController {
         if (coverImage != null && !coverImage.isEmpty()) {
             String fileName = System.currentTimeMillis() + "_" + coverImage.getOriginalFilename();
             try {
-                java.nio.file.Path path = java.nio.file.Paths.get("src/main/resources/static/uploads/" + fileName);
+                java.nio.file.Path path = java.nio.file.Paths.get("uploads/" + fileName);
                 java.nio.file.Files.createDirectories(path.getParent());
                 java.nio.file.Files.copy(coverImage.getInputStream(), path);
                 bookBO.setCoverImage("/uploads/" + fileName);

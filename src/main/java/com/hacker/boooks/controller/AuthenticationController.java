@@ -40,8 +40,11 @@ public class AuthenticationController {
             @RequestHeader("email") String email,
             @RequestHeader(value = "phone", required = false) String phone) {
         try {
-            return authenticationService.registerUser(username, password, name, email, phone);
-        } catch (IllegalArgumentException e) {
+            String decodedName = java.net.URLDecoder.decode(name, "UTF-8");
+            String decodedEmail = java.net.URLDecoder.decode(email, "UTF-8");
+            String decodedPhone = phone != null && !phone.isEmpty() ? java.net.URLDecoder.decode(phone, "UTF-8") : phone;
+            return authenticationService.registerUser(username, password, decodedName, decodedEmail, decodedPhone);
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

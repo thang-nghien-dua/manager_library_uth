@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html class="light" lang="en"><head>
 <meta charset="utf-8"/>
@@ -160,14 +160,16 @@
 <span class="material-symbols-outlined">receipt_long</span>
 <span class="font-body-md text-body-md">Transactions</span>
 </a>
+<a class="flex items-center gap-md p-md rounded-lg text-on-surface-variant hover:text-white hover:bg-white/10 transition-all duration-300 transition-transform duration-200 active:scale-95" href="/reports">
+<span class="material-symbols-outlined">bar_chart</span>
+<span class="font-body-md text-body-md">BĂ¡o cĂ¡o</span>
+</a>
+<a class="flex items-center gap-md p-md rounded-lg text-on-surface-variant hover:text-white hover:bg-white/10 transition-all duration-300 transition-transform duration-200 active:scale-95" href="/admin/staff">
+<span class="material-symbols-outlined">manage_accounts</span>
+<span class="font-body-md text-body-md">NhĂ¢n viĂªn</span>
+</a>
 </nav>
-<div class="mt-auto p-md glass-surface rounded-2xl bg-white/5 border-white/10 flex items-center gap-md">
-<img alt="User profile picture" class="w-10 h-10 rounded-full object-cover border border-primary" data-alt="A professional headshot of a library administrator in a clean, high-key office environment. The person has a friendly but authoritative expression. The lighting is soft and natural, emphasizing a professional and trustworthy persona. The background is slightly blurred to maintain focus on the individual, fitting a premium digital sanctuary aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAoUXvp2-I4D-ymu47lXr2iD-uJWVIR7Vf0JCbM5l0LCd_9A1vyVxQVYWjJqXzooh_rGonJax1MN4EOU63oz0_vnPmOuU5qZmC9UM64BmyMWIhZeMtBvKz0gUf00V7ydJi8cXK0SkyBINk6IFJFHIwSUFOoau2uKyTn5BHTyJhzbTDWpnLHiXCdj-2OZSihkU3tJUxAxYnwetSX6DvB6kBb_8ErMef6HoAS2Fiztife_fLjUSwnw19BXg0a-RawmDJnCcACnLKmPkK"/>
-<div class="overflow-hidden">
-<p class="font-label-md text-label-md text-white truncate">Admin Account</p>
-<p class="font-body-sm text-body-sm text-white/60 truncate">Chief Librarian</p>
-</div>
-</div>
+<div class="mt-auto p-md bg-white/5 rounded-xl flex items-center justify-center border border-white/10"><p class="text-white font-headline-sm font-bold tracking-widest uppercase">Admin</p></div>
 </aside>
 <!-- Main Content Area -->
 <main class="ml-[280px] min-h-screen">
@@ -254,8 +256,8 @@
 </div>
 <span class="text-error font-label-md text-label-md">-0.8%</span>
 </div>
-<p class="font-body-sm text-body-sm text-on-surface-variant">Tổng tiền phạt (VND)</p>
-<h3 id="total-fines" class="font-headline-lg text-headline-lg text-on-background">0 đ</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Tá»•ng tiá»n pháº¡t (VND)</p>
+<h3 id="total-fines" class="font-headline-lg text-headline-lg text-on-background">0 Ä‘</h3>
 </div>
 </div>
 <!-- Detailed Analysis Section -->
@@ -263,21 +265,21 @@
 <!-- Top 5 Books -->
 <div class="lg:col-span-5 glass-surface-elevated p-lg rounded-2xl">
         <div class="flex items-center justify-between mb-lg">
-            <h4 class="font-headline-sm text-headline-sm text-on-background">Top 5 sách mượn nhiều nhất</h4>
+            <h4 class="font-headline-sm text-headline-sm text-on-background">Top 5 sĂ¡ch mÆ°á»£n nhiá»u nháº¥t</h4>
             <span class="material-symbols-outlined text-outline">more_vert</span>
         </div>
         <div id="top-books-container" class="space-y-md">
             <!-- Dynamic Books will be inserted here -->
         </div>
         <button class="w-full mt-lg py-sm text-primary font-label-md text-label-md border-t border-outline-variant/30 hover:bg-primary/5 transition-colors rounded-b-xl">
-            Xem tất cả sách
+            Xem táº¥t cáº£ sĂ¡ch
         </button>
     </div>
     
     <!-- Top 5 Readers -->
     <div class="lg:col-span-7 glass-surface-elevated p-lg rounded-2xl flex flex-col">
         <div class="flex items-center justify-between mb-lg">
-            <h4 class="font-headline-sm text-headline-sm text-on-background">Top 5 độc giả năng nổ</h4>
+            <h4 class="font-headline-sm text-headline-sm text-on-background">Top 5 Ä‘á»™c giáº£ nÄƒng ná»•</h4>
             <div class="flex gap-sm">
                 <span class="px-sm py-xs bg-surface-container rounded text-body-sm text-on-surface-variant">All Time</span>
                 <span class="material-symbols-outlined text-outline">calendar_today</span>
@@ -287,9 +289,9 @@
             <table class="w-full text-left">
                 <thead>
                     <tr class="border-b border-outline-variant/30">
-                        <th class="pb-md font-label-md text-label-md text-on-surface-variant">Thành viên</th>
-                        <th class="pb-md font-label-md text-label-md text-on-surface-variant">Tổng số lần mượn</th>
-                        <th class="pb-md font-label-md text-label-md text-on-surface-variant">Trạng thái</th>
+                        <th class="pb-md font-label-md text-label-md text-on-surface-variant">ThĂ nh viĂªn</th>
+                        <th class="pb-md font-label-md text-label-md text-on-surface-variant">Tá»•ng sá»‘ láº§n mÆ°á»£n</th>
+                        <th class="pb-md font-label-md text-label-md text-on-surface-variant">Tráº¡ng thĂ¡i</th>
                     </tr>
                 </thead>
                 <tbody id="top-readers-container" class="divide-y divide-outline-variant/20">
@@ -298,7 +300,7 @@
             </table>
         </div>
         <button class="w-full mt-auto pt-lg text-primary font-label-md text-label-md border-t border-outline-variant/30 hover:bg-primary/5 transition-colors">
-            Xem tất cả độc giả
+            Xem táº¥t cáº£ Ä‘á»™c giáº£
         </button>
     </div>
 </div>
@@ -405,7 +407,7 @@
                                 </div>
                                 <div class="text-right">
                                     <p class="font-label-md text-label-md text-primary">${tb.count}</p>
-                                    <p class="font-body-sm text-body-sm text-on-surface-variant">Lần mượn</p>
+                                    <p class="font-body-sm text-body-sm text-on-surface-variant">Láº§n mÆ°á»£n</p>
                                 </div>
                             </div>
                         `;

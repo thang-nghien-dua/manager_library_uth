@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="vi" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hồ Sơ Cá Nhân | Boooks</title>
+    <meta name="description" content="Xem và quản lý thông tin cá nhân của bạn trong hệ thống thư viện Boooks">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-background": "#111c2d",
+                        "surface-container": "#e7eeff",
+                        "surface-container-highest": "#d8e3fb",
+                        "on-surface-variant": "#464555",
+                        "primary": "#3525cd",
+                        "primary-container": "#4f46e5",
+                        "surface": "#f9f9ff",
+                        "on-surface": "#111c2d",
+                        "on-primary": "#ffffff",
+                        "secondary": "#006a61",
+                        "tertiary": "#684000",
+                        "error": "#ba1a1a",
+                        "outline": "#777587",
+                        "outline-variant": "#c7c4d8",
+                        "surface-container-low": "#f0f3ff",
+                        "surface-dim": "#cfdaf2",
+                        "primary-fixed-dim": "#c3c0ff",
+                    },
+                    fontFamily: {
+                        "display-lg": ["Outfit"],
+                        "body-md": ["Inter"],
+                        "headline-md": ["Outfit"],
+                        "headline-lg": ["Outfit"],
+                        "label-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-sm": ["Inter"],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background: radial-gradient(circle at 20% 10%, rgba(79, 70, 229, 0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 90%, rgba(0, 106, 97, 0.08) 0%, transparent 50%),
+                        #f9f9ff;
+            min-height: 100vh;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 24px rgba(53, 37, 205, 0.06);
+        }
+        .glass-input {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1.5px solid rgba(119, 117, 135, 0.25);
+            transition: all 0.25s ease;
+        }
+        .glass-input:focus {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: #3525cd;
+            box-shadow: 0 0 0 4px rgba(53, 37, 205, 0.12);
+            outline: none;
+        }
+        .glass-input:disabled {
+            background: rgba(240, 243, 255, 0.5);
+            color: #777587;
+            cursor: not-allowed;
+        }
+        .material-symbols-outlined { vertical-align: middle; }
+        .stat-card {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .stat-card:hover { transform: translateY(-4px); }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in { animation: fadeInUp 0.5s ease forwards; }
+        .avatar-ring {
+            background: conic-gradient(#3525cd 0%, #006a61 50%, #3525cd 100%);
+            padding: 3px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-surface">
+
+    <!-- Top Navigation -->
+    <header class="fixed top-0 left-0 w-full h-20 bg-white/75 backdrop-blur-md border-b border-white/25 shadow-sm flex items-center justify-between px-8 z-40">
+        <div class="flex items-center gap-4">
+            <h1 class="font-display-lg text-3xl font-bold text-primary tracking-tight cursor-pointer" onclick="window.location.href='/user/home'">Boooks</h1>
+            <nav class="hidden md:flex ml-8 gap-6">
+                <a href="/user/home" class="text-on-surface-variant hover:text-primary py-1 transition-colors">Khám phá</a>
+                <a href="/user/history" class="text-on-surface-variant hover:text-primary py-1 transition-colors">Lịch sử mượn</a>
+                <a href="/user/profile" class="text-primary font-semibold border-b-2 border-primary py-1">Hồ sơ</a>
+            </nav>
+        </div>
+        <div class="flex items-center gap-4">
+            <div class="relative group cursor-pointer">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
+                        <span id="user-initial">U</span>
+                    </div>
+                    <span id="user-name-display" class="font-semibold text-on-surface hidden sm:block">User</span>
+                </div>
+                <div class="absolute right-0 mt-2 w-52 glass-card rounded-xl shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                    <a href="/user/home" class="flex items-center gap-2 px-4 py-3 text-sm text-on-surface hover:bg-white/50 rounded-t-xl">
+                        <span class="material-symbols-outlined text-sm">home</span> Trang chủ
+                    </a>
+                    <a href="/user/history" class="flex items-center gap-2 px-4 py-3 text-sm text-on-surface hover:bg-white/50">
+                        <span class="material-symbols-outlined text-sm">history</span> Lịch sử mượn
+                    </a>
+                    <a href="#" onclick="logout()" class="flex items-center gap-2 px-4 py-3 text-sm text-error hover:bg-error/10 rounded-b-xl">
+                        <span class="material-symbols-outlined text-sm">logout</span> Đăng xuất
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pt-28 pb-16 px-6 md:px-10 max-w-6xl mx-auto">
+        
+        <!-- Page Header -->
+        <div class="mb-10 fade-in">
+            <h2 class="text-4xl font-bold text-on-background font-headline-lg">Hồ sơ cá nhân</h2>
+            <p class="text-on-surface-variant text-lg mt-1">Quản lý thông tin tài khoản và bảo mật của bạn</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+            <!-- Left: Avatar & Stats Column -->
+            <div class="lg:col-span-1 space-y-6 fade-in" style="animation-delay: 0.1s">
+                <!-- Profile Card -->
+                <div class="glass-card rounded-3xl p-8 flex flex-col items-center text-center">
+                    <div class="avatar-ring mb-5">
+                        <div class="w-24 h-24 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center text-5xl font-bold text-primary bg-surface" id="avatar-initial">U</div>
+                    </div>
+                    <h3 id="profile-name" class="text-2xl font-bold text-on-background">--</h3>
+                    <p id="profile-username" class="text-on-surface-variant text-sm mt-1 font-medium">@--</p>
+                    <span class="mt-3 inline-flex items-center gap-1 bg-primary/10 text-primary text-xs font-semibold px-3 py-1 rounded-full">
+                        <span class="material-symbols-outlined text-xs">school</span>
+                        Sinh viên
+                    </span>
+                    <div class="w-full border-t border-outline-variant/30 mt-6 pt-5 space-y-3 text-left">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-outline">mail</span>
+                            <span id="profile-email" class="text-sm text-on-surface-variant truncate">--</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-outline">phone</span>
+                            <span id="profile-phone" class="text-sm text-on-surface-variant">--</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-outline">badge</span>
+                            <span id="profile-id" class="text-sm text-on-surface-variant">Mã SV: --</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="glass-card rounded-2xl p-6">
+                    <h4 class="font-semibold text-on-background mb-4 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">bar_chart</span> Thống kê của tôi
+                    </h4>
+                    <div class="space-y-4">
+                        <div class="stat-card flex items-center justify-between p-3 bg-primary/5 rounded-xl">
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary text-sm">library_books</span>
+                                <span class="text-sm text-on-surface-variant">Tổng đã mượn</span>
+                            </div>
+                            <span id="stat-total" class="font-bold text-on-background text-lg">0</span>
+                        </div>
+                        <div class="stat-card flex items-center justify-between p-3 bg-tertiary/5 rounded-xl">
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-tertiary text-sm">import_contacts</span>
+                                <span class="text-sm text-on-surface-variant">Đang mượn</span>
+                            </div>
+                            <span id="stat-active" class="font-bold text-on-background text-lg">0</span>
+                        </div>
+                        <div class="stat-card flex items-center justify-between p-3 bg-error/5 rounded-xl">
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-error text-sm">payments</span>
+                                <span class="text-sm text-on-surface-variant">Tiền phạt</span>
+                            </div>
+                            <span id="stat-fine" class="font-bold text-error text-lg">0 ₫</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Info & Password Column -->
+            <div class="lg:col-span-2 space-y-6 fade-in" style="animation-delay: 0.2s">
+
+                <!-- Personal Info Card -->
+                <div class="glass-card rounded-2xl overflow-hidden">
+                    <div class="px-6 py-4 border-b border-white/30 bg-white/30 flex items-center justify-between">
+                        <h3 class="font-semibold text-on-background flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">person</span> Thông tin cá nhân
+                        </h3>
+                        <span class="text-xs text-on-surface-variant bg-surface-container px-3 py-1 rounded-full">Chỉ đọc</span>
+                    </div>
+                    <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-2">Họ và tên</label>
+                            <input id="info-name" type="text" class="glass-input w-full px-4 py-3 rounded-xl text-on-background font-medium" disabled placeholder="--">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-2">Tên đăng nhập</label>
+                            <input id="info-username" type="text" class="glass-input w-full px-4 py-3 rounded-xl text-on-background font-medium" disabled placeholder="--">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-2">Địa chỉ Email</label>
+                            <input id="info-email" type="email" class="glass-input w-full px-4 py-3 rounded-xl text-on-background" disabled placeholder="--">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-2">Số điện thoại</label>
+                            <input id="info-phone" type="text" class="glass-input w-full px-4 py-3 rounded-xl text-on-background" disabled placeholder="--">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-2">Mã thành viên</label>
+                            <input id="info-member-id" type="text" class="glass-input w-full px-4 py-3 rounded-xl text-on-background font-mono" disabled placeholder="--">
+                        </div>
+                    </div>
+                    <div class="px-6 pb-5">
+                        <p class="text-xs text-on-surface-variant flex items-center gap-1">
+                            <span class="material-symbols-outlined text-xs">info</span>
+                            Để cập nhật thông tin, vui lòng liên hệ thủ thư hoặc quản trị viên.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Change Password Card -->
+                <div class="glass-card rounded-2xl overflow-hidden">
+                    <div class="px-6 py-4 border-b border-white/30 bg-white/30">
+                        <h3 class="font-semibold text-on-background flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">lock</span> Đổi mật khẩu
+                        </h3>
+                        <p class="text-sm text-on-surface-variant mt-1">Sử dụng mật khẩu mạnh để bảo vệ tài khoản của bạn</p>
+                    </div>
+                    <form id="change-password-form" class="p-6 space-y-4">
+                        <div id="pwd-success" class="hidden flex items-center gap-2 p-4 bg-secondary/10 text-secondary rounded-xl text-sm font-medium">
+                            <span class="material-symbols-outlined">check_circle</span>
+                            Đổi mật khẩu thành công!
+                        </div>
+                        <div id="pwd-error" class="hidden flex items-center gap-2 p-4 bg-error/10 text-error rounded-xl text-sm"></div>
+                        <div>
+                            <label class="block text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-2">Mật khẩu hiện tại</label>
+                            <div class="relative">
+                                <input id="old-password" type="password" class="glass-input w-full px-4 py-3 rounded-xl pr-12 text-on-background" placeholder="••••••••" required>
+                                <button type="button" onclick="togglePwd('old-password', this)" class="absolute right-4 top-1/2 -translate-y-1/2 text-outline hover:text-primary transition-colors">
+                                    <span class="material-symbols-outlined text-sm">visibility</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-2">Mật khẩu mới</label>
+                            <div class="relative">
+                                <input id="new-password" type="password" class="glass-input w-full px-4 py-3 rounded-xl pr-12 text-on-background" placeholder="Tối thiểu 6 ký tự" required minlength="6">
+                                <button type="button" onclick="togglePwd('new-password', this)" class="absolute right-4 top-1/2 -translate-y-1/2 text-outline hover:text-primary transition-colors">
+                                    <span class="material-symbols-outlined text-sm">visibility</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-2">Xác nhận mật khẩu mới</label>
+                            <div class="relative">
+                                <input id="retype-password" type="password" class="glass-input w-full px-4 py-3 rounded-xl pr-12 text-on-background" placeholder="Nhập lại mật khẩu mới" required>
+                                <button type="button" onclick="togglePwd('retype-password', this)" class="absolute right-4 top-1/2 -translate-y-1/2 text-outline hover:text-primary transition-colors">
+                                    <span class="material-symbols-outlined text-sm">visibility</span>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Password strength indicator -->
+                        <div id="pwd-strength" class="hidden">
+                            <div class="flex gap-1 mb-1">
+                                <div id="str-1" class="h-1 flex-1 rounded-full bg-outline-variant"></div>
+                                <div id="str-2" class="h-1 flex-1 rounded-full bg-outline-variant"></div>
+                                <div id="str-3" class="h-1 flex-1 rounded-full bg-outline-variant"></div>
+                                <div id="str-4" class="h-1 flex-1 rounded-full bg-outline-variant"></div>
+                            </div>
+                            <p id="str-text" class="text-xs text-on-surface-variant"></p>
+                        </div>
+                        <div class="pt-2 flex justify-end">
+                            <button type="submit" id="btn-change-pwd" class="flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl font-semibold hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/20 active:scale-95 transition-all duration-200">
+                                <span class="material-symbols-outlined text-sm">lock_reset</span>
+                                Cập nhật mật khẩu
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Security Info -->
+                <div class="glass-card rounded-2xl p-6">
+                    <h3 class="font-semibold text-on-background flex items-center gap-2 mb-4">
+                        <span class="material-symbols-outlined text-primary">security</span> Bảo mật tài khoản
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-3 bg-secondary/5 rounded-xl">
+                            <div class="flex items-center gap-3">
+                                <span class="material-symbols-outlined text-secondary text-sm">check_circle</span>
+                                <span class="text-sm text-on-surface">Tài khoản đã xác thực</span>
+                            </div>
+                            <span class="text-xs text-secondary font-semibold">Hoạt động</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-xl bg-surface-container/50">
+                            <div class="flex items-center gap-3">
+                                <span class="material-symbols-outlined text-outline text-sm">schedule</span>
+                                <span class="text-sm text-on-surface-variant">Phiên đăng nhập hiện tại</span>
+                            </div>
+                            <button onclick="logout()" class="text-xs text-error font-semibold hover:underline">Đăng xuất</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let currentUsername = null;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            currentUsername = localStorage.getItem('username');
+            if (!currentUsername) {
+                window.location.href = '/';
+                return;
+            }
+            document.getElementById('user-name-display').textContent = currentUsername;
+            document.getElementById('user-initial').textContent = currentUsername.charAt(0).toUpperCase();
+            document.getElementById('info-username').value = currentUsername;
+
+            await loadMemberProfile(currentUsername);
+
+            // Password strength checker
+            document.getElementById('new-password').addEventListener('input', checkStrength);
+            document.getElementById('change-password-form').addEventListener('submit', changePassword);
+        });
+
+        async function loadMemberProfile(username) {
+            const token = localStorage.getItem('accessToken');
+            try {
+                const res = await fetch(`/members/by-username?username=${encodeURIComponent(username)}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!res.ok) return;
+                const data = await res.json();
+
+                // Populate profile
+                const name = data.name || username;
+                document.getElementById('profile-name').textContent = name;
+                document.getElementById('profile-username').textContent = '@' + username;
+                document.getElementById('avatar-initial').textContent = name.charAt(0).toUpperCase();
+                document.getElementById('profile-email').textContent = data.email || 'Chưa cập nhật';
+                document.getElementById('profile-phone').textContent = data.phoneNumber || 'Chưa cập nhật';
+                document.getElementById('profile-id').textContent = 'Mã SV: ' + (data.memberId || '--');
+
+                // Populate form
+                document.getElementById('info-name').value = name;
+                document.getElementById('info-email').value = data.email || '';
+                document.getElementById('info-phone').value = data.phoneNumber || '';
+                document.getElementById('info-member-id').value = 'MBR-' + String(data.memberId || 0).padStart(4, '0');
+
+                // Load borrow history stats
+                if (data.memberId) {
+                    await loadStats(data.memberId, token);
+                }
+            } catch (e) {
+                console.error('Error loading profile:', e);
+            }
+        }
+
+        async function loadStats(memberId, token) {
+            try {
+                const res = await fetch(`/logs/member/${memberId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!res.ok) return;
+                const logs = await res.json();
+                const active = logs.filter(l => !l.returnDate).length;
+                const totalFine = logs.reduce((sum, l) => sum + (l.fine || 0), 0);
+                document.getElementById('stat-total').textContent = logs.length;
+                document.getElementById('stat-active').textContent = active;
+                document.getElementById('stat-fine').textContent = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalFine);
+            } catch (e) {
+                console.error('Error loading stats:', e);
+            }
+        }
+
+        function checkStrength() {
+            const pwd = document.getElementById('new-password').value;
+            const strengthDiv = document.getElementById('pwd-strength');
+            const strText = document.getElementById('str-text');
+            strengthDiv.classList.remove('hidden');
+
+            let score = 0;
+            if (pwd.length >= 6) score++;
+            if (pwd.length >= 10) score++;
+            if (/[A-Z]/.test(pwd) && /[a-z]/.test(pwd)) score++;
+            if (/\d/.test(pwd) && /[^A-Za-z0-9]/.test(pwd)) score++;
+
+            const colors = ['bg-error', 'bg-tertiary', 'bg-secondary', 'bg-secondary'];
+            const labels = ['Yếu', 'Trung bình', 'Mạnh', 'Rất mạnh'];
+            const textColors = ['text-error', 'text-tertiary', 'text-secondary', 'text-secondary'];
+
+            [1,2,3,4].forEach(i => {
+                const el = document.getElementById(`str-${i}`);
+                el.className = `h-1 flex-1 rounded-full ${i <= score ? colors[score-1] : 'bg-outline-variant'}`;
+            });
+            strText.textContent = score > 0 ? labels[score - 1] : '';
+            strText.className = `text-xs ${score > 0 ? textColors[score-1] : 'text-on-surface-variant'}`;
+        }
+
+        async function changePassword(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-change-pwd');
+            const successEl = document.getElementById('pwd-success');
+            const errorEl = document.getElementById('pwd-error');
+            successEl.classList.add('hidden');
+            errorEl.classList.add('hidden');
+
+            const oldPwd = document.getElementById('old-password').value;
+            const newPwd = document.getElementById('new-password').value;
+            const retypePwd = document.getElementById('retype-password').value;
+
+            if (newPwd !== retypePwd) {
+                errorEl.textContent = '⚠ Mật khẩu mới và xác nhận không khớp.';
+                errorEl.classList.remove('hidden');
+                return;
+            }
+
+            const originalHTML = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">progress_activity</span> Đang xử lý...';
+
+            try {
+                const res = await fetch('/change-password', {
+                    method: 'POST',
+                    headers: {
+                        'username': currentUsername,
+                        'old-password': oldPwd,
+                        'new-password': newPwd,
+                        'retype-password': retypePwd
+                    }
+                });
+
+                if (res.ok) {
+                    successEl.classList.remove('hidden');
+                    document.getElementById('change-password-form').reset();
+                    document.getElementById('pwd-strength').classList.add('hidden');
+                    setTimeout(() => successEl.classList.add('hidden'), 4000);
+                } else {
+                    const msg = await res.text();
+                    errorEl.innerHTML = '<span class="material-symbols-outlined text-sm">warning</span> ' + (msg || 'Đổi mật khẩu thất bại. Vui lòng kiểm tra lại mật khẩu cũ.');
+                    errorEl.classList.remove('hidden');
+                }
+            } catch(err) {
+                errorEl.innerHTML = '<span class="material-symbols-outlined text-sm">warning</span> Có lỗi xảy ra. Vui lòng thử lại.';
+                errorEl.classList.remove('hidden');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalHTML;
+            }
+        }
+
+        function togglePwd(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const isHidden = input.type === 'password';
+            input.type = isHidden ? 'text' : 'password';
+            btn.querySelector('span').textContent = isHidden ? 'visibility_off' : 'visibility';
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = '/';
+        }
+    </script>
+</body>
+</html>

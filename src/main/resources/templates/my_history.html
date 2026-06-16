@@ -56,6 +56,7 @@
             <nav class="hidden md:flex ml-8 gap-6">
                 <a href="/user/home" class="text-on-surface-variant hover:text-primary py-1 transition-colors">Khám phá</a>
                 <a href="/user/history" class="text-primary font-semibold border-b-2 border-primary py-1">Lịch sử mượn</a>
+                <a href="/user/profile" class="text-on-surface-variant hover:text-primary py-1 transition-colors">Hồ sơ</a>
             </nav>
         </div>
         
@@ -69,6 +70,8 @@
                 </div>
                 <!-- Dropdown -->
                 <div class="absolute right-0 mt-2 w-48 glass-card rounded-xl shadow-lg border border-white/30 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                    <a href="/user/home" class="block px-4 py-3 text-sm text-on-surface hover:bg-white/50 rounded-t-xl"><span class="material-symbols-outlined mr-2 text-sm" style="font-variation-settings:'FILL' 0">home</span> Trang chủ</a>
+                    <a href="/user/profile" class="block px-4 py-3 text-sm text-on-surface hover:bg-white/50"><span class="material-symbols-outlined mr-2 text-sm">person</span> Hồ sơ của tôi</a>
                     <a href="#" onclick="logout()" class="block px-4 py-3 text-sm text-error hover:bg-error/10 rounded-b-xl"><span class="material-symbols-outlined mr-2 text-sm">logout</span> Đăng xuất</a>
                 </div>
             </div>

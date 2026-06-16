@@ -395,9 +395,9 @@
                             'Content-Type': 'application/json',
                             'username': username,
                             'password': password,
-                            'name': name,
-                            'email': email,
-                            'phone': phone
+                            'name': encodeURIComponent(name),
+                            'email': encodeURIComponent(email),
+                            'phone': phone ? encodeURIComponent(phone) : ''
                         }
                     });
                     

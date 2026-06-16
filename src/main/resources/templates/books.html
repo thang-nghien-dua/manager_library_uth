@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html class="light" lang="vi"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Quản lý Sách | Boooks</title>
+<title>Quáº£n lĂ½ SĂ¡ch | Boooks</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -159,21 +159,23 @@
 <span class="material-symbols-outlined">receipt_long</span>
 <span class="font-body-md">Transactions</span>
 </a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:text-white hover:bg-white/10 transition-all duration-300" href="/reports">
+<span class="material-symbols-outlined">bar_chart</span>
+<span class="font-body-md">BĂ¡o cĂ¡o</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:text-white hover:bg-white/10 transition-all duration-300" href="/admin/staff">
+<span class="material-symbols-outlined">manage_accounts</span>
+<span class="font-body-md">NhĂ¢n viĂªn</span>
+</a>
 </nav>
-<div class="mt-auto p-md glass-card rounded-xl flex items-center gap-md">
-<img alt="User profile picture" class="w-10 h-10 rounded-full bg-surface-container shadow-sm" data-alt="A professional high-resolution close-up portrait of a librarian in a modern digital office environment. The person has a friendly, intellectual expression and is wearing sophisticated business-casual attire. The background is softly blurred, showing hints of a high-tech library with glass shelving and warm, focused lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7L0xtIHjjdIMe1VQTCyDkJRWxcKUp4rwnMoZAeRnGLoNYbuAEusQQXkILGZzy64nE2O_099esDmwW8bGu2oFvk6gqEllgXvC41YBL7GqJkdDlOW7IJ1XgZmOit6BOqPWBu1x1jFku9X93L4XH1o0l4rUDNn8o8rGHvB0a1r5_orBffkokPs_TP1hdfIqEXFeZDW662SC-dt8XTXFgmqOEa7xCyPwVso3TXrWDnJvbyMXK-GU8roHe9XdfxomuBvjUgbsMten2TQ58"/>
-<div>
-<p class="font-label-md text-white">Admin User</p>
-<p class="text-xs text-on-primary-container/60">Administrator</p>
-</div>
-</div>
+<div class="mt-auto p-md bg-white/5 rounded-xl flex items-center justify-center border border-white/10"><p class="text-white font-headline-sm font-bold tracking-widest uppercase">Admin</p></div>
 </aside>
 <!-- Top Navigation Bar (Shared Component) -->
 <header class="fixed top-0 right-0 w-[calc(100%-280px)] h-20 bg-white/70 backdrop-blur-md border-b border-white/20 shadow-sm flex items-center justify-between px-margin-desktop z-40">
 <div class="flex items-center gap-lg flex-1">
 <div class="relative w-full max-w-xl">
 <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">search</span>
-<input id="search-input" oninput="filterBooks(this.value)" class="glass-input w-full pl-12 pr-4 py-3 rounded-xl font-body-md" placeholder="Tìm kiếm tựa sách, tác giả hoặc ISBN..." type="text"/>
+<input id="search-input" oninput="filterBooks(this.value)" class="glass-input w-full pl-12 pr-4 py-3 rounded-xl font-body-md" placeholder="TĂ¬m kiáº¿m tá»±a sĂ¡ch, tĂ¡c giáº£ hoáº·c ISBN..." type="text"/>
 </div>
 </div>
 <div class="flex items-center gap-lg ml-lg">
@@ -191,61 +193,61 @@
 <!-- Header Section -->
 <section class="flex flex-col md:flex-row md:items-center justify-between mb-xl gap-lg">
 <div>
-<h2 class="font-headline-lg text-headline-lg text-on-background">Quản lý Sách</h2>
-<p class="font-body-md text-on-surface-variant">Quản lý kho tài liệu và trạng thái mượn trả của thư viện.</p>
+<h2 class="font-headline-lg text-headline-lg text-on-background">Quáº£n lĂ½ SĂ¡ch</h2>
+<p class="font-body-md text-on-surface-variant">Quáº£n lĂ½ kho tĂ i liá»‡u vĂ  tráº¡ng thĂ¡i mÆ°á»£n tráº£ cá»§a thÆ° viá»‡n.</p>
 </div>
 <button onclick="openBookModal()" class="flex items-center justify-center gap-sm bg-primary hover:bg-primary-container text-white px-lg py-3 rounded-xl font-label-md shadow-lg transition-all duration-300 transform hover:-translate-y-1 active:scale-95">
 <span class="material-symbols-outlined">add</span>
-                Thêm sách mới
+                ThĂªm sĂ¡ch má»›i
             </button>
 </section>
 <!-- Bento Stats Grid -->
 <section class="grid grid-cols-1 md:grid-cols-4 gap-gutter mb-xl">
 <div class="glass-card p-lg rounded-2xl shadow-sm">
 <div class="flex items-center justify-between mb-sm">
-<span class="text-on-surface-variant font-label-md">Tổng số sách</span>
+<span class="text-on-surface-variant font-label-md">Tá»•ng sá»‘ sĂ¡ch</span>
 <span class="material-symbols-outlined text-primary">menu_book</span>
 </div>
 <p id="stat-total" class="font-headline-lg text-headline-lg">...</p>
-<p class="text-xs text-secondary mt-xs font-medium">Cập nhật theo thời gian thực</p>
+<p class="text-xs text-secondary mt-xs font-medium">Cáº­p nháº­t theo thá»i gian thá»±c</p>
 </div>
 <div class="glass-card p-lg rounded-2xl shadow-sm border-l-4 border-secondary">
 <div class="flex items-center justify-between mb-sm">
-<span class="text-on-surface-variant font-label-md">Sẵn sàng</span>
+<span class="text-on-surface-variant font-label-md">Sáºµn sĂ ng</span>
 <span class="material-symbols-outlined text-secondary">check_circle</span>
 </div>
 <p id="stat-available" class="font-headline-lg text-headline-lg">...</p>
-<p class="text-xs text-on-surface-variant mt-xs">Sách đang trong kho</p>
+<p class="text-xs text-on-surface-variant mt-xs">SĂ¡ch Ä‘ang trong kho</p>
 </div>
 <div class="glass-card p-lg rounded-2xl shadow-sm border-l-4 border-tertiary">
 <div class="flex items-center justify-between mb-sm">
-<span class="text-on-surface-variant font-label-md">Đang mượn</span>
+<span class="text-on-surface-variant font-label-md">Äang mÆ°á»£n</span>
 <span class="material-symbols-outlined text-tertiary">import_contacts</span>
 </div>
 <p id="stat-borrowed" class="font-headline-lg text-headline-lg">...</p>
-<p class="text-xs text-on-surface-variant mt-xs">Đã mượn</p>
+<p class="text-xs text-on-surface-variant mt-xs">ÄĂ£ mÆ°á»£n</p>
 </div>
 <div class="glass-card p-lg rounded-2xl shadow-sm border-l-4 border-error">
 <div class="flex items-center justify-between mb-sm">
-<span class="text-on-surface-variant font-label-md">Quá hạn</span>
+<span class="text-on-surface-variant font-label-md">QuĂ¡ háº¡n</span>
 <span class="material-symbols-outlined text-error">priority_high</span>
 </div>
 <p class="font-headline-lg text-headline-lg">20</p>
-<p class="text-xs text-error mt-xs font-medium">Cần xử lý ngay</p>
+<p class="text-xs text-error mt-xs font-medium">Cáº§n xá»­ lĂ½ ngay</p>
 </div>
 </section>
 <!-- Data Table Section -->
 <section class="glass-card rounded-2xl shadow-lg overflow-hidden">
 <div class="p-lg border-b border-white/20 flex items-center justify-between bg-white/30">
-<h3 class="font-headline-sm text-headline-sm">Danh mục tài liệu</h3>
+<h3 class="font-headline-sm text-headline-sm">Danh má»¥c tĂ i liá»‡u</h3>
 <div class="flex gap-sm">
 <button class="p-2 glass-input rounded-lg flex items-center gap-xs text-on-surface-variant">
 <span class="material-symbols-outlined text-body-md">filter_list</span>
-<span class="font-label-sm">Lọc</span>
+<span class="font-label-sm">Lá»c</span>
 </button>
 <button class="p-2 glass-input rounded-lg flex items-center gap-xs text-on-surface-variant">
 <span class="material-symbols-outlined text-body-md">download</span>
-<span class="font-label-sm">Xuất file</span>
+<span class="font-label-sm">Xuáº¥t file</span>
 </button>
 </div>
 </div>
@@ -253,14 +255,14 @@
 <table class="w-full text-left border-collapse">
 <thead>
 <tr class="bg-surface-container-low/50">
-<th class="px-lg py-md font-label-md text-on-surface-variant uppercase tracking-wider text-xs w-16">Ảnh</th>
-<th class="px-lg py-md font-label-md text-on-surface-variant uppercase tracking-wider text-xs">Tựa sách</th>
-<th class="px-lg py-md font-label-md text-on-surface-variant uppercase tracking-wider text-xs">Tác giả</th>
-<th class="px-lg py-md font-label-md text-on-surface-variant uppercase tracking-wider text-xs">Thể loại</th>
-<th class="px-lg py-md font-label-md text-on-surface-variant uppercase tracking-wider text-xs">Ngày phát hành</th>
-<th class="px-lg py-md font-label-md text-on-surface-variant uppercase tracking-wider text-xs text-center">Số trang</th>
-<th class="px-lg py-md font-label-md text-on-surface-variant uppercase tracking-wider text-xs text-center">Đã cho thuê</th>
-<th class="px-lg py-md font-label-md text-on-surface-variant uppercase tracking-wider text-xs text-center">Số lượng còn</th>
+<th class="px-lg py-md font-label-md text-on-surface-variant uppercase tracking-wider text-xs w-16">áº¢nh</th>
+<th class="px-lg py-md font-label-md text-on-surface-variant uppercase tracking-wider text-xs">Tá»±a sĂ¡ch</th>
+<th class="px-lg py-md font-label-md text-on-surface-variant uppercase tracking-wider text-xs">TĂ¡c giáº£</th>
+<th class="px-lg py-md font-label-md text-on-surface-variant uppercase tracking-wider text-xs">Thá»ƒ loáº¡i</th>
+<th class="px-lg py-md font-label-md text-on-surface-variant uppercase tracking-wider text-xs">NgĂ y phĂ¡t hĂ nh</th>
+<th class="px-lg py-md font-label-md text-on-surface-variant uppercase tracking-wider text-xs text-center">Sá»‘ trang</th>
+<th class="px-lg py-md font-label-md text-on-surface-variant uppercase tracking-wider text-xs text-center">ÄĂ£ cho thuĂª</th>
+<th class="px-lg py-md font-label-md text-on-surface-variant uppercase tracking-wider text-xs text-center">Sá»‘ lÆ°á»£ng cĂ²n</th>
 <th class="px-lg py-md font-label-md text-on-surface-variant uppercase tracking-wider text-xs text-right"></th>
 </tr>
 </thead>
@@ -271,7 +273,7 @@
 </div>
 <!-- Pagination -->
 <div class="px-lg py-md bg-white/30 border-t border-white/20 flex items-center justify-between">
-<span class="text-sm text-on-surface-variant">Hiển thị 1 - 4 trên 1,284 cuốn</span>
+<span class="text-sm text-on-surface-variant">Hiá»ƒn thá»‹ 1 - 4 trĂªn 1,284 cuá»‘n</span>
 <div class="flex gap-1">
 <button class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/50 transition-colors disabled:opacity-30" disabled="">
 <span class="material-symbols-outlined text-body-md">chevron_left</span>
@@ -291,49 +293,49 @@
 <div id="book-modal" class="fixed inset-0 bg-on-background/50 backdrop-blur-sm z-[100] hidden items-center justify-center p-md overflow-y-auto">
     <div class="bg-surface rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden my-auto">
         <div class="px-lg py-md border-b border-outline/20 flex justify-between items-center bg-surface-container-low">
-            <h3 id="modal-title" class="font-headline-sm text-headline-sm text-on-surface">Thêm Sách Mới</h3>
+            <h3 id="modal-title" class="font-headline-sm text-headline-sm text-on-surface">ThĂªm SĂ¡ch Má»›i</h3>
             <button type="button" onclick="closeBookModal()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-outline/10 text-outline transition-colors">
                 <span class="material-symbols-outlined">close</span>
             </button>
         </div>
         <form id="book-form" class="p-lg grid grid-cols-1 md:grid-cols-2 gap-md">
             <div class="md:col-span-2">
-                <label class="block font-label-md text-label-md text-on-surface-variant mb-xs">Tựa sách *</label>
-                <input id="b-title" required type="text" class="form-input w-full px-md py-sm rounded-xl border border-outline/20 bg-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-body-md" placeholder="VD: Nhà giả kim">
+                <label class="block font-label-md text-label-md text-on-surface-variant mb-xs">Tá»±a sĂ¡ch *</label>
+                <input id="b-title" required type="text" class="form-input w-full px-md py-sm rounded-xl border border-outline/20 bg-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-body-md" placeholder="VD: NhĂ  giáº£ kim">
             </div>
             <div>
-                <label class="block font-label-md text-label-md text-on-surface-variant mb-xs">Tác giả *</label>
+                <label class="block font-label-md text-label-md text-on-surface-variant mb-xs">TĂ¡c giáº£ *</label>
                 <input id="b-author" required type="text" class="form-input w-full px-md py-sm rounded-xl border border-outline/20 bg-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-body-md" placeholder="VD: Paulo Coelho">
             </div>
             <div>
-                <label class="block font-label-md text-label-md text-on-surface-variant mb-xs">Thể loại *</label>
-                <input id="b-genre" required type="text" class="form-input w-full px-md py-sm rounded-xl border border-outline/20 bg-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-body-md" placeholder="VD: Tiểu thuyết">
+                <label class="block font-label-md text-label-md text-on-surface-variant mb-xs">Thá»ƒ loáº¡i *</label>
+                <input id="b-genre" required type="text" class="form-input w-full px-md py-sm rounded-xl border border-outline/20 bg-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-body-md" placeholder="VD: Tiá»ƒu thuyáº¿t">
             </div>
             <div>
-                <label class="block font-label-md text-label-md text-on-surface-variant mb-xs">Ngày phát hành *</label>
+                <label class="block font-label-md text-label-md text-on-surface-variant mb-xs">NgĂ y phĂ¡t hĂ nh *</label>
                 <input id="b-published" required type="date" class="form-input w-full px-md py-sm rounded-xl border border-outline/20 bg-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-body-md">
             </div>
             <div>
-                <label class="block font-label-md text-label-md text-on-surface-variant mb-xs">Số trang</label>
+                <label class="block font-label-md text-label-md text-on-surface-variant mb-xs">Sá»‘ trang</label>
                 <input id="b-page-count" type="number" class="form-input w-full px-md py-sm rounded-xl border border-outline/20 bg-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-body-md" placeholder="VD: 300">
             </div>
             <div>
-                <label class="block font-label-md text-label-md text-on-surface-variant mb-xs">Số lượng *</label>
+                <label class="block font-label-md text-label-md text-on-surface-variant mb-xs">Sá»‘ lÆ°á»£ng *</label>
                 <input id="b-quantity" required type="number" min="1" class="form-input w-full px-md py-sm rounded-xl border border-outline/20 bg-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-body-md" placeholder="VD: 5">
             </div>
             <div>
-                <label class="block font-label-md text-label-md text-on-surface-variant mb-xs">Ảnh bìa (chọn file từ máy tính)</label>
+                <label class="block font-label-md text-label-md text-on-surface-variant mb-xs">áº¢nh bĂ¬a (chá»n file tá»« mĂ¡y tĂ­nh)</label>
                 <input id="b-cover" type="file" accept="image/*" class="form-input w-full px-md py-sm rounded-xl border border-outline/20 bg-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-body-md">
             </div>
             <div class="md:col-span-2">
-                <label class="block font-label-md text-label-md text-on-surface-variant mb-xs">Mô tả</label>
-                <textarea id="b-desc" rows="3" class="form-input w-full px-md py-sm rounded-xl border border-outline/20 bg-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-body-md" placeholder="Tóm tắt nội dung..."></textarea>
+                <label class="block font-label-md text-label-md text-on-surface-variant mb-xs">MĂ´ táº£</label>
+                <textarea id="b-desc" rows="3" class="form-input w-full px-md py-sm rounded-xl border border-outline/20 bg-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-body-md" placeholder="TĂ³m táº¯t ná»™i dung..."></textarea>
             </div>
             
             <div class="md:col-span-2 pt-md flex gap-sm justify-end border-t border-outline/20">
-                <button type="button" onclick="closeBookModal()" class="px-lg py-sm rounded-xl font-label-md text-label-md text-on-surface-variant hover:bg-surface-container transition-colors">Hủy</button>
+                <button type="button" onclick="closeBookModal()" class="px-lg py-sm rounded-xl font-label-md text-label-md text-on-surface-variant hover:bg-surface-container transition-colors">Há»§y</button>
                 <button type="button" id="btn-edit-mode" onclick="enableEditMode()" class="hidden px-lg py-sm rounded-xl font-label-md text-label-md bg-secondary text-white shadow-md hover:-translate-y-px transition-all">Edit</button>
-                <button type="submit" id="btn-save" class="px-lg py-sm rounded-xl font-label-md text-label-md bg-primary text-white shadow-md hover:-translate-y-px hover:shadow-lg transition-all">Lưu</button>
+                <button type="submit" id="btn-save" class="px-lg py-sm rounded-xl font-label-md text-label-md bg-primary text-white shadow-md hover:-translate-y-px hover:shadow-lg transition-all">LÆ°u</button>
             </div>
         </form>
     </div>
@@ -363,7 +365,7 @@
             setFormDisabled(false);
             isEditing = true;
             isViewing = false;
-            document.getElementById('modal-title').textContent = 'Chỉnh sửa Sách';
+            document.getElementById('modal-title').textContent = 'Chá»‰nh sá»­a SĂ¡ch';
             // Only allow changing total quantity if needed, or disable it
         }
 
@@ -376,7 +378,7 @@
                 isEditing = !viewMode;
                 isViewing = viewMode;
                 currentBookId = book.bookId;
-                title.textContent = viewMode ? 'Thông tin Sách' : 'Chỉnh sửa Sách';
+                title.textContent = viewMode ? 'ThĂ´ng tin SĂ¡ch' : 'Chá»‰nh sá»­a SĂ¡ch';
                 
                 document.getElementById('b-title').value = book.title || '';
                 document.getElementById('b-author').value = book.author || '';
@@ -402,7 +404,7 @@
                 isEditing = false;
                 isViewing = false;
                 currentBookId = null;
-                title.textContent = 'Thêm Sách Mới';
+                title.textContent = 'ThĂªm SĂ¡ch Má»›i';
                 form.reset();
                 setFormDisabled(false);
             }
@@ -452,16 +454,16 @@
                     closeBookModal();
                     fetchBooks();
                 } else {
-                    alert('Lưu sách thất bại. ' + await response.text());
+                    alert('LÆ°u sĂ¡ch tháº¥t báº¡i. ' + await response.text());
                 }
             } catch (err) {
                 console.error('Error saving book:', err);
-                alert('Có lỗi xảy ra khi lưu.');
+                alert('CĂ³ lá»—i xáº£y ra khi lÆ°u.');
             }
         }
 
         async function deleteBook(id) {
-            if (!confirm('Bạn có chắc chắn muốn xóa sách này?')) return;
+            if (!confirm('Báº¡n cĂ³ cháº¯c cháº¯n muá»‘n xĂ³a sĂ¡ch nĂ y?')) return;
             const token = localStorage.getItem('accessToken');
             const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
             
@@ -474,11 +476,11 @@
                 if (response.ok) {
                     fetchBooks();
                 } else {
-                    alert('Lỗi xóa sách. ' + await response.text());
+                    alert('Lá»—i xĂ³a sĂ¡ch. ' + await response.text());
                 }
             } catch (err) {
                 console.error('Error deleting book:', err);
-                alert('Có lỗi xảy ra khi xóa.');
+                alert('CĂ³ lá»—i xáº£y ra khi xĂ³a.');
             }
         }
 
@@ -498,7 +500,7 @@
                     renderBooks(allBooksData);
                 }
             } catch (err) {
-                console.error("Lỗi khi tải sách:", err);
+                console.error("Lá»—i khi táº£i sĂ¡ch:", err);
             }
         }
 

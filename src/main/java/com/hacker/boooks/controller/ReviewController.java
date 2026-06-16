@@ -31,7 +31,7 @@ public class ReviewController {
 
     @Operation(summary = "Get reviews for a book", description = "Get all reviews for a specific book")
     @GetMapping("/book/{bookId}")
-    public ResponseEntity<List<ReviewEntity>> getBookReviews(@PathVariable int bookId) {
+    public ResponseEntity<List<com.hacker.boooks.bean.ReviewDTO>> getBookReviews(@PathVariable int bookId) {
         return reviewService.getBookReviews(bookId);
     }
 }

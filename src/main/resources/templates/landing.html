@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boooks - Digital Sanctuary | Thư viện số hiện đại</title>
+    <meta name="description" content="Boooks - Hệ thống quản lý thư viện số hiện đại. Tìm kiếm, mượn và theo dõi sách trực tuyến dễ dàng.">
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3525cd;
+            --secondary: #006a61;
+            --tertiary: #684000;
+            --surface: #f9f9ff;
+            --on-surface: #111c2d;
+            --on-surface-variant: #464555;
+            --outline: #777587;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--surface);
+            color: var(--on-surface);
+            overflow-x: hidden;
+        }
+        /* Animated background */
+        .hero-bg {
+            position: relative;
+            background: linear-gradient(135deg, #0f0069 0%, #1a1060 40%, #111c2d 100%);
+            overflow: hidden;
+        }
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(79,70,229,0.4) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0,106,97,0.3) 0%, transparent 50%),
+                radial-gradient(circle at 60% 80%, rgba(104,64,0,0.2) 0%, transparent 40%);
+        }
+        .floating-book {
+            position: absolute;
+            border-radius: 8px;
+            opacity: 0.15;
+            animation: float 8s ease-in-out infinite;
+        }
+        .floating-book:nth-child(2) { animation-delay: -2s; animation-duration: 10s; }
+        .floating-book:nth-child(3) { animation-delay: -4s; animation-duration: 6s; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(var(--rot, 5deg)); }
+            50% { transform: translateY(-30px) rotate(calc(var(--rot, 5deg) + 5deg)); }
+        }
+        /* Nav */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            padding: 16px 48px;
+            display: flex; align-items: center; justify-content: space-between;
+            background: rgba(255,255,255,0.02);
+            backdrop-filter: blur(0px);
+            transition: all 0.3s ease;
+        }
+        nav.scrolled {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 1px 20px rgba(53,37,205,0.1);
+        }
+        nav.scrolled .nav-logo, nav.scrolled .nav-link { color: var(--primary); }
+        nav.scrolled .nav-cta { background: var(--primary); color: white; }
+        .nav-logo { font-family: 'Outfit', sans-serif; font-size: 28px; font-weight: 700; color: white; }
+        .nav-link { color: rgba(255,255,255,0.7); font-size: 15px; font-weight: 500; text-decoration: none; transition: color 0.2s; }
+        .nav-link:hover { color: white; }
+        .nav-cta {
+            padding: 10px 24px; border-radius: 12px;
+            background: rgba(255,255,255,0.15); color: white;
+            font-weight: 600; font-size: 14px; text-decoration: none;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s; backdrop-filter: blur(8px);
+        }
+        .nav-cta:hover { background: white; color: var(--primary); transform: translateY(-2px); }
+        /* Glass card */
+        .glass { background: rgba(255,255,255,0.08); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; }
+        .glass-light { background: rgba(255,255,255,0.75); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.3); border-radius: 20px; box-shadow: 0 4px 24px rgba(53,37,205,0.06); }
+        /* Feature card */
+        .feature-card {
+            background: white; border-radius: 20px; padding: 32px;
+            box-shadow: 0 4px 24px rgba(53,37,205,0.06);
+            border: 1px solid rgba(199,196,216,0.3);
+            transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+        }
+        .feature-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(53,37,205,0.12); }
+        /* Stats */
+        .stat-item { text-align: center; }
+        .stat-number { font-family: 'Outfit', sans-serif; font-size: 48px; font-weight: 700; background: linear-gradient(135deg, #c3c0ff, #86f2e4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; }
+        /* CTA Section */
+        .cta-section { background: linear-gradient(135deg, var(--primary) 0%, #4f46e5 100%); }
+        /* Animations */
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.7s cubic-bezier(0.4,0,0.2,1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        /* Particle dots */
+        .dot { position: absolute; border-radius: 50%; opacity: 0.4; animation: pulse-dot 4s ease-in-out infinite; }
+        @keyframes pulse-dot { 0%,100%{opacity:0.2;transform:scale(1)} 50%{opacity:0.6;transform:scale(1.3)} }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+        @keyframes gradient-shift { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
+    </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav id="navbar">
+    <a href="/landing" class="nav-logo">Boooks</a>
+    <div class="hidden md:flex items-center gap-8">
+        <a href="#features" class="nav-link">Tính năng</a>
+        <a href="#how-it-works" class="nav-link">Cách dùng</a>
+        <a href="#stats" class="nav-link">Thống kê</a>
+    </div>
+    <div class="flex items-center gap-3">
+        <a href="/" class="nav-link hidden sm:block">Đăng nhập</a>
+        <a href="/" class="nav-cta">Bắt đầu ngay →</a>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero-bg min-h-screen flex items-center justify-center relative px-6 py-32">
+    <!-- Floating shapes -->
+    <div class="floating-book w-40 h-56 bg-primary-fixed" style="top:10%;left:5%;--rot:8deg;"></div>
+    <div class="floating-book w-32 h-48 bg-secondary-container" style="top:20%;right:8%;--rot:-5deg;"></div>
+    <div class="floating-book w-24 h-36 bg-tertiary-fixed" style="bottom:15%;left:15%;--rot:12deg;"></div>
+    <!-- Dots -->
+    <div class="dot w-3 h-3 bg-white" style="top:30%;left:20%;animation-delay:0s"></div>
+    <div class="dot w-2 h-2 bg-white" style="top:60%;right:25%;animation-delay:1s"></div>
+    <div class="dot w-4 h-4 bg-white/60" style="bottom:30%;right:40%;animation-delay:2s"></div>
+    <div class="dot w-2 h-2 bg-white" style="top:70%;left:35%;animation-delay:3s"></div>
+
+    <div class="relative z-10 max-w-5xl mx-auto text-center">
+        <!-- Badge -->
+        <div class="inline-flex items-center gap-2 glass px-4 py-2 rounded-full mb-8 text-white/80 text-sm font-medium">
+            <span class="w-2 h-2 bg-secondary rounded-full animate-pulse"></span>
+            Hệ thống thư viện số thế hệ mới
+        </div>
+
+        <h1 class="text-5xl md:text-7xl font-extrabold text-white mb-6 leading-tight" style="font-family:'Outfit',sans-serif; letter-spacing:-0.02em;">
+            Thư viện số<br>
+            <span style="background:linear-gradient(90deg,#c3c0ff,#86f2e4,#ffb95f);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
+                trong tầm tay
+            </span>
+        </h1>
+        <p class="text-xl text-white/70 max-w-2xl mx-auto mb-12 leading-relaxed">
+            Boooks giúp sinh viên tìm kiếm, mượn và theo dõi sách trực tuyến. Giúp thủ thư quản lý thư viện thông minh và hiệu quả hơn bao giờ hết.
+        </p>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href="/" class="flex items-center gap-2 px-8 py-4 bg-white text-primary font-bold text-lg rounded-2xl shadow-2xl hover:scale-105 hover:shadow-white/20 transition-all duration-300" style="box-shadow: 0 20px 40px rgba(255,255,255,0.15);">
+                <span class="material-symbols-outlined">login</span>
+                Đăng nhập ngay
+            </a>
+            <a href="/" id="register-hero-btn" class="flex items-center gap-2 px-8 py-4 glass text-white font-bold text-lg rounded-2xl hover:scale-105 transition-all duration-300 border-white/20">
+                <span class="material-symbols-outlined">person_add</span>
+                Đăng ký miễn phí
+            </a>
+        </div>
+
+        <!-- Hero Stats Bar -->
+        <div class="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
+            <div class="glass p-4 rounded-2xl text-center">
+                <p class="text-3xl font-extrabold text-white" id="hero-books" style="font-family:'Outfit',sans-serif">--</p>
+                <p class="text-white/60 text-sm mt-1">Đầu sách</p>
+            </div>
+            <div class="glass p-4 rounded-2xl text-center">
+                <p class="text-3xl font-extrabold text-white" id="hero-members" style="font-family:'Outfit',sans-serif">--</p>
+                <p class="text-white/60 text-sm mt-1">Sinh viên</p>
+            </div>
+            <div class="glass p-4 rounded-2xl text-center">
+                <p class="text-3xl font-extrabold text-white" id="hero-borrowed" style="font-family:'Outfit',sans-serif">--</p>
+                <p class="text-white/60 text-sm mt-1">Lượt mượn</p>
+            </div>
+            <div class="glass p-4 rounded-2xl text-center">
+                <p class="text-3xl font-extrabold text-white">3</p>
+                <p class="text-white/60 text-sm mt-1">Vai trò quản lý</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="py-24 px-6 bg-surface">
+    <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-16 reveal">
+            <span class="text-primary font-semibold text-sm uppercase tracking-widest">Tính năng</span>
+            <h2 class="text-4xl font-bold text-on-background mt-2 mb-4" style="font-family:'Outfit',sans-serif">Mọi thứ bạn cần trong một nơi</h2>
+            <p class="text-on-surface-variant text-lg max-w-2xl mx-auto">Hệ thống được thiết kế riêng cho môi trường giáo dục, tối ưu cho cả sinh viên và nhân viên thư viện.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="feature-card reveal reveal-delay-1">
+                <div class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-5">
+                    <span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings:'FILL' 1">search</span>
+                </div>
+                <h3 class="text-xl font-bold text-on-background mb-3" style="font-family:'Outfit',sans-serif">Tìm kiếm thông minh</h3>
+                <p class="text-on-surface-variant leading-relaxed">Tra cứu sách theo tên, tác giả, thể loại, ngôn ngữ. Xem trạng thái sách còn hay đã được mượn hết ngay lập tức.</p>
+            </div>
+            <div class="feature-card reveal reveal-delay-2">
+                <div class="w-14 h-14 rounded-2xl bg-secondary/10 flex items-center justify-center mb-5">
+                    <span class="material-symbols-outlined text-secondary text-3xl" style="font-variation-settings:'FILL' 1">bookmark</span>
+                </div>
+                <h3 class="text-xl font-bold text-on-background mb-3" style="font-family:'Outfit',sans-serif">Mượn trả trực tuyến</h3>
+                <p class="text-on-surface-variant leading-relaxed">Sinh viên đăng ký mượn sách online, theo dõi hạn trả và nhận cảnh báo quá hạn. Tiết kiệm thời gian đến thư viện.</p>
+            </div>
+            <div class="feature-card reveal reveal-delay-3">
+                <div class="w-14 h-14 rounded-2xl bg-tertiary/10 flex items-center justify-center mb-5">
+                    <span class="material-symbols-outlined text-tertiary text-3xl" style="font-variation-settings:'FILL' 1">bar_chart</span>
+                </div>
+                <h3 class="text-xl font-bold text-on-background mb-3" style="font-family:'Outfit',sans-serif">Báo cáo & Thống kê</h3>
+                <p class="text-on-surface-variant leading-relaxed">Biểu đồ xu hướng mượn sách theo tháng, danh sách sách trễ hạn, sách ít được mượn — tất cả trực quan và dễ đọc.</p>
+            </div>
+            <div class="feature-card reveal reveal-delay-1">
+                <div class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-5">
+                    <span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings:'FILL' 1">manage_accounts</span>
+                </div>
+                <h3 class="text-xl font-bold text-on-background mb-3" style="font-family:'Outfit',sans-serif">Phân quyền 3 cấp</h3>
+                <p class="text-on-surface-variant leading-relaxed">Admin quản lý nhân viên, Thủ thư vận hành thư viện, Sinh viên tra cứu và mượn sách — mỗi vai trò có giao diện riêng.</p>
+            </div>
+            <div class="feature-card reveal reveal-delay-2">
+                <div class="w-14 h-14 rounded-2xl bg-secondary/10 flex items-center justify-center mb-5">
+                    <span class="material-symbols-outlined text-secondary text-3xl" style="font-variation-settings:'FILL' 1">history</span>
+                </div>
+                <h3 class="text-xl font-bold text-on-background mb-3" style="font-family:'Outfit',sans-serif">Lịch sử đầy đủ</h3>
+                <p class="text-on-surface-variant leading-relaxed">Toàn bộ lịch sử mượn trả được ghi lại. Tính phí phạt tự động cho sách trễ hạn hoặc bị hư hỏng.</p>
+            </div>
+            <div class="feature-card reveal reveal-delay-3">
+                <div class="w-14 h-14 rounded-2xl bg-error/10 flex items-center justify-center mb-5">
+                    <span class="material-symbols-outlined text-error text-3xl" style="font-variation-settings:'FILL' 1">security</span>
+                </div>
+                <h3 class="text-xl font-bold text-on-background mb-3" style="font-family:'Outfit',sans-serif">Bảo mật JWT</h3>
+                <p class="text-on-surface-variant leading-relaxed">Xác thực bằng JWT token, đổi mật khẩu, kích hoạt/khóa tài khoản. Bảo vệ dữ liệu thư viện an toàn.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How it works -->
+<section id="how-it-works" class="py-24 px-6" style="background:linear-gradient(180deg,#f0f3ff,#f9f9ff)">
+    <div class="max-w-5xl mx-auto">
+        <div class="text-center mb-16 reveal">
+            <span class="text-primary font-semibold text-sm uppercase tracking-widest">Quy trình</span>
+            <h2 class="text-4xl font-bold text-on-background mt-2 mb-4" style="font-family:'Outfit',sans-serif">Dễ dùng chỉ với 3 bước</h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+            <div class="hidden md:block absolute top-10 left-1/6 right-1/6 h-0.5 bg-gradient-to-r from-primary/20 via-primary/60 to-primary/20" style="left:16.67%;right:16.67%"></div>
+            <div class="text-center reveal reveal-delay-1">
+                <div class="w-20 h-20 rounded-3xl bg-primary text-white flex items-center justify-center mx-auto mb-5 shadow-xl shadow-primary/30 relative z-10">
+                    <span class="material-symbols-outlined text-4xl" style="font-variation-settings:'FILL' 1">login</span>
+                </div>
+                <div class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-primary/10 text-primary text-sm font-bold mb-3">1</div>
+                <h3 class="text-xl font-bold text-on-background mb-2" style="font-family:'Outfit',sans-serif">Đăng nhập</h3>
+                <p class="text-on-surface-variant">Đăng nhập bằng tài khoản được cấp bởi thư viện. Hệ thống tự nhận diện vai trò và chuyển đến giao diện phù hợp.</p>
+            </div>
+            <div class="text-center reveal reveal-delay-2">
+                <div class="w-20 h-20 rounded-3xl bg-secondary text-white flex items-center justify-center mx-auto mb-5 shadow-xl shadow-secondary/30 relative z-10">
+                    <span class="material-symbols-outlined text-4xl" style="font-variation-settings:'FILL' 1">search</span>
+                </div>
+                <div class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-secondary/10 text-secondary text-sm font-bold mb-3">2</div>
+                <h3 class="text-xl font-bold text-on-background mb-2" style="font-family:'Outfit',sans-serif">Tìm & Đăng ký</h3>
+                <p class="text-on-surface-variant">Tìm kiếm sách theo nhiều tiêu chí. Kiểm tra tình trạng sách và đăng ký mượn trực tuyến dễ dàng.</p>
+            </div>
+            <div class="text-center reveal reveal-delay-3">
+                <div class="w-20 h-20 rounded-3xl bg-tertiary text-white flex items-center justify-center mx-auto mb-5 shadow-xl shadow-tertiary/30 relative z-10">
+                    <span class="material-symbols-outlined text-4xl" style="font-variation-settings:'FILL' 1">assignment_turned_in</span>
+                </div>
+                <div class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-tertiary/10 text-tertiary text-sm font-bold mb-3">3</div>
+                <h3 class="text-xl font-bold text-on-background mb-2" style="font-family:'Outfit',sans-serif">Theo dõi & Trả</h3>
+                <p class="text-on-surface-variant">Xem hạn trả, nhận cảnh báo. Khi trả sách, hệ thống tự cập nhật và tính phí phạt nếu có.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section id="stats" class="py-24 px-6" style="background:linear-gradient(135deg,#0f0069,#111c2d)">
+    <div class="max-w-5xl mx-auto">
+        <div class="text-center mb-16 reveal">
+            <h2 class="text-4xl font-bold text-white mb-4" style="font-family:'Outfit',sans-serif">Số liệu thực từ hệ thống</h2>
+            <p class="text-white/60 text-lg">Dữ liệu cập nhật theo thời gian thực từ cơ sở dữ liệu thư viện</p>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div class="stat-item reveal reveal-delay-1">
+                <div class="stat-number" id="stat-books-count">--</div>
+                <p class="text-white/60 mt-2 font-medium">Đầu sách</p>
+            </div>
+            <div class="stat-item reveal reveal-delay-2">
+                <div class="stat-number" id="stat-members-count">--</div>
+                <p class="text-white/60 mt-2 font-medium">Sinh viên</p>
+            </div>
+            <div class="stat-item reveal reveal-delay-3">
+                <div class="stat-number" id="stat-logs-count">--</div>
+                <p class="text-white/60 mt-2 font-medium">Lượt mượn</p>
+            </div>
+            <div class="stat-item reveal reveal-delay-3">
+                <div class="stat-number">3</div>
+                <p class="text-white/60 mt-2 font-medium">Cấp quản lý</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section py-24 px-6">
+    <div class="max-w-3xl mx-auto text-center reveal">
+        <div class="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-white/10 mb-8">
+            <span class="material-symbols-outlined text-white text-5xl" style="font-variation-settings:'FILL' 1">auto_stories</span>
+        </div>
+        <h2 class="text-4xl md:text-5xl font-bold text-white mb-6" style="font-family:'Outfit',sans-serif;letter-spacing:-0.02em">
+            Sẵn sàng khám phá kho sách?
+        </h2>
+        <p class="text-white/70 text-xl mb-10 leading-relaxed">
+            Đăng nhập ngay và bắt đầu hành trình đọc sách của bạn. Miễn phí, không giới hạn.
+        </p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href="/" class="flex items-center gap-3 px-10 py-5 bg-white text-primary font-bold text-lg rounded-2xl shadow-2xl hover:scale-105 transition-all duration-300">
+                <span class="material-symbols-outlined">login</span>
+                Đăng nhập
+            </a>
+            <a href="/" id="register-cta-btn" class="flex items-center gap-3 px-10 py-5 bg-white/10 text-white font-bold text-lg rounded-2xl border border-white/20 hover:bg-white/20 hover:scale-105 transition-all duration-300">
+                <span class="material-symbols-outlined">person_add</span>
+                Đăng ký
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-on-background py-10 px-8">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+        <div>
+            <p class="text-2xl font-bold text-white" style="font-family:'Outfit',sans-serif">Boooks</p>
+            <p class="text-white/40 text-sm mt-1">Digital Sanctuary — Hệ thống quản lý thư viện số</p>
+        </div>
+        <div class="flex gap-6 text-white/40 text-sm">
+            <a href="#features" class="hover:text-white transition-colors">Tính năng</a>
+            <a href="#how-it-works" class="hover:text-white transition-colors">Cách dùng</a>
+            <a href="/" class="hover:text-white transition-colors">Đăng nhập</a>
+        </div>
+        <p class="text-white/30 text-sm">© 2026 Boooks. Bảo lưu mọi quyền.</p>
+    </div>
+</footer>
+
+<script>
+    // Navbar scroll effect
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 60) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.classList.add('visible');
+                observer.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+    reveals.forEach(el => observer.observe(el));
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', e => {
+            e.preventDefault();
+            const target = document.querySelector(a.getAttribute('href'));
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+
+    // Register button goes to login page with register tab
+    ['register-hero-btn', 'register-cta-btn'].forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = '/';
+        });
+    });
+
+    // Fetch real stats
+    async function loadStats() {
+        try {
+            const [bRes, mRes, lRes] = await Promise.all([
+                fetch('/books'),
+                fetch('/members'),
+                fetch('/logs')
+            ]);
+
+            if (bRes.ok) {
+                const books = await bRes.json();
+                const count = books.length;
+                document.getElementById('hero-books').textContent = count > 999 ? Math.round(count/100)/10 + 'k' : count;
+                document.getElementById('stat-books-count').textContent = count > 999 ? Math.round(count/100)/10 + 'k' : count;
+                const borrowed = books.filter(b => !b.available || b.quantityRented > 0).length;
+                document.getElementById('hero-borrowed').textContent = borrowed;
+            }
+            if (mRes.ok) {
+                const members = await mRes.json();
+                document.getElementById('hero-members').textContent = members.length;
+                document.getElementById('stat-members-count').textContent = members.length;
+            }
+            if (lRes.ok) {
+                const logs = await lRes.json();
+                document.getElementById('stat-logs-count').textContent = logs.length > 999 ? Math.round(logs.length/100)/10 + 'k' : logs.length;
+                document.getElementById('hero-borrowed').textContent = logs.length > 999 ? Math.round(logs.length/100)/10 + 'k' : logs.length;
+            }
+        } catch (e) {
+            // Silently fail - this is a public page
+            ['hero-books','hero-members','hero-borrowed','stat-books-count','stat-members-count','stat-logs-count']
+                .forEach(id => { const el = document.getElementById(id); if(el && el.textContent==='--') el.textContent = '---'; });
+        }
+    }
+    loadStats();
+</script>
+</body>
+</html>

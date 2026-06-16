@@ -8,6 +8,9 @@ public class WebController {
     @GetMapping("/")
     public String index() { return "login"; }
 
+    @GetMapping("/landing")
+    public String landing() { return "landing"; }
+
     @GetMapping("/dashboard")
     public String dashboard() { return "dashboard"; }
 
@@ -20,6 +23,12 @@ public class WebController {
     @GetMapping("/issue-return")
     public String issueReturn() { return "issue_return"; }
 
+    @GetMapping("/reports")
+    public String reports() { return "reports"; }
+
+    @GetMapping("/admin/staff")
+    public String adminStaff() { return "admin_staff"; }
+
     @GetMapping("/user/home")
     public String userHome() { return "user_home"; }
 
@@ -28,4 +37,7 @@ public class WebController {
 
     @GetMapping("/user/history")
     public String userHistory() { return "my_history"; }
+
+    @GetMapping("/user/profile")
+    public String userProfile() { return "profile"; }
 }

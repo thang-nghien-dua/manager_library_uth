@@ -1,0 +1,631 @@
+﻿<!DOCTYPE html>
+<html class="light" lang="vi">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Thá»‘ng kĂª & BĂ¡o cĂ¡o | Boooks</title>
+    <meta name="description" content="Thá»‘ng kĂª kho sĂ¡ch, sĂ¡ch trá»… háº¡n, xu hÆ°á»›ng mÆ°á»£n sĂ¡ch vĂ  sĂ¡ch bá»‹ lĂ£ng quĂªn">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-background": "#111c2d",
+                        "surface-container": "#e7eeff",
+                        "surface-container-highest": "#d8e3fb",
+                        "on-surface-variant": "#464555",
+                        "on-tertiary-fixed": "#2a1700",
+                        "surface-bright": "#f9f9ff",
+                        "outline": "#777587",
+                        "on-error-container": "#93000a",
+                        "primary-container": "#4f46e5",
+                        "background": "#f9f9ff",
+                        "primary": "#3525cd",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "surface-container-low": "#f0f3ff",
+                        "tertiary": "#684000",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#dad7ff",
+                        "surface-container-high": "#dee8ff",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "secondary-fixed-dim": "#6bd8cb",
+                        "surface": "#f9f9ff",
+                        "error-container": "#ffdad6",
+                        "on-surface": "#111c2d",
+                        "on-error": "#ffffff",
+                        "inverse-primary": "#c3c0ff",
+                        "on-primary": "#ffffff",
+                        "tertiary-container": "#885500",
+                        "primary-fixed": "#e2dfff",
+                        "secondary": "#006a61",
+                        "inverse-surface": "#263143",
+                        "error": "#ba1a1a",
+                        "surface-variant": "#d8e3fb",
+                        "secondary-container": "#86f2e4",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-dim": "#cfdaf2",
+                        "outline-variant": "#c7c4d8"
+                    },
+                    spacing: {
+                        "margin-desktop": "48px",
+                        "xl": "40px",
+                        "md": "16px",
+                        "margin-mobile": "16px",
+                        "gutter": "24px",
+                        "lg": "24px",
+                        "sm": "8px",
+                        "xs": "4px",
+                    },
+                    fontFamily: {
+                        "display-lg": ["Outfit"],
+                        "headline-lg": ["Outfit"],
+                        "headline-sm": ["Outfit"],
+                        "label-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-md": ["Outfit"],
+                        "body-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                    },
+                    fontSize: {
+                        "display-lg": ["48px", {"lineHeight":"1.2","fontWeight":"700"}],
+                        "headline-lg": ["32px", {"lineHeight":"1.3","fontWeight":"600"}],
+                        "headline-md": ["24px", {"lineHeight":"1.4","fontWeight":"600"}],
+                        "headline-sm": ["20px", {"lineHeight":"1.4","fontWeight":"600"}],
+                        "label-md": ["14px", {"lineHeight":"1","fontWeight":"600"}],
+                        "label-sm": ["12px", {"lineHeight":"1","fontWeight":"500"}],
+                        "body-md": ["16px", {"lineHeight":"1.6","fontWeight":"400"}],
+                        "body-sm": ["14px", {"lineHeight":"1.5","fontWeight":"400"}],
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .mesh-gradient {
+            background-color: #f9f9ff;
+            background-image:
+                radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(0, 106, 97, 0.05) 0px, transparent 50%);
+        }
+        .glass-surface {
+            background: rgba(255,255,255,0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .glass-surface-elevated {
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.3);
+            box-shadow: 0 20px 25px -5px rgba(79, 70, 229, 0.1);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .tab-btn { transition: all 0.2s; }
+        .tab-btn.active {
+            background: rgba(53, 37, 205, 0.1);
+            color: #3525cd;
+            font-weight: 600;
+        }
+        .overdue-row { border-left: 3px solid #ba1a1a; }
+        .forgotten-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 10px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .tab-panel { animation: fadeIn 0.3s ease; }
+    </style>
+</head>
+<body class="mesh-gradient min-h-screen text-on-surface">
+
+<!-- Sidebar -->
+<aside class="fixed left-0 top-0 h-screen w-[280px] bg-on-background border-r border-white/10 shadow-xl flex flex-col py-lg px-md z-50">
+    <div class="mb-xl px-sm">
+        <h1 class="font-display-lg text-display-lg font-bold text-white tracking-tight">Boooks</h1>
+        <p class="font-body-sm text-on-primary-container/60">Digital Sanctuary</p>
+    </div>
+    <nav class="flex-1 space-y-1" id="sidebar-nav">
+        <a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:text-white hover:bg-white/10 transition-all duration-300" href="/dashboard">
+            <span class="material-symbols-outlined">dashboard</span>
+            <span class="font-body-md">Dashboard</span>
+        </a>
+        <a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:text-white hover:bg-white/10 transition-all duration-300" href="/books-ui">
+            <span class="material-symbols-outlined">book</span>
+            <span class="font-body-md">Books</span>
+        </a>
+        <a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:text-white hover:bg-white/10 transition-all duration-300" href="/members-ui">
+            <span class="material-symbols-outlined">group</span>
+            <span class="font-body-md">Members</span>
+        </a>
+        <a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:text-white hover:bg-white/10 transition-all duration-300" href="/issue-return">
+            <span class="material-symbols-outlined">receipt_long</span>
+            <span class="font-body-md">Transactions</span>
+        </a>
+        <a class="flex items-center gap-md px-md py-sm rounded-lg border-l-4 border-primary bg-primary/10 text-white font-bold transition-all" href="/reports">
+            <span class="material-symbols-outlined">bar_chart</span>
+            <span class="font-body-md">BĂ¡o cĂ¡o</span>
+        </a>
+        <a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:text-white hover:bg-white/10 transition-all duration-300" href="/admin/staff" id="admin-nav-link">
+            <span class="material-symbols-outlined">manage_accounts</span>
+            <span class="font-body-md">NhĂ¢n viĂªn</span>
+        </a>
+    </nav>
+    <div class="mt-auto p-md bg-white/5 rounded-xl flex items-center justify-center border border-white/10"><p class="text-white font-headline-sm font-bold tracking-widest uppercase">Admin</p></div>
+                <p class="font-body-sm text-on-surface-variant">Tá»•ng Ä‘áº§u sĂ¡ch</p>
+                <h3 id="kpi-total" class="font-headline-lg text-headline-lg text-on-background">--</h3>
+            </div>
+            <div class="glass-surface-elevated p-lg rounded-2xl hover:scale-[1.02] transition-transform cursor-default">
+                <div class="flex justify-between items-start mb-sm">
+                    <div class="p-sm bg-secondary/10 rounded-xl"><span class="material-symbols-outlined text-secondary" style="font-variation-settings:'FILL' 1">check_circle</span></div>
+                </div>
+                <p class="font-body-sm text-on-surface-variant">SĂ¡ch cĂ²n trong kho</p>
+                <h3 id="kpi-available" class="font-headline-lg text-headline-lg text-on-background">--</h3>
+            </div>
+            <div class="glass-surface-elevated p-lg rounded-2xl hover:scale-[1.02] transition-transform cursor-default">
+                <div class="flex justify-between items-start mb-sm">
+                    <div class="p-sm bg-tertiary/10 rounded-xl"><span class="material-symbols-outlined text-tertiary" style="font-variation-settings:'FILL' 1">import_contacts</span></div>
+                </div>
+                <p class="font-body-sm text-on-surface-variant">Äang Ä‘Æ°á»£c mÆ°á»£n</p>
+                <h3 id="kpi-borrowed" class="font-headline-lg text-headline-lg text-on-background">--</h3>
+            </div>
+            <div class="glass-surface-elevated p-lg rounded-2xl hover:scale-[1.02] transition-transform cursor-default">
+                <div class="flex justify-between items-start mb-sm">
+                    <div class="p-sm bg-error/10 rounded-xl"><span class="material-symbols-outlined text-error" style="font-variation-settings:'FILL' 1">priority_high</span></div>
+                </div>
+                <p class="font-body-sm text-on-surface-variant">Trá»… háº¡n</p>
+                <h3 id="kpi-overdue" class="font-headline-lg text-headline-lg text-error">--</h3>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="glass-surface-elevated rounded-2xl overflow-hidden">
+            <div class="flex border-b border-outline-variant/30 bg-white/30 px-lg pt-md gap-sm">
+                <button id="tab-inventory" onclick="switchTab('inventory')" class="tab-btn active flex items-center gap-1 px-md py-sm rounded-t-lg text-sm">
+                    <span class="material-symbols-outlined text-sm">warehouse</span> Tá»•ng quan kho
+                </button>
+                <button id="tab-overdue" onclick="switchTab('overdue')" class="tab-btn flex items-center gap-1 px-md py-sm rounded-t-lg text-sm text-on-surface-variant">
+                    <span class="material-symbols-outlined text-sm">warning</span> Trá»… háº¡n
+                </button>
+                <button id="tab-trends" onclick="switchTab('trends')" class="tab-btn flex items-center gap-1 px-md py-sm rounded-t-lg text-sm text-on-surface-variant">
+                    <span class="material-symbols-outlined text-sm">trending_up</span> Xu hÆ°á»›ng
+                </button>
+                <button id="tab-forgotten" onclick="switchTab('forgotten')" class="tab-btn flex items-center gap-1 px-md py-sm rounded-t-lg text-sm text-on-surface-variant">
+                    <span class="material-symbols-outlined text-sm">hourglass_empty</span> SĂ¡ch lĂ£ng quĂªn
+                </button>
+            </div>
+
+            <!-- Tab: Inventory -->
+            <div id="panel-inventory" class="tab-panel p-lg">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-gutter">
+                    <div>
+                        <h4 class="font-headline-sm text-on-background mb-md">Tá»· lá»‡ sĂ¡ch trong kho</h4>
+                        <div class="relative max-w-xs mx-auto">
+                            <canvas id="chart-donut" height="260"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-headline-sm text-on-background mb-md">Top 10 thá»ƒ loáº¡i phá»• biáº¿n</h4>
+                        <canvas id="chart-genre" height="260"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Overdue -->
+            <div id="panel-overdue" class="tab-panel hidden p-lg">
+                <div class="flex items-center justify-between mb-md">
+                    <h4 class="font-headline-sm text-on-background">Danh sĂ¡ch sĂ¡ch trá»… háº¡n</h4>
+                    <span id="overdue-count" class="bg-error/10 text-error text-xs font-bold px-3 py-1 rounded-full">0 trÆ°á»ng há»£p</span>
+                </div>
+                <div class="overflow-x-auto rounded-xl border border-outline-variant/30">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="bg-surface-container-low/60">
+                                <th class="px-lg py-md font-label-md text-on-surface-variant text-xs uppercase">Sinh viĂªn</th>
+                                <th class="px-lg py-md font-label-md text-on-surface-variant text-xs uppercase">Tá»±a sĂ¡ch</th>
+                                <th class="px-lg py-md font-label-md text-on-surface-variant text-xs uppercase">NgĂ y mÆ°á»£n</th>
+                                <th class="px-lg py-md font-label-md text-on-surface-variant text-xs uppercase">Háº¡n tráº£</th>
+                                <th class="px-lg py-md font-label-md text-on-surface-variant text-xs uppercase">Sá»‘ ngĂ y trá»…</th>
+                                <th class="px-lg py-md font-label-md text-on-surface-variant text-xs uppercase text-right">Tiá»n pháº¡t dá»± kiáº¿n</th>
+                            </tr>
+                        </thead>
+                        <tbody id="overdue-list" class="divide-y divide-outline-variant/20">
+                            <tr><td colspan="6" class="text-center py-10"><span class="material-symbols-outlined animate-spin text-3xl text-primary">progress_activity</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tab: Trends -->
+            <div id="panel-trends" class="tab-panel hidden p-lg">
+                <div class="flex items-center justify-between mb-md">
+                    <h4 class="font-headline-sm text-on-background">LÆ°á»£t mÆ°á»£n theo thĂ¡ng</h4>
+                    <select id="trend-year" onchange="renderTrends()" class="px-md py-sm rounded-xl border border-outline-variant bg-white/60 text-sm font-medium focus:ring-2 focus:ring-primary outline-none">
+                    </select>
+                </div>
+                <canvas id="chart-monthly" height="120"></canvas>
+                <div class="mt-gutter grid grid-cols-1 md:grid-cols-2 gap-gutter">
+                    <div>
+                        <h4 class="font-headline-sm text-on-background mb-md">Top thá»ƒ loáº¡i Ä‘Æ°á»£c mÆ°á»£n nhiá»u nháº¥t</h4>
+                        <div id="top-genres" class="space-y-2"></div>
+                    </div>
+                    <div>
+                        <h4 class="font-headline-sm text-on-background mb-md">Top tĂ¡c giáº£ Ä‘Æ°á»£c mÆ°á»£n nhiá»u nháº¥t</h4>
+                        <div id="top-authors" class="space-y-2"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Forgotten -->
+            <div id="panel-forgotten" class="tab-panel hidden p-lg">
+                <div class="flex items-center justify-between mb-md flex-wrap gap-sm">
+                    <h4 class="font-headline-sm text-on-background">SĂ¡ch Ă­t Ä‘Æ°á»£c mÆ°á»£n / bá»‹ lĂ£ng quĂªn</h4>
+                    <div class="flex gap-sm">
+                        <button onclick="setForgottenFilter(1)" id="filt-1" class="text-xs px-3 py-1 rounded-full border border-outline-variant hover:bg-surface-container transition-colors font-medium">HÆ¡n 1 nÄƒm</button>
+                        <button onclick="setForgottenFilter(2)" id="filt-2" class="text-xs px-3 py-1 rounded-full border border-primary bg-primary/10 text-primary font-medium">HÆ¡n 2 nÄƒm</button>
+                        <button onclick="setForgottenFilter(3)" id="filt-3" class="text-xs px-3 py-1 rounded-full border border-outline-variant hover:bg-surface-container transition-colors font-medium">HÆ¡n 3 nÄƒm</button>
+                        <button onclick="setForgottenFilter(0)" id="filt-0" class="text-xs px-3 py-1 rounded-full border border-outline-variant hover:bg-surface-container transition-colors font-medium">ChÆ°a cĂ³ lÆ°á»£t mÆ°á»£n</button>
+                    </div>
+                </div>
+                <div class="overflow-x-auto rounded-xl border border-outline-variant/30">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="bg-surface-container-low/60">
+                                <th class="px-lg py-md font-label-md text-on-surface-variant text-xs uppercase">Tá»±a sĂ¡ch</th>
+                                <th class="px-lg py-md font-label-md text-on-surface-variant text-xs uppercase">TĂ¡c giáº£</th>
+                                <th class="px-lg py-md font-label-md text-on-surface-variant text-xs uppercase">Thá»ƒ loáº¡i</th>
+                                <th class="px-lg py-md font-label-md text-on-surface-variant text-xs uppercase text-center">Tá»•ng lÆ°á»£t mÆ°á»£n</th>
+                                <th class="px-lg py-md font-label-md text-on-surface-variant text-xs uppercase">Láº§n mÆ°á»£n gáº§n nháº¥t</th>
+                                <th class="px-lg py-md font-label-md text-on-surface-variant text-xs uppercase">TĂ¬nh tráº¡ng</th>
+                            </tr>
+                        </thead>
+                        <tbody id="forgotten-list" class="divide-y divide-outline-variant/20">
+                            <tr><td colspan="6" class="text-center py-10"><span class="material-symbols-outlined animate-spin text-3xl text-primary">progress_activity</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    let allBooks = [], allLogs = [], allMembers = [];
+    let donutChart, genreChart, monthlyChart;
+    let forgottenFilterYears = 2;
+
+    async function loadAll() {
+        const token = localStorage.getItem('accessToken');
+        const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+        const username = localStorage.getItem('username');
+        const role = localStorage.getItem('userRole');
+
+        // Update sidebar
+        if (username) {
+            document.getElementById('sidebar-username').textContent = username;
+            document.getElementById('sidebar-initial').textContent = username.charAt(0).toUpperCase();
+            document.getElementById('sidebar-role').textContent = role === 'ROLE_ADMIN' ? 'Admin' : 'Thá»§ thÆ°';
+        }
+
+        try {
+            const [bRes, lRes, mRes] = await Promise.all([
+                fetch('/books', { headers }),
+                fetch('/logs', { headers }),
+                fetch('/members', { headers })
+            ]);
+
+            if (bRes.ok) allBooks = await bRes.json();
+            if (lRes.ok) allLogs = await lRes.json();
+            if (mRes.ok) allMembers = await mRes.json();
+
+            updateKPIs();
+            renderInventory();
+            renderOverdue();
+            renderTrends();
+            renderForgotten();
+        } catch(e) {
+            console.error('Load error:', e);
+        }
+    }
+
+    function updateKPIs() {
+        const today = new Date();
+        const overdueCount = allLogs.filter(l => {
+            if (l.returnDate) return false;
+            const due = l.dueDate ? new Date(l.dueDate) : null;
+            return due && today > due;
+        }).length;
+
+        document.getElementById('kpi-total').textContent = allBooks.length;
+        document.getElementById('kpi-available').textContent = allBooks.filter(b => b.quantityAvailable > 0).length;
+        document.getElementById('kpi-borrowed').textContent = allLogs.filter(l => !l.returnDate).length;
+        document.getElementById('kpi-overdue').textContent = overdueCount;
+    }
+
+    function renderInventory() {
+        const available = allBooks.reduce((s, b) => s + (b.quantityAvailable || 0), 0);
+        const rented = allBooks.reduce((s, b) => s + (b.quantityRented || 0), 0);
+
+        // Donut chart
+        if (donutChart) donutChart.destroy();
+        donutChart = new Chart(document.getElementById('chart-donut').getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: ['CĂ²n trong kho', 'Äang Ä‘Æ°á»£c mÆ°á»£n'],
+                datasets: [{ data: [available, rented], backgroundColor: ['#006a61', '#3525cd'], borderWidth: 0, hoverOffset: 6 }]
+            },
+            options: {
+                cutout: '72%',
+                plugins: {
+                    legend: { position: 'bottom', labels: { font: { family: 'Inter', size: 12 }, padding: 16 } }
+                }
+            }
+        });
+
+        // Genre bar
+        const genreCount = {};
+        allBooks.forEach(b => { if(b.genre) genreCount[b.genre] = (genreCount[b.genre] || 0) + 1; });
+        const sorted = Object.entries(genreCount).sort((a,b) => b[1]-a[1]).slice(0, 10);
+
+        if (genreChart) genreChart.destroy();
+        genreChart = new Chart(document.getElementById('chart-genre').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: sorted.map(e => e[0]),
+                datasets: [{ data: sorted.map(e => e[1]), backgroundColor: 'rgba(53,37,205,0.7)', borderRadius: 6 }]
+            },
+            options: {
+                indexAxis: 'y',
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { color: 'rgba(0,0,0,0.05)' } },
+                    y: { grid: { display: false }, ticks: { font: { family: 'Inter', size: 11 } } }
+                }
+            }
+        });
+    }
+
+    function renderOverdue() {
+        const today = new Date();
+        const members = {};
+        allMembers.forEach(m => { members[m.memberId] = m; });
+
+        const overdue = allLogs.filter(l => {
+            if (l.returnDate) return false;
+            const due = l.dueDate ? new Date(l.dueDate) : null;
+            return due && today > due;
+        }).sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+
+        document.getElementById('overdue-count').textContent = overdue.length + ' trÆ°á»ng há»£p';
+        const tbody = document.getElementById('overdue-list');
+
+        if (overdue.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6" class="text-center py-10 text-on-surface-variant">
+                <span class="material-symbols-outlined text-secondary text-4xl block mb-2">check_circle</span>
+                KhĂ´ng cĂ³ sĂ¡ch nĂ o trá»… háº¡n!
+            </td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = overdue.map(l => {
+            const due = new Date(l.dueDate);
+            const diff = Math.ceil((today - due) / 86400000);
+            const fine = diff * 1000;
+            const member = members[l.memberId];
+            return `<tr class="hover:bg-error/5 transition-colors overdue-row">
+                <td class="px-lg py-md">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-full bg-error/10 text-error flex items-center justify-center text-xs font-bold">${(member?.name||'?').charAt(0).toUpperCase()}</div>
+                        <span class="font-medium text-on-surface">${member?.name || 'ID:'+l.memberId}</span>
+                    </div>
+                </td>
+                <td class="px-lg py-md font-medium text-on-background">${l.bookTitle || 'SĂ¡ch ID: '+l.bookId}</td>
+                <td class="px-lg py-md text-on-surface-variant">${new Date(l.issueDate).toLocaleDateString('vi-VN')}</td>
+                <td class="px-lg py-md text-error font-semibold">${due.toLocaleDateString('vi-VN')}</td>
+                <td class="px-lg py-md">
+                    <span class="bg-error/10 text-error font-bold px-2 py-1 rounded-full text-xs">${diff} ngĂ y</span>
+                </td>
+                <td class="px-lg py-md text-right font-bold text-error">${new Intl.NumberFormat('vi-VN',{style:'currency',currency:'VND'}).format(fine)}</td>
+            </tr>`;
+        }).join('');
+    }
+
+    function renderTrends() {
+        // Build year options
+        const years = new Set();
+        allLogs.forEach(l => { if (l.issueDate) years.add(new Date(l.issueDate).getFullYear()); });
+        const yearSel = document.getElementById('trend-year');
+        const selectedYear = parseInt(yearSel.value) || new Date().getFullYear();
+
+        if (yearSel.options.length === 0) {
+            [...years].sort((a,b) => b-a).forEach(y => {
+                const opt = document.createElement('option');
+                opt.value = y; opt.textContent = 'NÄƒm ' + y;
+                if (y === selectedYear) opt.selected = true;
+                yearSel.appendChild(opt);
+            });
+        }
+
+        const selYear = parseInt(yearSel.value) || selectedYear;
+        const monthly = Array(12).fill(0);
+        allLogs.forEach(l => {
+            if (!l.issueDate) return;
+            const d = new Date(l.issueDate);
+            if (d.getFullYear() === selYear) monthly[d.getMonth()]++;
+        });
+
+        if (monthlyChart) monthlyChart.destroy();
+        monthlyChart = new Chart(document.getElementById('chart-monthly').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: ['T1','T2','T3','T4','T5','T6','T7','T8','T9','T10','T11','T12'],
+                datasets: [{
+                    label: 'LÆ°á»£t mÆ°á»£n',
+                    data: monthly,
+                    borderColor: '#3525cd',
+                    backgroundColor: 'rgba(53,37,205,0.08)',
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#3525cd',
+                    pointRadius: 5
+                }]
+            },
+            options: {
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { stepSize: 1 } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // Top genres & authors from logs
+        const books = {};
+        allBooks.forEach(b => { books[b.bookId] = b; });
+
+        const genreMap = {}, authorMap = {};
+        allLogs.forEach(l => {
+            const b = books[l.bookId];
+            if (!b) return;
+            if (b.genre) genreMap[b.genre] = (genreMap[b.genre] || 0) + 1;
+            if (b.author) authorMap[b.author] = (authorMap[b.author] || 0) + 1;
+        });
+
+        const topGenres = Object.entries(genreMap).sort((a,b)=>b[1]-a[1]).slice(0,5);
+        const topAuthors = Object.entries(authorMap).sort((a,b)=>b[1]-a[1]).slice(0,5);
+        const maxG = topGenres[0]?.[1] || 1;
+        const maxA = topAuthors[0]?.[1] || 1;
+
+        document.getElementById('top-genres').innerHTML = topGenres.map(([name, count]) =>
+            `<div class="flex items-center gap-3 p-3 rounded-xl hover:bg-surface-container/50 transition-colors">
+                <span class="text-sm font-medium text-on-surface min-w-0 flex-1 truncate">${name}</span>
+                <div class="flex items-center gap-2 flex-shrink-0">
+                    <div class="w-24 h-2 rounded-full bg-outline-variant/30">
+                        <div class="h-2 rounded-full bg-primary" style="width:${Math.round(count/maxG*100)}%"></div>
+                    </div>
+                    <span class="text-xs font-bold text-primary w-8 text-right">${count}</span>
+                </div>
+            </div>`
+        ).join('');
+
+        document.getElementById('top-authors').innerHTML = topAuthors.map(([name, count]) =>
+            `<div class="flex items-center gap-3 p-3 rounded-xl hover:bg-surface-container/50 transition-colors">
+                <span class="text-sm font-medium text-on-surface min-w-0 flex-1 truncate">${name}</span>
+                <div class="flex items-center gap-2 flex-shrink-0">
+                    <div class="w-24 h-2 rounded-full bg-outline-variant/30">
+                        <div class="h-2 rounded-full bg-secondary" style="width:${Math.round(count/maxA*100)}%"></div>
+                    </div>
+                    <span class="text-xs font-bold text-secondary w-8 text-right">${count}</span>
+                </div>
+            </div>`
+        ).join('');
+    }
+
+    function setForgottenFilter(years) {
+        forgottenFilterYears = years;
+        [0,1,2,3].forEach(y => {
+            const btn = document.getElementById('filt-' + y);
+            if (y === years) {
+                btn.className = 'text-xs px-3 py-1 rounded-full border border-primary bg-primary/10 text-primary font-medium';
+            } else {
+                btn.className = 'text-xs px-3 py-1 rounded-full border border-outline-variant hover:bg-surface-container transition-colors font-medium';
+            }
+        });
+        renderForgotten();
+    }
+
+    function renderForgotten() {
+        const today = new Date();
+        const bookLogMap = {};
+        allLogs.forEach(l => {
+            if (!bookLogMap[l.bookId] || new Date(l.issueDate) > new Date(bookLogMap[l.bookId].issueDate)) {
+                bookLogMap[l.bookId] = l;
+            }
+        });
+        const logCountMap = {};
+        allLogs.forEach(l => { logCountMap[l.bookId] = (logCountMap[l.bookId] || 0) + 1; });
+
+        let forgotten = allBooks.filter(b => {
+            const lastLog = bookLogMap[b.bookId];
+            if (forgottenFilterYears === 0) return !lastLog;
+            if (!lastLog) return true;
+            const lastDate = new Date(lastLog.issueDate);
+            const diffYears = (today - lastDate) / (365.25 * 86400000);
+            return diffYears >= forgottenFilterYears;
+        });
+
+        const tbody = document.getElementById('forgotten-list');
+        if (forgotten.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6" class="text-center py-10 text-on-surface-variant">KhĂ´ng cĂ³ sĂ¡ch nĂ o phĂ¹ há»£p vá»›i tiĂªu chĂ­ lá»c.</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = forgotten.map(b => {
+            const lastLog = bookLogMap[b.bookId];
+            const count = logCountMap[b.bookId] || 0;
+            let badgeHtml = '';
+            let lastDateStr = 'ChÆ°a tá»«ng Ä‘Æ°á»£c mÆ°á»£n';
+
+            if (!lastLog) {
+                badgeHtml = `<span class="forgotten-badge bg-error/10 text-error">ChÆ°a mÆ°á»£n</span>`;
+            } else {
+                const lastDate = new Date(lastLog.issueDate);
+                lastDateStr = lastDate.toLocaleDateString('vi-VN');
+                const diffYears = (today - lastDate) / (365.25 * 86400000);
+                if (diffYears >= 3) {
+                    badgeHtml = `<span class="forgotten-badge bg-error/10 text-error"><span class="material-symbols-outlined" style="font-size:12px">hourglass_empty</span> LĂ¢u hÆ¡n 3 nÄƒm</span>`;
+                } else if (diffYears >= 2) {
+                    badgeHtml = `<span class="forgotten-badge bg-tertiary/10 text-tertiary">LĂ¢u hÆ¡n 2 nÄƒm</span>`;
+                } else {
+                    badgeHtml = `<span class="forgotten-badge bg-outline-variant/30 text-on-surface-variant">LĂ¢u hÆ¡n 1 nÄƒm</span>`;
+                }
+            }
+
+            return `<tr class="hover:bg-surface-container/30 transition-colors">
+                <td class="px-lg py-md font-medium text-on-background">${b.title}</td>
+                <td class="px-lg py-md text-on-surface-variant">${b.author || '--'}</td>
+                <td class="px-lg py-md"><span class="bg-surface-container-highest px-2 py-1 rounded-full text-xs">${b.genre || '--'}</span></td>
+                <td class="px-lg py-md text-center font-bold text-on-surface-variant">${count}</td>
+                <td class="px-lg py-md text-on-surface-variant text-sm">${lastDateStr}</td>
+                <td class="px-lg py-md">${badgeHtml}</td>
+            </tr>`;
+        }).join('');
+    }
+
+    function switchTab(tab) {
+        ['inventory','overdue','trends','forgotten'].forEach(t => {
+            document.getElementById('tab-' + t).classList.remove('active');
+            document.getElementById('panel-' + t).classList.add('hidden');
+        });
+        document.getElementById('tab-' + tab).classList.add('active');
+        document.getElementById('panel-' + tab).classList.remove('hidden');
+    }
+
+    function refreshAll() { loadAll(); }
+
+    function logout() {
+        localStorage.clear();
+        window.location.href = '/';
+    }
+
+    document.addEventListener('DOMContentLoaded', loadAll);
+</script>
+</body>
+</html>
+

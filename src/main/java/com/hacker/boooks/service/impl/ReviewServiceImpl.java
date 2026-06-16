@@ -72,7 +72,20 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public ResponseEntity<List<ReviewEntity>> getBookReviews(int bookId) {
-        return ResponseEntity.ok(reviewRepository.findByBookId(bookId));
+    public ResponseEntity<List<com.hacker.boooks.bean.ReviewDTO>> getBookReviews(int bookId) {
+        List<ReviewEntity> reviews = reviewRepository.findByBookId(bookId);
+        List<com.hacker.boooks.bean.ReviewDTO> reviewDTOs = reviews.stream().map(r -> {
+            com.hacker.boooks.bean.ReviewDTO dto = new com.hacker.boooks.bean.ReviewDTO();
+            dto.setReviewId(r.getReviewId());
+            dto.setBookId(r.getBookId());
+            dto.setMemberId(r.getMemberId());
+            dto.setRating(r.getRating());
+            dto.setComment(r.getComment());
+            dto.setCreatedAt(r.getCreatedAt());
+            
+            memberRepository.findById(r.getMemberId()).ifPresent(m -> dto.setUsername(m.getUsername()));
+            return dto;
+        }).collect(Collectors.toList());
+        return ResponseEntity.ok(reviewDTOs);
     }
 }

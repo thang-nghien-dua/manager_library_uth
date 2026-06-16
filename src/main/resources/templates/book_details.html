@@ -56,6 +56,7 @@
             <nav class="hidden md:flex ml-8 gap-6">
                 <a href="/user/home" class="text-on-surface-variant hover:text-primary py-1 transition-colors">Khám phá</a>
                 <a href="/user/history" class="text-on-surface-variant hover:text-primary py-1 transition-colors">Lịch sử mượn</a>
+                <a href="/user/profile" class="text-on-surface-variant hover:text-primary py-1 transition-colors">Hồ sơ</a>
             </nav>
         </div>
         
@@ -69,6 +70,9 @@
                 </div>
                 <!-- Dropdown -->
                 <div class="absolute right-0 mt-2 w-48 glass-card rounded-xl shadow-lg border border-white/30 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                    <a href="/user/home" class="block px-4 py-3 text-sm text-on-surface hover:bg-white/50 rounded-t-xl"><span class="material-symbols-outlined mr-2 text-sm">home</span> Trang chủ</a>
+                    <a href="/user/history" class="block px-4 py-3 text-sm text-on-surface hover:bg-white/50"><span class="material-symbols-outlined mr-2 text-sm">history</span> Lịch sử mượn</a>
+                    <a href="/user/profile" class="block px-4 py-3 text-sm text-on-surface hover:bg-white/50"><span class="material-symbols-outlined mr-2 text-sm">person</span> Hồ sơ của tôi</a>
                     <a href="#" onclick="logout()" class="block px-4 py-3 text-sm text-error hover:bg-error/10 rounded-b-xl"><span class="material-symbols-outlined mr-2 text-sm">logout</span> Đăng xuất</a>
                 </div>
             </div>
@@ -212,12 +216,10 @@
                 }
             }
 
-            let borrowBtn = '';
-            if (available) {
-                borrowBtn = `<button onclick="borrowBook()" class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-3 rounded-xl shadow-lg transition-transform hover:-translate-y-1">Mượn Sách Này</button>`;
-            } else {
-                borrowBtn = `<button disabled class="w-full bg-outline-variant text-white font-bold py-3 rounded-xl cursor-not-allowed">Đã Hết Sách</button>`;
-            }
+            const userRole = localStorage.getItem('userRole');
+            let borrowBtn = `<div class="w-full bg-surface-container-highest border border-outline/20 text-on-surface-variant text-center text-sm font-medium py-4 rounded-xl px-4 leading-relaxed">
+                                Để mượn sách này, vui lòng <span class="font-bold text-primary">liên hệ trực tiếp Thủ thư</span> tại quầy.
+                             </div>`;
 
             const html = `
                 <div class="w-full md:w-1/3 flex flex-col gap-4">
@@ -257,32 +259,6 @@
                 </div>
             `;
             document.getElementById('book-info-container').innerHTML = html;
-        }
-
-        async function borrowBook() {
-            if (!currentMemberId) {
-                alert("Không thể mượn sách. Vui lòng đăng nhập lại.");
-                return;
-            }
-            if (!confirm(`Xác nhận mượn sách: ${bookData.title}?`)) return;
-
-            const token = localStorage.getItem('accessToken');
-            try {
-                const response = await fetch(`/books/issue?bookId=${bookId}&memberId=${currentMemberId}`, {
-                    method: 'POST',
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                if (response.ok) {
-                    alert("Mượn sách thành công!");
-                    fetchBookDetails(); // refresh quantity
-                } else {
-                    const text = await response.text();
-                    alert("Mượn sách thất bại: " + text);
-                }
-            } catch (e) {
-                console.error(e);
-                alert("Lỗi hệ thống khi mượn sách.");
-            }
         }
 
         async function fetchReviews() {
